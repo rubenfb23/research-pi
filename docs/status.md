@@ -68,8 +68,13 @@ Repositorio público creado: https://github.com/rubenfb23/research-pi.
 Los commits de los cuatro hitos están publicados en `main`. La primera CI remota
 pasó instalación, las 17 pruebas, demo, auditoría y subida de evidencias:
 https://github.com/rubenfb23/research-pi/actions/runs/36997449500
-La herramienta de protocolos propios y la actualización de acciones de CI se validan
-en una segunda ejecución antes de la entrega.
+La herramienta de protocolos propios y las acciones actualizadas también pasaron
+instalación, 17 pruebas, veinte fits, auditoría y subida de evidencias en la CI final
+del commit de implementación `c76bbd55d4ff78bc63d8a4638fd7f1e7e139ded1`:
+https://github.com/rubenfb23/research-pi/actions/runs/36997809448
+
+Código verificado publicado; checkout local sin cambios pendientes. La entrega final
+incluye una actualización documental de este estado, sin cambios al código probado.
 
 El agente puede crear protocolos propios compatibles mediante herramientas específicas:
 plantilla estructurada y congelación con validación del host. Una prueba atraviesa el
