@@ -39,6 +39,8 @@ try {
   assert.match(first.stderr, /reasoning stream: off/);
   assert.match(first.stdout, /OFFLINE TEST/); assert.match(first.stderr, /Tool: project_status/);
   assert.match(first.stderr, /Unknown command/);
+  assert.match(first.stderr, /Tab.*complete/);
+  assert(!existsSync(join(project, '.research-pi/input-history.json')), 'Piped input must not populate interactive history');
   // macOS exposes temporary directories through /var -> /private/var.
   assert.equal(realpathSync(JSON.parse(run(['status']).stdout).project), realpathSync(project));
   const pointer = readFileSync(join(project, '.research-pi/session-pointer.json'), 'utf8');

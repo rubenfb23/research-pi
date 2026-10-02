@@ -95,7 +95,7 @@ export async function openResearchSession(project: string, config?: AgentConfig,
     settingsManager: SettingsManager.inMemory({ compaction: { enabled: false, keepRecentTokens: 128 }, retry: { enabled: false } }),
     thinkingLevel: model.reasoning ? preferences(cwd).thinkingLevel : 'off',
   });
-  return { ...result, manager, selected, savePointer() {
+  return { ...result, manager, selected, getModels: () => runtime.getModels(selected.provider), savePointer() {
     const path = manager.getSessionFile();
     if (path) writeJson(pointer, { path });
   } };

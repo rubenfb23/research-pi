@@ -49,13 +49,19 @@ Native package tests verified help/version, chat, SDK tool calls, resume, invoca
 
 OpenCode uses native Pi providers rather than an OpenCode local server. Tests simulate seven provider/API routes, verify key/client/session headers, independent credential storage, cancellation, actual bounded tool execution and stable session IDs after resume. CLI checks cover both catalogs, environment-key setup, model switching and rejection of piped keys. Native smoke tests check both catalogs. See [OpenCode](opencode.md).
 
-Version 1.0.0 passes 37 local tests, including twenty actual CPU fits. English-interface checks exercise fresh connection setup under a Spanish locale, English help/errors and paper/resource output. A separate pseudo-terminal check verified no-argument startup of the globally linked `repi`, fresh English onboarding under `es_ES.UTF-8`, offline chat and clean exit. Native smoke tests exercise the actual installed onboarding and help. Release publication runs scientific and all four native installer checks before uploading four packages, four checksums and a source-commit manifest. See [releases](releases.md).
+Version 1.1.0 passes 40 local tests, including twenty actual CPU fits. English-interface checks exercise fresh connection setup under a Spanish locale, English help/errors and paper/resource output. A separate pseudo-terminal check verified no-argument startup of the globally linked `repi`, fresh English onboarding under `es_ES.UTF-8`, offline chat and clean exit. Native smoke tests exercise the actual installed onboarding and help. Release publication runs scientific and all four native installer checks before uploading four packages, four checksums and a source-commit manifest. See [releases](releases.md).
 
 ## Terminal and prompt 1.0.0
 
 The CLI uses a colored scrolling layout, immediate answer streaming, separate provider reasoning, tool progress/completion, a model picker, and persisted effort/display preferences. Plain output and `NO_COLOR` remain supported. Tests verify text arrives before completion, reasoning stays off answer stdout, split terminal controls are stripped, and settings survive resume. A real pseudo-terminal verified colored startup, input, tool boundaries and clean exit. [Assistant contract](assistant.md).
 
 The initial live greeting check found a Spanish, lengthy response; the prompt was strengthened with an explicit English response contract and short greeting example. A subsequent fresh-project Go `glm-5.3-flash` call returned exactly “Hi! What research question are you working on?”, emitted 58 characters of provider reasoning, and called no tools. This is one behavior check, not a general model-compliance evaluation. SDK-clamped effort was high for this model although the project default is medium.
+
+## Keyboard verification 1.1.0
+
+Completion tests cover command prefixes, provider/model arguments, supported effort levels and prose without completion. History checks cover deduplication, a 500-entry bound, separate concurrent-session snapshots, corrupt storage recovery and whitespace/control exclusions. A POSIX pseudo-terminal exercises the actual compiled CLI with unique and double Tab, provider connection, model IDs and the picker, ↑/↓ navigation, prefix draft restoration, restart persistence and hidden credential entry. Persisted SDK user messages verify recalled text was actually submitted. Go model completion uses the real SDK catalog with a fake key and sends no inference request.
+
+The automated keyboard test runs on POSIX. Windows native installer smoke tests exercise setup/chat/resume with piped input; interactive Windows keyboard behavior still needs a native terminal check. The added completion/history code uses Node's cross-platform readline API.
 
 ## Pending capabilities and limitations
 
