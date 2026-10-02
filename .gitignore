@@ -1,0 +1,10 @@
+node_modules/
+dist/
+.venv/
+.research-pi/
+__pycache__/
+*.pyc
+.env
+.env.*
+*.log
+coverage/

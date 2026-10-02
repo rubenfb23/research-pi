@@ -1,0 +1,8 @@
+{
+  "compilerOptions": {
+    "target": "ES2023", "module": "NodeNext", "moduleResolution": "NodeNext",
+    "strict": true, "rootDir": "src", "outDir": "dist", "declaration": true,
+    "noUncheckedIndexedAccess": true, "skipLibCheck": true
+  },
+  "include": ["src/**/*.ts"]
+}

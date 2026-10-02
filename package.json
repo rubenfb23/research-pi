@@ -1,0 +1,33 @@
+{
+  "name": "research-pi",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "license": "UNLICENSED",
+  "engines": {
+    "node": ">=22.19.0"
+  },
+  "bin": {
+    "research-pi": "dist/cli.js"
+  },
+  "scripts": {
+    "build": "tsc",
+    "start": "node dist/cli.js",
+    "test": "tsx --test tests/*.test.ts",
+    "check": "npm run build && npm test",
+    "demo": "node dist/cli.js demo"
+  },
+  "dependencies": {
+    "@earendil-works/pi-ai": "1.0.0",
+    "@earendil-works/pi-coding-agent": "1.0.0",
+    "commander": "14.0.3"
+  },
+  "devDependencies": {
+    "@types/node": "22.19.15",
+    "tsx": "4.21.0",
+    "typescript": "5.9.3"
+  },
+  "overrides": {
+    "esbuild": "0.28.1"
+  }
+}
