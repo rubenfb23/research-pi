@@ -4,6 +4,7 @@ import { existsSync, mkdtempSync, readFileSync, realpathSync, rmSync } from 'nod
 import { tmpdir, homedir } from 'node:os';
 import { join } from 'node:path';
 import { pathToFileURL } from 'node:url';
+import { fileURLToPath } from 'node:url';
 
 const exe = process.argv[2] || 'repi';
 const app = process.argv[3];
@@ -32,6 +33,13 @@ try {
   assert.equal(prompt.status, 0, prompt.error?.message || prompt.stderr);
   assert(prompt.stdout.includes(policy), 'Installed runtime must load the full bundled manuscript policy');
   assert.match(prompt.stdout, /ten distinct/);
+  assert.match(prompt.stdout, /Web research workflow/);
+  const webStatus = JSON.parse(run(['web','status']).stdout);
+  assert.equal(webStatus.directReading,true); assert.equal(webStatus.searchApiRequired,false);
+  const webSmoke = spawnSync(join(app,'..','runtime',process.platform === 'win32' ? 'node.exe' : 'node'),
+    [fileURLToPath(new URL('./smoke-web.mjs',import.meta.url)),app],{encoding:'utf8',timeout:70000});
+  assert.equal(webSmoke.status,0,webSmoke.error?.message || webSmoke.stderr);
+  console.log(webSmoke.stdout.trim());
   for (const provider of ['opencode', 'opencode-go']) {
     assert(JSON.parse(run(['models', provider]).stdout).some(model => model.id === 'glm-5.3'));
   }

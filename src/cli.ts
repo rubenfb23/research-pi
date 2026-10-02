@@ -13,12 +13,34 @@ import { aggregateProject, auditProject, runExperiment, withProjectLock } from '
 import type { Protocol } from './protocol.js';
 import { searchLibrary, scientificProtocol, reviewCausal, type CausalPlan } from './science.js';
 import { draftPaper, outlinePaper, reviewProjectManifest, venueProfiles, type ManuscriptManifest } from './papers.js';
+import { WebResearch } from './web.js';
 
 const program = new Command().name('repi').version(readJson<{ version: string }>(join(ROOT, 'package.json')).version)
   .description('ResearchPi: research with Claude, OpenAI or OpenCode on the Pi SDK')
   .option('--project <directory>', 'project directory', '.')
   .option('--offline', 'offline test chat without scientific reasoning');
 const project = () => resolve(program.opts().project);
+const web = program.command('web').description('Read and search public sources with direct HTTP and your installed browser');
+web.command('status').action(() => console.log(JSON.stringify(new WebResearch(project()).status(),null,2)));
+async function webAction(action: (web: WebResearch, signal: AbortSignal) => Promise<unknown>) {
+  const controller = new AbortController();
+  const stop = () => controller.abort(); process.once('SIGINT',stop);
+  try {
+    const result = await action(new WebResearch(project()),controller.signal);
+    console.log(JSON.stringify(result,null,2));
+    if (controller.signal.aborted) process.exitCode = 130;
+    else if (['error','blocked','unsupported','incomplete','no_results'].includes((result as { status:string }).status)) process.exitCode = 1;
+  } finally { process.removeListener('SIGINT',stop); }
+}
+web.command('read').argument('<url>').action(url => webAction((web,signal) => web.read(url,signal)));
+web.command('open').argument('<url>').action(url => webAction((web,signal) => web.open(url,signal)));
+web.command('search').argument('<query>').option('--engine <id>','auto, duckduckgo or bing','auto')
+  .action((query,opts) => webAction((web,signal) => web.search(query,opts.engine,signal)));
+web.command('papers').argument('<query>').option('--from-year <year>').option('--until-year <year>').option('--issn <id>').option('--limit <number>','1 to 10','10')
+  .action((query,opts) => webAction((web,signal) => web.papers(query,{fromYear:opts.fromYear ? Number(opts.fromYear) : undefined,untilYear:opts.untilYear ? Number(opts.untilYear) : undefined,issn:opts.issn,limit:Number(opts.limit)},signal)));
+web.command('follow').argument('<source-id>').argument('<link-id>').action((id,link) => webAction((web,signal) => web.follow(id,Number(link),signal)));
+web.command('source').argument('<source-id>').option('--offset <number>','text offset','0').option('--max-chars <number>','1000 to 20000','12000').option('--link-offset <number>','link offset','0')
+  .action((id,opts) => console.log(JSON.stringify(new WebResearch(project()).source(id,Number(opts.offset),Number(opts.maxChars),Number(opts.linkOffset)),null,2)));
 program.command('config').requiredOption('--provider <id>').requiredOption('--model <id>').action(opts => {
   writeJson(join(stateDir(project()), 'config.json'), { provider: opts.provider, model: opts.model });
   console.log('Model saved. Use connect to configure credentials.');
