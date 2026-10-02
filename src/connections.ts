@@ -4,13 +4,13 @@ import { join } from 'node:path';
 import { spawn } from 'node:child_process';
 import { ModelRuntime } from '@earendil-works/pi-coding-agent';
 import type { AuthInteraction, AuthType } from '@earendil-works/pi-ai';
-import { ROOT, stateDir } from './paths.js';
+import { installationDataDirectory, stateDir } from './paths.js';
 import { readJson, writeJson } from './storage.js';
 
 export interface AgentConfig { provider: string; model: string; authMode?: AuthType; }
 export const mockConfig: AgentConfig = { provider: 'researchpi-mock', model: 'offline-test' };
 // Installation-local credentials are reused across projects, never across applications.
-export const connectionDir = () => join(ROOT, '.research-pi', 'connections');
+export const connectionDir = () => join(installationDataDirectory(), 'connections');
 export const connectionConfig = () => join(connectionDir(), 'config.json');
 export const connectionAuth = () => join(connectionDir(), 'auth.json');
 export function selectedConfig(project: string): AgentConfig | undefined {

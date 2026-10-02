@@ -1,0 +1,70 @@
+name: Native installers
+on:
+  push:
+    branches: [main]
+    tags: ['v*']
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  package:
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: ubuntu-24.04
+            target: deb
+            arch: x64
+          - os: windows-2022
+            target: windows
+            arch: x64
+          - os: macos-15
+            target: macos
+            arch: arm64
+          - os: macos-15-intel
+            target: macos
+            arch: x64
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v7.0.1
+      - uses: actions/setup-node@v7.0.0
+        with:
+          node-version: '22.23.0'
+          architecture: ${{ matrix.arch }}
+          cache: npm
+      - run: npm ci
+      - if: runner.os == 'Windows'
+        run: choco install nsis --yes --no-progress
+      - run: npm run package:native -- ${{ matrix.target }}
+      - if: runner.os == 'Linux'
+        run: sudo dpkg -i release/*.deb
+      - if: runner.os == 'Linux'
+        run: node scripts/smoke-installed.mjs /usr/bin/repi /opt/research-pi/app
+      - if: runner.os == 'Linux'
+        run: sudo dpkg -r research-pi && test -f "$HOME/.local/share/research-pi/connections/config.json"
+      - if: runner.os == 'macOS'
+        run: sudo installer -pkg release/*.pkg -target /
+      - if: runner.os == 'macOS'
+        run: node scripts/smoke-installed.mjs /usr/local/bin/repi /Library/ResearchPi/app
+      - if: runner.os == 'macOS'
+        run: sudo rm -rf /Library/ResearchPi /usr/local/bin/repi && sudo pkgutil --forget com.researchpi.cli && test -f "$HOME/Library/Application Support/ResearchPi/connections/config.json"
+      - if: runner.os == 'Windows'
+        shell: pwsh
+        run: |
+          $exe = (Get-ChildItem release/*-setup.exe).FullName
+          $p = Start-Process $exe -ArgumentList '/S' -Wait -PassThru
+          if ($p.ExitCode -ne 0) { throw "Installer failed: $($p.ExitCode)" }
+          $env:Path = [Environment]::GetEnvironmentVariable('Path','User') + ';' + $env:Path
+          node scripts/smoke-installed.mjs repi "$env:LOCALAPPDATA/Programs/ResearchPi/app"
+          if ($LASTEXITCODE -ne 0) { throw 'Installed CLI smoke failed' }
+          $p = Start-Process "$env:LOCALAPPDATA/Programs/ResearchPi/Uninstall.exe" -ArgumentList '/S' -Wait -PassThru
+          if ($p.ExitCode -ne 0) { throw 'Uninstall failed' }
+          if (!(Test-Path "$env:LOCALAPPDATA/ResearchPi/connections/config.json")) { throw 'User data removed' }
+          if ([Environment]::GetEnvironmentVariable('Path','User') -like '*Programs\ResearchPi*') { throw 'PATH entry not removed' }
+      - uses: actions/upload-artifact@v7.0.1
+        with:
+          name: installer-${{ matrix.target }}-${{ matrix.arch }}
+          path: release/*
+          retention-days: 14
+          if-no-files-found: error

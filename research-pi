@@ -10,13 +10,19 @@ const root = dirname(fileURLToPath(import.meta.url));
 function fail(message) { console.error(message); process.exit(1); }
 const [major, minor] = process.versions.node.split('.').map(Number);
 if (major < 22 || (major === 22 && minor < 19)) fail('ResearchPi requiere Node >=22.19. Instálalo y vuelve a ejecutar ./research-pi.');
+if (existsSync(join(root, 'package-runtime.json'))) {
+  // Native installers already include Node, dependencies and compiled code.
+  // Never install, compile or write inside the system application directory.
+  process.argv = [process.execPath, join(root, 'dist', 'cli.js'), ...process.argv.slice(2)];
+  await import('./dist/cli.js');
+} else {
 const digest = paths => {
   const hash = createHash('sha256');
   for (const path of paths.sort()) { hash.update(path); hash.update(readFileSync(join(root, path))); }
   return hash.digest('hex');
 };
 function run(exe, args) {
-  const result = spawnSync(exe, args, { cwd: root, stdio: 'inherit' });
+  const result = spawnSync(exe, args, { cwd: root, stdio: 'inherit', shell: process.platform === 'win32' && exe.endsWith('.cmd') });
   if (result.error) fail(`No se pudo iniciar ${exe}. Comprueba que está instalado.`);
   if (result.signal) process.exit(result.signal === 'SIGINT' ? 130 : 1);
   if (result.status !== 0) process.exit(result.status ?? 1);
@@ -41,3 +47,4 @@ writeFileSync(cache, JSON.stringify({ dependencies, sources, compiled: built() }
 // Import in this process so Ctrl+C, terminal input and streamed output reach the CLI.
 process.argv = [process.execPath, join(root, 'dist', 'cli.js'), ...process.argv.slice(2)];
 await import('./dist/cli.js');
+}

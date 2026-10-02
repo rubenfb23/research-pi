@@ -10,6 +10,9 @@ from Pi's SDK documentation/examples; the retained MIT notice applies to those p
 
 Installed npm packages and Python wheels retain their own license files. The source
 repository does not vendor node_modules, Python wheels, scientific datasets or book PDFs.
+Native installers bundle production npm packages with their distributed license files,
+retain this notice and docs/Pi-LICENSE.txt, and include the Node runtime LICENSE (with its
+third-party notices) in runtime/Node-LICENSE.txt. Python wheels are installed separately.
 The lockfiles identify the exact dependencies. See `docs/dependency-licenses.md` for
 the license metadata inventory; redistributing a bundled application requires preserving
 the full notices and checking the actual bundle contents.

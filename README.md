@@ -5,14 +5,34 @@ Harness de investigación para ML, AI y computer science basado en el SDK de Pi 
 Repositorio independiente: https://github.com/rubenfb23/research-pi
 Implementa los cuatro hitos del [encargo](docs/encargo-codex-research-pi.md).
 
-Requiere Node >=22.19 y npm. Python 3.14 se necesita únicamente para los experimentos
-(entorno probado); el lanzador prepara las dependencias automáticamente, sin sudo.
+## Instalar la CLI
+
+Los [instaladores nativos](https://github.com/rubenfb23/research-pi/releases) incluyen Node
+y las dependencias: `.deb` para Ubuntu/Debian x64, `.exe` para Windows x64 y `.pkg`
+para macOS Apple Silicon e Intel. Consulta [instalación y paquetes](docs/installation.md).
+Tras instalar, abre una terminal nueva y ejecuta:
+
+```sh
+repi
+repi --help
+repi connect codex
+repi connect claude
+repi chat 'Ayúdame a diseñar un experimento'
+```
+
+Para instalar desde el código fuente, requiere Node >=22.19 y npm:
 
 ```sh
 git clone https://github.com/rubenfb23/research-pi.git
 cd research-pi
-./research-pi
+npm run install:cli
+repi
 ```
+
+Se crea el comando `repi` en el prefijo global de npm, sin sudo. El checkout debe
+permanecer en su ubicación; puedes seguir usando `./research-pi` o `npm start`.
+Python 3.14 se necesita únicamente para experimentos. La instalación del entorno
+científico es automática cuando Python está disponible; el chat no lo necesita.
 
 El primer arranque instala las dependencias, prepara la CLI y muestra un asistente:
 elige **Claude**, **Codex / OpenAI con ChatGPT**, **OpenAI con API key** o **prueba offline**.

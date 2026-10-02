@@ -1,7 +1,7 @@
 import { spawn } from 'node:child_process';
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs';
 import { join } from 'node:path';
-import { ROOT } from './paths.js';
+import { ROOT, pythonVenvDirectory } from './paths.js';
 import { fileHash } from './storage.js';
 
 let installing: Promise<void> | undefined;
@@ -18,7 +18,7 @@ export async function ensureExperiments(signal?: AbortSignal): Promise<void> {
   if (installing) return installing;
   installing = (async () => {
     signal?.throwIfAborted();
-    const venv = join(ROOT, '.venv');
+    const venv = pythonVenvDirectory();
     const python = join(venv, process.platform === 'win32' ? 'Scripts/python.exe' : 'bin/python');
     const stamp = join(venv, '.research-pi-requirements');
     const digest = fileHash(join(ROOT, 'requirements.lock'));

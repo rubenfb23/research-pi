@@ -1,5 +1,10 @@
 # Inicio y conexiones
 
+Los [paquetes nativos](installation.md) y `npm run install:cli` permiten invocar
+`repi` desde cualquier carpeta. Los comandos de esta guía también funcionan con
+`repi` en lugar de `./research-pi`. En los paquetes nativos las conexiones y Python
+usan el directorio de datos del usuario; el checkout mantiene su ubicación anterior.
+
 Ejecuta `./research-pi` desde el checkout (Linux/macOS; Windows puede usar WSL).
 Necesitas Node >=22.19 y npm instalados. El lanzador instala el lock de npm si falta,
 compila si cambia el código y abre un chat interactivo. `npm start` hace lo mismo.

@@ -2,7 +2,7 @@ import { spawn } from 'node:child_process';
 import { randomUUID } from 'node:crypto';
 import { appendFileSync, existsSync, mkdirSync, readFileSync, readdirSync, rmSync, writeFileSync } from 'node:fs';
 import { join } from 'node:path';
-import { ROOT, stateDir } from './paths.js';
+import { ROOT, stateDir, pythonVenvDirectory } from './paths.js';
 import { codeFingerprint, loadFrozen, type FrozenProtocol, type Method } from './protocol.js';
 import { fileHash, hash, readJson, writeJson } from './storage.js';
 
@@ -88,7 +88,7 @@ function validateMeasurement(m: Measurement, frozen: FrozenProtocol, method: Met
 }
 
 export function pythonPath(): string {
-  return process.env.RESEARCH_PI_PYTHON ?? join(ROOT, '.venv', process.platform === 'win32' ? 'Scripts/python.exe' : 'bin/python');
+  return process.env.RESEARCH_PI_PYTHON ?? join(pythonVenvDirectory(), process.platform === 'win32' ? 'Scripts/python.exe' : 'bin/python');
 }
 function worker(frozen: FrozenProtocol, method: Method, seed: number, signal?: AbortSignal): Promise<Measurement> {
   return new Promise((resolve, reject) => {

@@ -5,7 +5,7 @@ import { chat } from './chat.js';
 import { connect, connectionName, changeModel, connectionRuntime, selectedConfig, connections } from './connections.js';
 import { terminalUI } from './terminal.js';
 import { ensureExperiments } from './setup.js';
-import { stateDir } from './paths.js';
+import { ROOT, stateDir } from './paths.js';
 import { projectStatus, writeJson } from './storage.js';
 import { readJson } from './storage.js';
 import { demoProtocol, freezeProtocol } from './protocol.js';
@@ -14,7 +14,7 @@ import type { Protocol } from './protocol.js';
 import { searchLibrary, scientificProtocol, reviewCausal, type CausalPlan } from './science.js';
 import { draftPaper, outlinePaper, reviewProjectManifest, venueProfiles, type ManuscriptManifest } from './papers.js';
 
-const program = new Command().name('research-pi').version('0.1.0')
+const program = new Command().name('repi').version(readJson<{ version: string }>(join(ROOT, 'package.json')).version)
   .description('ResearchPi: investigación con Claude u OpenAI sobre el SDK de Pi')
   .option('--project <directory>', 'directorio del proyecto', '.')
   .option('--offline', 'chat de prueba sin conexión ni razonamiento científico');
@@ -51,7 +51,7 @@ program.command('disconnect').argument('<connection>', 'claude, codex u openai')
 });
 program.command('setup').option('--experiments', 'preparar también Python para los experimentos').action(async opts => {
   if (opts.experiments) await ensureExperiments();
-  console.log('ResearchPi está preparado. Ejecuta ./research-pi para abrir el chat.');
+  console.log('ResearchPi está preparado. Ejecuta repi (tras instalar la CLI) o ./research-pi para abrir el chat.');
 });
 program.command('status').action(() => console.log(JSON.stringify(projectStatus(project()), null, 2)));
 program.command('search').argument('[query]', 'Spanish/English lexical query', '').option('--topic <topic>').action((query, opts) => {

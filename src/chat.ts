@@ -18,7 +18,7 @@ export async function chat(project: string, prompt?: string, options: { offline?
   try {
     let config = options.offline ? mockConfig : selectedConfig(project);
     if (!config) {
-      if (!process.stdin.isTTY) throw new Error('Conecta con ./research-pi connect o usa chat --offline para una prueba sin conexión.');
+      if (!process.stdin.isTTY) throw new Error('Conecta con repi connect o usa chat --offline para una prueba sin conexión.');
       ui = terminalUI(controller.signal);
       config = await connect(project, undefined, ui);
     }
@@ -53,7 +53,7 @@ export async function chat(project: string, prompt?: string, options: { offline?
     if (config.provider === mockConfig.provider) ui.message('OFFLINE TEST: transporte de prueba, sin respuestas científicas reales.');
     while (!controller.signal.aborted) {
       let text: string;
-      try { text = (await ui.read('research-pi >')).trim(); }
+      try { text = (await ui.read('repi >')).trim(); }
       catch (error) { if (error instanceof EndOfInput || controller.signal.aborted) break; throw error; }
       if (!text) continue;
       if (text === '/exit' || text === '/quit') break;

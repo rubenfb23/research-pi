@@ -1,6 +1,6 @@
 {
   "name": "research-pi",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "private": true,
   "type": "module",
   "license": "UNLICENSED",
@@ -8,11 +8,15 @@
     "node": ">=22.19.0"
   },
   "bin": {
+    "repi": "research-pi",
     "research-pi": "research-pi"
   },
   "scripts": {
     "build": "tsc",
     "start": "node research-pi",
+    "install:cli": "node scripts/install-cli.mjs",
+    "uninstall:cli": "npm uninstall --global research-pi",
+    "package:native": "node scripts/package-native.mjs",
     "test": "tsx --test tests/*.test.ts",
     "check": "npm run build && npm test",
     "demo": "node research-pi demo"
