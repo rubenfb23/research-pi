@@ -1,0 +1,6 @@
+{
+  "id": "methodology", "title": "Redacción de metodología trazable",
+  "sourceIds": ["sklearn-practices", "mensh-kording", "neurips-checklist"],
+  "steps": ["Separar planificación y ejecución", "Identificar datos y sus derechos", "Explicar preprocessing aprendido en train", "Documentar splits, algoritmos y parámetros", "Explicar selección y presupuesto", "Declarar seeds, métrica e incertidumbre", "Enlazar versiones, recibos y reproducción", "Declarar cambios exploratorios y limitaciones"],
+  "reviewBoundary": "Generar desde evidencias evita inventar cifras; todavía se debe revisar claridad, suficiencia y validez."
+}

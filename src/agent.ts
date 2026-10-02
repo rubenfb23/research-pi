@@ -30,10 +30,11 @@ function mockStream(model: Parameters<NonNullable<Parameters<ModelRuntime['regis
     const last = context.messages.at(-1);
     const text = last && 'content' in last ? (typeof last.content === 'string' ? last.content
       : last.content.filter(c => c.type === 'text').map(c => c.text).join('')) : '';
-    const call = last?.role === 'user' && text === '[tool:project_status]';
+    const requested = last?.role === 'user' ? /^\[tool:([a-z_]+)\](?: (\{.*\}))?$/.exec(text) : null;
+    const call = requested !== null;
     const message: AssistantMessage = {
       role: 'assistant', api: model.api, provider: model.provider, model: model.id,
-      content: call ? [{ type: 'toolCall', id: 'mock-status', name: 'project_status', arguments: {} }]
+      content: call ? [{ type: 'toolCall', id: 'mock-' + requested[1], name: requested[1]!, arguments: requested[2] ? JSON.parse(requested[2]) : {} }]
         : [{ type: 'text', text: 'ResearchPi OFFLINE TEST: SDK session, scientific resource and tools loaded. No live scientific reasoning.' }],
       stopReason: call ? 'toolUse' : 'stop', timestamp: Date.now(),
       usage: { input: 50, output: 20, cacheRead: 0, cacheWrite: 0, totalTokens: 70,

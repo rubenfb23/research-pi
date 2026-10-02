@@ -1,0 +1,6 @@
+{
+  "id": "causal", "title": "Análisis causal: puertas de revisión",
+  "sourceIds": ["dowhy-causal", "what-if"],
+  "steps": ["Definir exposición, resultado, población, horizonte y estimando", "Explicar datos, diseño, DAG y supuestos", "Justificar identificación antes de estimar", "Elegir estimador compatible e incertidumbre", "Planificar sensibilidad y robustez", "Limitar conclusiones al diseño y evidencia"],
+  "reviewBoundary": "Completar campos no demuestra supuestos, identificación o causalidad. La revisión científica siempre queda explícita."
+}

@@ -6,6 +6,7 @@ import { join } from 'node:path';
 import { openResearchSession } from '../src/agent.js';
 import { stateDir } from '../src/paths.js';
 import { projectStatus, writeJson, canonical } from '../src/storage.js';
+import { researchTools } from '../src/tools.js';
 
 test('H1: real Pi SDK mock tool call, persistent resume and actual compaction preserve scientific state', async () => {
   const project = mkdtempSync(join(tmpdir(), 'researchpi-session-'));
@@ -33,4 +34,18 @@ test('H1: real Pi SDK mock tool call, persistent resume and actual compaction pr
     await second.session.prompt('[tool:project_status]');
     assert.equal(canonical(projectStatus(project)), before);
   } finally { first?.session.dispose(); second?.session.dispose(); rmSync(project, { recursive: true, force: true }); }
+});
+
+test('H3: research tools operate through Pi with no free filesystem/shell tool', async () => {
+  const project = mkdtempSync(join(tmpdir(), 'researchpi-tools-'));
+  const opened = await openResearchSession(project, undefined, researchTools(project));
+  try {
+    const names = opened.session.getActiveToolNames();
+    assert(names.includes('search_library') && names.includes('run_frozen_experiment'));
+    assert(!names.some(n => ['read','write','edit','bash','codemode'].includes(n)));
+    await opened.session.prompt('[tool:search_library] {"query":"causal identificación"}');
+    const message = opened.session.messages.find(m => m.role === 'toolResult' && m.toolName === 'search_library');
+    assert(message && message.role === 'toolResult' && !message.isError);
+    assert.match(JSON.stringify(message.content), /dowhy-causal/);
+  } finally { opened.session.dispose(); rmSync(project, { recursive: true, force: true }); }
 });

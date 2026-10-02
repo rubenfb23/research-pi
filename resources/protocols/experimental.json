@@ -1,0 +1,6 @@
+{
+  "id": "experimental", "title": "Diseño experimental ML",
+  "sourceIds": ["lab-policy", "sklearn-practices", "neurips-checklist"],
+  "steps": ["Pregunta e hipótesis", "Datos, unidades de evaluación y splits sin leakage", "Métrica principal y baselines con presupuesto comparable", "Configuraciones y diez seeds predefinidas", "Congelación antes de evaluar", "Registro de todos los intentos y artefactos", "Agregación y alcance de incertidumbre", "Ablations e interpretación con límites"],
+  "reviewBoundary": "El runner comprueba campos y cobertura; pertinencia de baselines, métricas y diseño requiere revisión científica. Teoría y tareas deterministas deben justificar seeds no aplicables."
+}

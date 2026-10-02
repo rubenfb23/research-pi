@@ -1,0 +1,11 @@
+{
+  "id": "lab-policy", "title": "Política del laboratorio: diez seeds",
+  "authors": ["Usuario de ResearchPi"], "sourceUrl": "docs/diseno-harness-research.md",
+  "sourceSection": "Regla de las 10 seeds", "sourceDate": "2026-10-02", "verifiedAt": "2026-10-02",
+  "kind": "user_policy", "topics": ["experimental", "seeds", "reproducibilidad", "methodology"],
+  "scope": "Configuraciones y baselines estocásticos del laboratorio",
+  "summary": "Predefinir diez seeds distintas por configuración. Registrar fallos y reintentos, separar entrenamiento de datos/split y congelar el protocolo antes de ejecutar.",
+  "interpretation": "La demo implementa esta política mecánicamente. No se permite reducirla mediante una decisión del modelo.",
+  "limitations": "No es una regla universal de conferencias ni garantiza suficiencia estadística. Estudios deterministas o teóricos necesitan una justificación de no aplicabilidad; el runner MVP solo admite métodos estocásticos.",
+  "conflicts": [], "referenceStatus": "verified"
+}

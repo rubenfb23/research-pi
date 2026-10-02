@@ -1,0 +1,13 @@
+{
+  "id": "dowhy-causal", "title": "Separar modelado, identificación, estimación y refutación",
+  "authors": ["PyWhy / DoWhy contributors"],
+  "sourceUrl": "https://www.pywhy.org/dowhy/main/user_guide/causal_tasks/estimating_causal_effects/index.html",
+  "sourceSection": "Estimating Causal Effects: four-step workflow and identification strategies",
+  "sourceDate": "main branch, consulted 2026-10-02", "verifiedAt": "2026-10-02", "kind": "sourced_guidance",
+  "topics": ["causal", "causalidad", "identification", "identificación", "assumptions", "supuestos", "robustez"],
+  "scope": "Estimación de efectos causales con datos y conocimiento del dominio",
+  "summary": "Formular supuestos y una representación causal antes de identificar el efecto. Elegir un estimador compatible con la identificación y después estudiar robustez frente a supuestos. El orden evita confundir una asociación estimada con un efecto causal identificado.",
+  "interpretation": "El validador de ResearchPi bloquea conclusiones respaldadas si faltan elementos y distingue no identificable de información insuficiente. Su comprobación de campos no demuestra los supuestos.",
+  "limitations": "Superar refutaciones no prueba todos los supuestos. El MVP no calcula estimaciones DoWhy ni identifica efectos automáticamente.",
+  "conflicts": [], "referenceStatus": "verified"
+}

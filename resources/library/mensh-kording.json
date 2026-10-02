@@ -1,0 +1,13 @@
+{
+  "id": "mensh-kording", "title": "Estructurar un paper alrededor de su contribución y evidencia",
+  "authors": ["Brett Mensh", "Konrad Kording"],
+  "sourceUrl": "https://journals.plos.org/ploscompbiol/article?id=10.1371/journal.pcbi.1005619",
+  "doi": "10.1371/journal.pcbi.1005619", "sourceSection": "Rules 1–3, 7–10",
+  "sourceDate": "2017", "verifiedAt": "2026-10-02", "kind": "sourced_guidance",
+  "topics": ["paper", "writing", "escritura", "methodology", "metodología", "expertos", "estructura"],
+  "scope": "Escritura de artículos científicos; adaptación editorial a ML",
+  "summary": "Explicar una contribución central y organizar los resultados como pasos lógicos que la sostengan. Dar al lector contexto suficiente, vincular afirmaciones con evidencia, planificar un esquema y solicitar lectura crítica.",
+  "interpretation": "Los perfiles de ResearchPi sirven de esquema editable. La metodología sale de protocolo y registros reales; la revisión del argumento sigue siendo humana.",
+  "limitations": "No impone secciones idénticas a artículos teóricos, datasets, sistemas o surveys. No sustituye instrucciones de la publicación.",
+  "conflicts": [], "referenceStatus": "verified"
+}

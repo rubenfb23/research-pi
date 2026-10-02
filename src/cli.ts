@@ -8,6 +8,8 @@ import { readJson } from './storage.js';
 import { demoProtocol, freezeProtocol } from './protocol.js';
 import { aggregateProject, auditProject, runExperiment, withProjectLock } from './experiments.js';
 import type { Protocol } from './protocol.js';
+import { searchLibrary, scientificProtocol, reviewCausal, type CausalPlan } from './science.js';
+import { researchTools } from './tools.js';
 
 const program = new Command().name('research-pi').version('0.1.0')
   .description('Scientific harness on the Pi SDK').option('--project <directory>', 'project directory', '.');
@@ -17,6 +19,17 @@ program.command('config').requiredOption('--provider <id>').requiredOption('--mo
   console.log('Model configuration saved; credentials stay in environment variables.');
 });
 program.command('status').action(() => console.log(JSON.stringify(projectStatus(project()), null, 2)));
+program.command('search').argument('[query]', 'Spanish/English lexical query', '').option('--topic <topic>').action((query, opts) => {
+  console.log(JSON.stringify(searchLibrary(query, opts.topic), null, 2));
+});
+program.command('protocol').argument('<id>', 'experimental, causal or methodology').action(id => {
+  console.log(JSON.stringify(scientificProtocol(id), null, 2));
+});
+program.command('causal').requiredOption('--file <json>', 'causal plan JSON').action(opts => {
+  const review = reviewCausal(readJson<CausalPlan>(resolve(opts.file)));
+  console.log(JSON.stringify(review, null, 2));
+  if (review.status !== 'ready_for_scientific_review') process.exitCode = 1;
+});
 program.command('freeze').option('--file <json>', 'protocol file; otherwise use the prespecified demo')
   .option('--replace', 'explicitly freeze a new version; old evidence becomes incompatible').action(opts => {
     const frozen = withProjectLock(project(), () => freezeProtocol(project(), opts.file ? readJson<Protocol>(resolve(opts.file)) : demoProtocol(), opts.replace));
@@ -47,7 +60,7 @@ program.command('demo').description('Freeze, execute twenty CPU fits and aggrega
   if (audit.status === 'complete') console.log(JSON.stringify(aggregateProject(project()), null, 2));
 });
 program.command('chat').argument('<prompt>').option('--compact', 'compact conversation after the reply').action(async (prompt, opts) => {
-  const opened = await openResearchSession(project());
+  const opened = await openResearchSession(project(), undefined, researchTools(project()));
   const stop = () => { void opened.session.abort(); };
   process.once('SIGINT', stop);
   try {

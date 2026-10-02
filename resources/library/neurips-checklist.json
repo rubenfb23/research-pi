@@ -1,0 +1,12 @@
+{
+  "id": "neurips-checklist", "title": "Checklist de NeurIPS: transparencia e incertidumbre",
+  "authors": ["NeurIPS"], "sourceUrl": "https://neurips.cc/public/guides/PaperChecklist",
+  "sourceSection": "Claims, Limitations, Experimental Result Reproducibility, Experimental Statistical Significance",
+  "sourceDate": "2026 website edition", "verifiedAt": "2026-10-02", "kind": "venue_requirement",
+  "topics": ["paper", "experimental", "uncertainty", "incertidumbre", "seeds", "neurips", "methodology"],
+  "scope": "Checklist aplicable según edición y track de NeurIPS",
+  "summary": "Explicitar límites, reproducibilidad y qué variación representan las barras de error. Describir el procedimiento y sus supuestos, y distinguir desviación estándar, error estándar e intervalos.",
+  "interpretation": "La demo reporta SD muestral del entrenamiento con datos fijos y no convierte diez seeds en un intervalo de población.",
+  "limitations": "No fija diez seeds. Verificar reglas de la edición y track antes de enviar; una checklist rellenada no certifica validez científica.",
+  "conflicts": [], "referenceStatus": "verified"
+}
