@@ -1,10 +1,10 @@
 import { openResearchSession } from './agent.js';
-import { mockConfig, selectedConfig, connect, connectionName, changeModel } from './connections.js';
+import { mockConfig, selectedConfig, connect, connectionName, changeModel, connections } from './connections.js';
 import { terminalUI, EndOfInput } from './terminal.js';
 import { researchTools } from './tools.js';
 import { projectStatus } from './storage.js';
 
-const help = '/help · /status · /connect [claude|codex|openai|offline] · /model <id> · /compact · /exit';
+const help = `/help · /status · /connect [${Object.keys(connections).join('|')}] · /model <id> · /compact · /exit`;
 export async function chat(project: string, prompt?: string, options: { offline?: boolean; compact?: boolean } = {}) {
   const controller = new AbortController();
   let opened: Awaited<ReturnType<typeof openResearchSession>> | undefined;

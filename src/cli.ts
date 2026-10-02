@@ -2,7 +2,7 @@
 import { Command } from 'commander';
 import { join, resolve } from 'node:path';
 import { chat } from './chat.js';
-import { connect, connectionName, changeModel, connectionRuntime, selectedConfig, connections } from './connections.js';
+import { connect, connectionName, changeModel, connectionRuntime, selectedConfig, connections, connectionNames } from './connections.js';
 import { terminalUI } from './terminal.js';
 import { ensureExperiments } from './setup.js';
 import { ROOT, stateDir } from './paths.js';
@@ -15,7 +15,7 @@ import { searchLibrary, scientificProtocol, reviewCausal, type CausalPlan } from
 import { draftPaper, outlinePaper, reviewProjectManifest, venueProfiles, type ManuscriptManifest } from './papers.js';
 
 const program = new Command().name('repi').version(readJson<{ version: string }>(join(ROOT, 'package.json')).version)
-  .description('ResearchPi: investigación con Claude u OpenAI sobre el SDK de Pi')
+  .description('ResearchPi: investigación con Claude, OpenAI u OpenCode sobre el SDK de Pi')
   .option('--project <directory>', 'directorio del proyecto', '.')
   .option('--offline', 'chat de prueba sin conexión ni razonamiento científico');
 const project = () => resolve(program.opts().project);
@@ -23,7 +23,7 @@ program.command('config').requiredOption('--provider <id>').requiredOption('--mo
   writeJson(join(stateDir(project()), 'config.json'), { provider: opts.provider, model: opts.model });
   console.log('Modelo guardado. Usa connect para configurar credenciales.');
 });
-program.command('connect').alias('login').argument('[connection]', 'claude, codex, openai u offline')
+program.command('connect').alias('login').argument('[connection]', connectionNames)
   .option('--model <id>', 'modelo del catálogo de Pi').action(async (name, opts) => {
     const controller = new AbortController();
     const ui = terminalUI(controller.signal);
@@ -33,9 +33,9 @@ program.command('connect').alias('login').argument('[connection]', 'claude, code
     finally { ui.close(); process.removeListener('SIGINT', stop); }
   });
 program.command('model').argument('<id>').action(async id => { await changeModel(project(), id); console.log('Modelo guardado.'); });
-program.command('models').argument('[connection]', 'claude, codex u openai').action(async name => {
+program.command('models').argument('[connection]', connectionNames).action(async name => {
   const provider = name ? connections[connectionName(name)].provider : selectedConfig(project())?.provider;
-  if (!provider || provider === 'researchpi-mock') { console.log('Selecciona claude, codex u openai.'); return; }
+  if (!provider || provider === 'researchpi-mock') { console.log(`Selecciona una conexión: ${connectionNames}.`); return; }
   console.log(JSON.stringify((await connectionRuntime()).getModels(provider).map(m => ({ id: m.id, name: m.name })), null, 2));
 });
 program.command('connection').action(async () => {
@@ -44,7 +44,7 @@ program.command('connection').action(async () => {
     : config ? Boolean(await (await connectionRuntime()).checkAuth(config.provider)) : false;
   console.log(JSON.stringify({ selected: config ?? null, credentialsConfigured: configured, liveResponseVerified: 'Solo una respuesta real verifica acceso al modelo.' }, null, 2));
 });
-program.command('disconnect').argument('<connection>', 'claude, codex u openai').action(async name => {
+program.command('disconnect').argument('<connection>', connectionNames).action(async name => {
   const provider = connections[connectionName(name)].provider;
   if (provider !== 'researchpi-mock') await (await connectionRuntime()).logout(provider);
   console.log('Credencial local eliminada. Las variables de entorno y la autorización del proveedor se gestionan por separado.');

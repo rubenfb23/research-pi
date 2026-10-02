@@ -166,3 +166,18 @@ Las comprobaciones incluyen validación de tags/versiones, pertenencia a `main`,
 conjunto completo de instaladores y rechazo de checksums alterados. El workflow
 `release.yml` ejecuta pruebas científicas y cuatro instalaciones nativas antes de
 subir los assets de una release publicada. Consulta [releases.md](releases.md).
+
+## OpenCode Zen / Go · 0.2.2
+
+`connect`, el asistente inicial, `/connect`, `models`, `model`, `connection` y
+`disconnect` admiten `opencode` y `opencode-go` mediante sus adaptadores nativos
+incluidos en Pi 1.0.0. API keys separadas por proveedor y `OPENCODE_API_KEY` para
+ambos. ResearchPi se identifica con su nombre/versión y conserva el identificador
+de conversación al reanudar. No se integra el servidor local de OpenCode.
+
+Pruebas con HTTP simulado verifican siete rutas proveedor/formato, API key,
+cabeceras, almacenamiento, cancelación, herramientas reales del harness y resume.
+Las pruebas CLI comprueban los dos catálogos, conexión por entorno, cambio de modelo
+y rechazo de claves por tubería. Los instaladores también comprueban los catálogos.
+La inferencia con una cuenta real y acceso a cada modelo siguen pendientes.
+[Guía y fuentes](opencode.md).

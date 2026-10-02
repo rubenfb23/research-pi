@@ -50,6 +50,16 @@ La integración autenticada en vivo permanece pendiente si no se completa un log
 como alternativa. Las dos opciones comparten el proveedor `openai` y su entrada de
 credenciales: conectar otra cuenta o método sustituye esa entrada.
 
+## OpenCode Zen / Go
+
+Usa `repi connect opencode` para Zen o `repi connect opencode-go` para Go.
+Ambos aceptan API key de OpenCode Console; `repi models opencode` y
+`repi models opencode-go` muestran sus catálogos del SDK. Las credenciales guardadas
+se mantienen por proveedor, y ambos admiten `OPENCODE_API_KEY` para ejecución
+sin guardar la clave. `model`, `connection`, `disconnect` y `/connect` también
+admiten estas conexiones. Consulta [OpenCode](opencode.md) para endpoints,
+identificación de ResearchPi, alcance de Go y límites de verificación.
+
 ## Uso cotidiano
 
 `repi` reanuda el chat. `chat '<pregunta>'` envía una pregunta y termina.
