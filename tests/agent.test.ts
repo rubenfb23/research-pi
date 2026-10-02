@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import { mkdtempSync, rmSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
-import { openResearchSession } from '../src/agent.js';
+import { openResearchSession, mockConfig } from '../src/agent.js';
 import { stateDir } from '../src/paths.js';
 import { projectStatus, writeJson, canonical } from '../src/storage.js';
 import { researchTools } from '../src/tools.js';
@@ -17,7 +17,7 @@ test('H1: real Pi SDK mock tool call, persistent resume and actual compaction pr
   let first;
   let second;
   try {
-    first = await openResearchSession(project);
+    first = await openResearchSession(project, mockConfig);
     assert.match(first.session.systemPrompt, /ten distinct/);
     assert.deepEqual(first.session.getActiveToolNames(), ['project_status']);
     await first.session.prompt('[tool:project_status]');
@@ -29,7 +29,7 @@ test('H1: real Pi SDK mock tool call, persistent resume and actual compaction pr
     await first.session.compact();
     assert(first.manager.getEntries().some(e => e.type === 'compaction'));
     first.session.dispose();
-    second = await openResearchSession(project);
+    second = await openResearchSession(project, mockConfig);
     assert.equal(second.manager.getSessionFile(), file);
     assert(second.manager.getEntries().some(e => e.type === 'compaction'));
     await second.session.prompt('[tool:project_status]');
@@ -39,7 +39,7 @@ test('H1: real Pi SDK mock tool call, persistent resume and actual compaction pr
 
 test('H3: research tools operate through Pi with no free filesystem/shell tool', async () => {
   const project = mkdtempSync(join(tmpdir(), 'researchpi-tools-'));
-  const opened = await openResearchSession(project, undefined, researchTools(project));
+  const opened = await openResearchSession(project, mockConfig, researchTools(project));
   try {
     const names = opened.session.getActiveToolNames();
     assert(names.includes('search_library') && names.includes('run_frozen_experiment'));

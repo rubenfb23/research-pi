@@ -83,3 +83,35 @@ SDK, persiste una pregunta propia y comprueba el rechazo de una reducción de se
 ResearchPi usa el SDK de Pi 1.0.0 como dependencia; no modifica su núcleo.
 La licencia MIT para el código propio queda como propuesta; hasta elegirla, el paquete
 se declara UNLICENSED. Los avisos de Pi y de dependencias se conservan por separado.
+
+## Arranque y conexiones simplificados · 2026-10-02
+
+`./research-pi` y `npm start` instalan/preparan la CLI y abren el chat. El primer
+arranque ofrece Claude API, OpenAI con Sign in with ChatGPT (`connect codex`),
+OpenAI API y prueba offline. La selección y las credenciales propias de Pi se
+reutilizan en otros proyectos de esta instalación. No se importan credenciales
+de Codex o Claude Code. Anthropic se conecta mediante API key conforme a su guía.
+La [guía de conexiones](connections.md) recoge comandos y límites.
+
+Comprobaciones locales completadas:
+
+- Compilación y 23/23 pruebas: las 17 anteriores y seis nuevas de conexión/CLI.
+  API key y OAuth atraviesan el SDK real, con credenciales falsas e intercambio
+  de tokens simulado; se comprueban PKCE, estado, guardado privado y fallos sin
+  sustituir la selección. Esto no acredita login real ni acceso a los modelos.
+- Copia limpia sin node_modules, dist ni .venv: arranque sin argumentos,
+  instalación automática, asistente y chat en terminal interactiva. Una clave
+  falsa se introdujo sin eco; cambio de conexión conservando el historial y
+  cierre del chat comprobados. Ninguna petición de inferencia fue enviada.
+- Preparación automática de Python desde esa copia limpia y veinte fits reales,
+  diez seeds por configuración, con auditoría completa sin errores.
+- Demo en `examples/easy-launch-v1/.research-pi/` del checkout principal: veinte
+  fits, agregados y paper trazables. Huella de código comprobada:
+  `a109d1401d7f8bf2ca67c6a6ca58d9d7e7474f3e75f70470e8e3a80ab80f45cf`.
+  Las evidencias anteriores siguen guardadas y no se reescribieron.
+
+Pendiente: login con cuenta real de ChatGPT, clave real de Anthropic/OpenAI y
+respuesta autenticada de cada proveedor. También siguen pendientes las
+capacidades científicas y la actualización transitiva detalladas más arriba.
+La CI comprueba el mismo lanzador desde un checkout limpio; su resultado remoto
+se informa al completar la publicación de esta actualización.

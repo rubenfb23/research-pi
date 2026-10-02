@@ -8,7 +8,7 @@ import { aggregateProject, analyzeReceipts, auditProject, readReceipts, runExper
 import { canonical, hash, writeJson } from '../src/storage.js';
 import { stateDir } from '../src/paths.js';
 import { draftPaper, reviewManifest } from '../src/papers.js';
-import { openResearchSession } from '../src/agent.js';
+import { openResearchSession, mockConfig } from '../src/agent.js';
 
 const project = mkdtempSync(join(tmpdir(), 'researchpi-runs-'));
 let receipts: ReturnType<typeof readReceipts>;
@@ -58,14 +58,14 @@ test('Actual experiment evidence survives Pi resume and real SDK compaction', as
   let first;
   let second;
   try {
-    first = await openResearchSession(project);
+    first = await openResearchSession(project, mockConfig);
     await first.session.prompt('[tool:project_status]');
     await first.session.prompt('Research background: ' + 'scientific context '.repeat(500));
     await first.session.prompt('Persist state.');
     first.savePointer();
     await first.session.compact();
     first.session.dispose();
-    second = await openResearchSession(project);
+    second = await openResearchSession(project, mockConfig);
     assert(second.manager.getEntries().some(e => e.type === 'compaction'));
     await second.session.prompt('[tool:project_status]');
     assert.equal(hash(readReceipts(project)), before);

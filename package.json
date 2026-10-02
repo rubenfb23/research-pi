@@ -8,14 +8,14 @@
     "node": ">=22.19.0"
   },
   "bin": {
-    "research-pi": "dist/cli.js"
+    "research-pi": "research-pi"
   },
   "scripts": {
     "build": "tsc",
-    "start": "node dist/cli.js",
+    "start": "node research-pi",
     "test": "tsx --test tests/*.test.ts",
     "check": "npm run build && npm test",
-    "demo": "node dist/cli.js demo"
+    "demo": "node research-pi demo"
   },
   "dependencies": {
     "@earendil-works/pi-ai": "1.0.0",

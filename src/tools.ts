@@ -5,6 +5,7 @@ import { demoProtocol, freezeProtocol, type Protocol } from './protocol.js';
 import { getNote, reviewCausal, scientificProtocol, searchLibrary, type CausalPlan } from './science.js';
 import { projectStatus } from './storage.js';
 import { draftPaper, outlinePaper, venueProfiles } from './papers.js';
+import { ensureExperiments } from './setup.js';
 
 const result = (data: unknown) => ({ content: [{ type: 'text' as const, text: JSON.stringify(data) }], details: {} });
 export function researchTools(project: string): ToolDefinition[] {
@@ -42,7 +43,7 @@ export function researchTools(project: string): ToolDefinition[] {
     defineTool({ name: 'run_frozen_experiment', label: 'Execute frozen CPU experiment',
       description: 'Run the validated frozen configurations with ten seeds, genuine receipts and measured predictions. Failures require explicit user CLI run --retry; tool never silently retries.',
       parameters: Type.Object({}), executionMode: 'sequential',
-      async execute(_id, _params, signal) { return result(await runExperiment(project, { signal })); } }),
+      async execute(_id, _params, signal) { await ensureExperiments(signal); return result(await runExperiment(project, { signal })); } }),
     defineTool({ name: 'audit_experiment', label: 'Audit scientific evidence',
       description: 'Recheck seeds, versions, measured predictions and host journal; mechanical validity only.', parameters: Type.Object({}),
       async execute() { return result(auditProject(project)); } }),

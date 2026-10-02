@@ -8,9 +8,9 @@ import {
 } from '@earendil-works/pi-coding-agent';
 import { resource, stateDir } from './paths.js';
 import { projectStatus, readJson, writeJson } from './storage.js';
+import { connectionAuth, connectionRuntime, mockConfig, selectedConfig, type AgentConfig } from './connections.js';
 
-export interface AgentConfig { provider: string; model: string; }
-export const mockConfig: AgentConfig = { provider: 'researchpi-mock', model: 'offline-test' };
+export { mockConfig, type AgentConfig } from './connections.js';
 export const toolResult = (data: unknown) => ({
   content: [{ type: 'text' as const, text: JSON.stringify(data) }], details: {},
 });
@@ -51,11 +51,10 @@ export async function openResearchSession(project: string, config?: AgentConfig,
   const cwd = resolve(project);
   const dir = stateDir(cwd);
   mkdirSync(dir, { recursive: true, mode: 0o700 });
-  const settingsFile = join(dir, 'config.json');
-  const selected = config ?? (existsSync(settingsFile) ? readJson<AgentConfig>(settingsFile) : mockConfig);
-  const runtime = await ModelRuntime.create({
-    authPath: join(dir, 'auth.json'), modelsPath: null, refreshOnCreate: false,
-  });
+  const selected = config ?? selectedConfig(cwd) ?? mockConfig;
+  // Preserve support for legacy project credentials; new onboarding uses installation credentials.
+  const legacy = join(dir, 'auth.json');
+  const runtime = await connectionRuntime(!selected.authMode && existsSync(legacy) ? legacy : connectionAuth());
   if (selected.provider === mockConfig.provider) {
     runtime.registerProvider(mockConfig.provider, {
       api: 'researchpi-test', baseUrl: 'https://offline.invalid', apiKey: 'offline-test',
@@ -69,7 +68,7 @@ export async function openResearchSession(project: string, config?: AgentConfig,
   if (!model) throw new Error(`Unknown model ${selected.provider}/${selected.model}`);
   if (selected.provider !== mockConfig.provider) {
     if (process.env.RESEARCH_PI_API_KEY) await runtime.setRuntimeApiKey(selected.provider, process.env.RESEARCH_PI_API_KEY);
-    if (!runtime.hasConfiguredAuth(selected.provider)) throw new Error('Set RESEARCH_PI_API_KEY or provider API key environment variable; no live request sent.');
+    if (!await runtime.checkAuth(selected.provider)) throw new Error('Sin credenciales. Ejecuta ./research-pi connect claude o ./research-pi connect codex.');
   }
   const promptFile = resource('system.md');
   const loader: ResourceLoader = {

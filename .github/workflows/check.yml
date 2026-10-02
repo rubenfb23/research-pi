@@ -15,16 +15,14 @@ jobs:
       - uses: actions/setup-python@v7.0.0
         with:
           python-version: '3.14'
-      - run: npm ci
-      - run: python -m venv .venv
-      - run: .venv/bin/python -m pip install -r requirements.lock
+      - run: ./research-pi setup --experiments
       - run: npm run check
-      - run: npm run demo
-      - run: node dist/cli.js audit
+      - run: ./research-pi --project examples/ci-demo demo
+      - run: ./research-pi --project examples/ci-demo audit
       - uses: actions/upload-artifact@v7.0.1
         if: always()
         with:
           name: demo-evidence
-          path: .research-pi/
+          path: examples/ci-demo/.research-pi/
           include-hidden-files: true
           retention-days: 7

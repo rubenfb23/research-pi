@@ -5,40 +5,72 @@ Harness de investigación para ML, AI y computer science basado en el SDK de Pi 
 Repositorio independiente: https://github.com/rubenfb23/research-pi
 Implementa los cuatro hitos del [encargo](docs/encargo-codex-research-pi.md).
 
-Requiere Node >=22.19 y Python 3.14 (entorno probado).
+Requiere Node >=22.19 y npm. Python 3.14 se necesita únicamente para los experimentos
+(entorno probado); el lanzador prepara las dependencias automáticamente, sin sudo.
 
 ```sh
 git clone https://github.com/rubenfb23/research-pi.git
 cd research-pi
-npm ci
-npm run build
-python3 -m venv .venv
-.venv/bin/python -m pip install -r requirements.lock
-npm run check
-node dist/cli.js chat '[tool:project_status]'
-npm run demo
-node dist/cli.js audit
-node dist/cli.js aggregate
-node dist/cli.js search 'redactar metodología paper'
-node dist/cli.js protocol causal
-node dist/cli.js venues
-node dist/cli.js outline --type theory
-node dist/cli.js paper --venue tmlr-2026-journal
+./research-pi
 ```
 
-La configuración inicial usa un transporte simulado, identificado como OFFLINE TEST.
-Para usar un proveedor real:
+El primer arranque instala las dependencias, prepara la CLI y muestra un asistente:
+elige **Claude**, **Codex / OpenAI con ChatGPT**, **OpenAI con API key** o **prueba offline**.
+Después se abre el chat interactivo y los siguientes arranques recuerdan tu conexión
+y la conversación del proyecto. También puedes usar `npm start`.
+
+Para conectar directamente o cambiar de proveedor:
 
 ```sh
-node dist/cli.js config --provider anthropic --model claude-sonnet-4-5
-export RESEARCH_PI_API_KEY='tu-clave'
-node dist/cli.js chat 'Ayúdame a diseñar un experimento de clasificación'
+./research-pi connect claude
+./research-pi connect codex
+./research-pi connect openai
+./research-pi
 ```
 
-El modelo debe existir en el catálogo del SDK; las credenciales no se guardan en Git.
-Cada llamada `chat` reanuda la conversación persistida del proyecto. `--compact` compacta
-la conversación después de la respuesta (puede requerir una conversación suficientemente larga).
-`--project <carpeta>` permite usar otro directorio de proyecto.
+- **Claude**: introduce una clave de [Claude Console](https://platform.claude.com/settings/keys).
+  La terminal oculta la clave; el uso se factura como API. ResearchPi no ofrece OAuth
+  de Claude Pro/Max: [Anthropic reserva ese acceso para sus aplicaciones](https://code.claude.com/docs/en/legal-and-compliance).
+- **Codex / OpenAI**: el SDK de Pi abre **Sign in with ChatGPT** y guarda su propia sesión.
+  Usa el proveedor actual `openai` y la Responses API; no ejecuta el programa Codex ni
+  importa su `auth.json`. El acceso depende del plan, autorización y modelo disponible.
+- **Prueba offline**: sirve para comprobar el harness; no razona ni responde científicamente.
+
+Comandos dentro del chat: `/help`, `/status`, `/connect claude`, `/connect codex`,
+`/model <id>`, `/compact` y `/exit`. Ctrl+C cancela una respuesta en curso;
+Ctrl+C cuando esperas entrada, Ctrl+D o `/exit` cierran el chat.
+
+```sh
+./research-pi models codex
+./research-pi model gpt-5.3-codex
+./research-pi connection
+./research-pi chat 'Ayúdame a diseñar un experimento de clasificación'
+./research-pi --project examples/otro-estudio
+```
+
+El selector usa el catálogo del SDK: estar listado no certifica acceso. Solo una respuesta
+real lo verifica. `connection` comprueba credenciales configuradas, sin afirmar haber
+completado una inferencia. Consulta [la guía de conexiones](docs/connections.md) para
+credenciales, recuperación y límites de verificación.
+
+La demo no requiere conexión con un modelo. Prepara Python y ejecuta veinte fits reales:
+
+```sh
+./research-pi --project examples/demo-inicio demo
+./research-pi --project examples/demo-inicio audit
+./research-pi --project examples/demo-inicio aggregate
+./research-pi search 'redactar metodología paper'
+./research-pi protocol causal
+./research-pi venues
+./research-pi outline --type theory
+```
+
+Para probar el chat sin cuenta:
+
+```sh
+./research-pi chat --offline '[tool:project_status]'
+./research-pi --offline
+```
 
 Protocolos, registros y evidencias se guardan en `.research-pi/`, fuera de la conversación.
 La aplicación carga sus recursos explícitamente y no descubre extensiones ni instrucciones
@@ -55,11 +87,11 @@ Salidas locales (ignoradas por Git): `.research-pi/protocol.json`, `runs/`, `art
 y `paper-review.json`. El borrador incluye metodología, cifras enlazadas con recibos y
 una lista de lo que falta revisar. La demo no descubre una contribución publicable.
 
-`npm run demo` reanuda sin repetir ejecuciones completas. Para repetir todo desde cero
+`demo` reanuda sin repetir ejecuciones completas. Para repetir todo desde cero
 conservando evidencia anterior, usa un proyecto nuevo:
 
 ```sh
-node dist/cli.js --project examples/replica-2 demo
+./research-pi --project examples/replica-2 demo
 ```
 
 El papel de cada seed y los límites de la incertidumbre se registran en el protocolo.

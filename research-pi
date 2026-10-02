@@ -1,0 +1,43 @@
+#!/usr/bin/env node
+// Dependency-free entry point: a fresh checkout needs only Node and npm.
+import { createHash } from 'node:crypto';
+import { existsSync, mkdirSync, readFileSync, readdirSync, writeFileSync } from 'node:fs';
+import { dirname, join } from 'node:path';
+import { fileURLToPath } from 'node:url';
+import { spawnSync } from 'node:child_process';
+
+const root = dirname(fileURLToPath(import.meta.url));
+function fail(message) { console.error(message); process.exit(1); }
+const [major, minor] = process.versions.node.split('.').map(Number);
+if (major < 22 || (major === 22 && minor < 19)) fail('ResearchPi requiere Node >=22.19. Instálalo y vuelve a ejecutar ./research-pi.');
+const digest = paths => {
+  const hash = createHash('sha256');
+  for (const path of paths.sort()) { hash.update(path); hash.update(readFileSync(join(root, path))); }
+  return hash.digest('hex');
+};
+function run(exe, args) {
+  const result = spawnSync(exe, args, { cwd: root, stdio: 'inherit' });
+  if (result.error) fail(`No se pudo iniciar ${exe}. Comprueba que está instalado.`);
+  if (result.signal) process.exit(result.signal === 'SIGINT' ? 130 : 1);
+  if (result.status !== 0) process.exit(result.status ?? 1);
+}
+const cache = join(root, 'node_modules', '.research-pi-launcher.json');
+let old = {};
+try { old = JSON.parse(readFileSync(cache, 'utf8')); } catch {}
+const dependencies = digest(['package.json', 'package-lock.json']);
+if (old.dependencies !== dependencies || !existsSync(join(root, 'node_modules', 'typescript', 'bin', 'tsc'))
+    || !existsSync(join(root, 'node_modules', '@earendil-works', 'pi-coding-agent', 'package.json'))) {
+  console.error('Instalando las dependencias de ResearchPi…');
+  run(process.platform === 'win32' ? 'npm.cmd' : 'npm', ['ci']); old = { dependencies };
+}
+const sources = digest(['tsconfig.json', 'package-lock.json', ...readdirSync(join(root, 'src')).filter(n => n.endsWith('.ts')).map(n => 'src/' + n)]);
+const built = () => existsSync(join(root, 'dist', 'cli.js'))
+  ? digest(readdirSync(join(root, 'dist')).filter(n => n.endsWith('.js')).map(n => 'dist/' + n)) : null;
+if (old.sources !== sources || old.compiled !== built()) {
+  console.error('Preparando ResearchPi…'); run(process.execPath, ['node_modules/typescript/bin/tsc']);
+}
+mkdirSync(join(root, 'node_modules'), { recursive: true });
+writeFileSync(cache, JSON.stringify({ dependencies, sources, compiled: built() }));
+// Import in this process so Ctrl+C, terminal input and streamed output reach the CLI.
+process.argv = [process.execPath, join(root, 'dist', 'cli.js'), ...process.argv.slice(2)];
+await import('./dist/cli.js');
