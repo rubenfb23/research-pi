@@ -1,15 +1,51 @@
 {
-  "id": "tmlr-2026-journal", "name": "TMLR", "year": 2026, "track": "journal-guidance-snapshot", "verifiedAt": "2026-10-02",
-  "verificationScope": "Author Guidelines consultadas; 2026 identifica fecha de snapshot, no una edición anual del journal",
-  "audience": "Machine learning", "articleTypes": ["empirical", "theory"],
+  "id": "tmlr-2026-journal",
+  "name": "TMLR",
+  "year": 2026,
+  "track": "journal-guidance-snapshot",
+  "verifiedAt": "2026-10-02",
+  "verificationScope": "Author Guidelines reviewed; 2026 identifies the snapshot date, not an annual journal edition",
+  "audience": "Machine learning",
+  "articleTypes": [
+    "empirical",
+    "theory"
+  ],
   "templateUrl": "https://github.com/JmlrOrg/tmlr-style-file",
   "rules": [
-    { "field": "pageLimit", "value": "Sin límite fijo en la guía; longitud justificada por contenido", "sourceUrl": "https://jmlr.org/tmlr/author-guide.html", "sourceSection": "Format" },
-    { "field": "anonymization", "value": "Manuscrito y suplementos anonimizados para revisión doble ciego", "sourceUrl": "https://jmlr.org/tmlr/author-guide.html", "sourceSection": "Overview of submission process and Format" },
-    { "field": "template", "value": "PDF generado con estilo y plantilla LaTeX oficiales de TMLR", "sourceUrl": "https://jmlr.org/tmlr/author-guide.html", "sourceSection": "Format" },
-    { "field": "impact", "value": "Statement of Broader Impact cuando el trabajo suponga riesgo significativo de daño", "sourceUrl": "https://jmlr.org/tmlr/author-guide.html", "sourceSection": "Broader impact statement" }
+    {
+      "field": "pageLimit",
+      "value": "No fixed limit in the guide; length must be justified by content",
+      "sourceUrl": "https://jmlr.org/tmlr/author-guide.html",
+      "sourceSection": "Format"
+    },
+    {
+      "field": "anonymization",
+      "value": "Anonymize the manuscript and supplements for double-blind review",
+      "sourceUrl": "https://jmlr.org/tmlr/author-guide.html",
+      "sourceSection": "Overview of submission process and Format"
+    },
+    {
+      "field": "template",
+      "value": "Generate the PDF with the official TMLR LaTeX style and template",
+      "sourceUrl": "https://jmlr.org/tmlr/author-guide.html",
+      "sourceSection": "Format"
+    },
+    {
+      "field": "impact",
+      "value": "Include a Statement of Broader Impact when the work poses significant risk of harm",
+      "sourceUrl": "https://jmlr.org/tmlr/author-guide.html",
+      "sourceSection": "Broader impact statement"
+    }
   ],
   "deadlines": null,
-  "requiresRecheck": ["Editorial policies y acceptance criteria", "AI policy", "Plantilla vigente", "Condiciones actuales de submission", "Licencia del manuscrito"],
-  "sources": ["https://jmlr.org/tmlr/author-guide.html"]
+  "requiresRecheck": [
+    "Editorial policies and acceptance criteria",
+    "AI policy",
+    "Current template",
+    "Current submission conditions",
+    "Manuscript license"
+  ],
+  "sources": [
+    "https://jmlr.org/tmlr/author-guide.html"
+  ]
 }

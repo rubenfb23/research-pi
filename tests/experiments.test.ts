@@ -41,7 +41,7 @@ test('H4: paper uses real table, exposes claim-to-receipt links and missing scie
   const table = aggregateProject(project);
   const draft = draftPaper(project);
   const text = readFileSync(draft.path, 'utf8');
-  assert.match(text, /Se ejecutaron 20 entrenamientos/);
+  assert.match(text, /20 CPU training runs were completed/);
   assert(text.includes(table.rows[0]!.metrics.accuracy!.mean.toFixed(6)));
   assert(text.includes(receipts[0]!.id));
   assert(draft.report.manuscript.claims.every(c => c.status === 'mechanically_linked'));

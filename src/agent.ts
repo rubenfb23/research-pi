@@ -68,7 +68,7 @@ export async function openResearchSession(project: string, config?: AgentConfig,
   if (!model) throw new Error(`Unknown model ${selected.provider}/${selected.model}`);
   if (selected.provider !== mockConfig.provider) {
     if (process.env.RESEARCH_PI_API_KEY) await runtime.setRuntimeApiKey(selected.provider, process.env.RESEARCH_PI_API_KEY);
-    if (!await runtime.checkAuth(selected.provider)) throw new Error('Sin credenciales. Ejecuta repi connect para elegir un proveedor.');
+    if (!await runtime.checkAuth(selected.provider)) throw new Error('No credentials. Run repi connect to choose a provider.');
   }
   const promptFile = resource('system.md');
   const loader: ResourceLoader = {

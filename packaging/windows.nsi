@@ -11,14 +11,14 @@ SetCompressor /SOLID lzma
 !insertmacro MUI_PAGE_FINISH
 !insertmacro MUI_UNPAGE_CONFIRM
 !insertmacro MUI_UNPAGE_INSTFILES
-!insertmacro MUI_LANGUAGE "Spanish"
+!insertmacro MUI_LANGUAGE "English"
 Section "ResearchPi"
   SetOutPath "$INSTDIR"
   File /r "${PAYLOAD}\*"
   WriteUninstaller "$INSTDIR\Uninstall.exe"
   ExecWait '"$SYSDIR\WindowsPowerShell\v1.0\powershell.exe" -NoProfile -ExecutionPolicy Bypass -File "$INSTDIR\windows-path.ps1" -Action add -InstallDirectory "$INSTDIR"' $0
   IntCmp $0 0 path_ok
-  MessageBox MB_ICONSTOP "No se pudo actualizar PATH. Puede invocar $INSTDIR\repi.cmd directamente."
+  MessageBox MB_ICONSTOP "Could not update PATH. You can run $INSTDIR\repi.cmd directly."
   path_ok:
   SendMessage 0xffff 0x001A 0 "STR:Environment" /TIMEOUT=5000
   WriteRegStr HKCU "Software\Microsoft\Windows\CurrentVersion\Uninstall\ResearchPi" "DisplayName" "ResearchPi"

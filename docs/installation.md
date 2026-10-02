@@ -1,56 +1,37 @@
-# Instalación de ResearchPi 0.2.2
+# Installing ResearchPi 0.2.3
 
-Descarga el paquete de tu sistema en [GitHub Releases](https://github.com/rubenfb23/research-pi/releases).
-Todos añaden el comando `repi` e incluyen un runtime Node, la CLI compilada, recursos,
-fuentes, lockfiles, dependencias de producción y atribuciones. No requieren npm ni
-compilar al arrancar. Los instaladores todavía no tienen firma de editor ni notarización.
-Los archivos `.sha256` permiten comprobar que la descarga coincide con la publicada;
-no sustituyen una firma del editor.
+Download your platform's package from [GitHub Releases](https://github.com/rubenfb23/research-pi/releases). Packages install `repi` and include Node, compiled CLI, scientific resources, source, lockfiles, production dependencies and license notices. Startup does not require npm or compilation.
+
+Installers currently have no publisher signature; macOS packages are not notarized. `.sha256` files check consistency with published downloads and do not replace a publisher signature.
 
 ## Ubuntu / Debian · x64
 
 ```sh
-sudo apt install ./research-pi_0.2.2_amd64.deb
+sudo apt install ./research-pi_0.2.3_amd64.deb
 repi
 ```
 
-La aplicación se instala en `/opt/research-pi` y el comando en `/usr/bin/repi`.
-El runtime necesita glibc >=2.28; la instalación se comprueba en Ubuntu 24.04.
-No se necesita Python para abrir el chat. Para ejecutar la demo, instala Python 3.14
-con soporte venv; Python 3.12 de Ubuntu 24.04 no cumple el entorno fijado del experimento.
+The app installs to `/opt/research-pi` and the command to `/usr/bin/repi`. The runtime requires glibc >=2.28. Installation is tested on Ubuntu 24.04. Chat needs no Python; experiments need Python 3.14 with venv support. Ubuntu 24.04's default Python 3.12 does not satisfy the pinned experiment environment.
 
-Desinstalación: `sudo apt remove research-pi`. Los proyectos, conexiones y entornos
-del usuario se conservan; no se eliminan datos de investigación automáticamente.
+Uninstall with `sudo apt remove research-pi`. User projects, connections and experiment environments are retained.
 
 ## Windows · x64
 
-Abre `research-pi-0.2.2-windows-x64-setup.exe`. Se instala por usuario en
-`%LOCALAPPDATA%\Programs\ResearchPi`, sin solicitar permisos de administrador,
-y añade esa carpeta al PATH del usuario. Abre una terminal nueva y escribe `repi`.
-El instalador y ejecutable se verifican en el runner nativo Windows de GitHub.
-Al no estar firmado puede aparecer un aviso de Windows sobre editor desconocido.
+Open `research-pi-0.2.3-windows-x64-setup.exe`. The English installer runs per user at `%LOCALAPPDATA%\Programs\ResearchPi` without administrator privileges and adds that directory to the user PATH. Open a new terminal and run `repi`.
 
-Puedes desinstalar desde Aplicaciones instaladas o `Uninstall.exe` en esa carpeta.
-Se elimina únicamente la entrada propia de PATH; los datos del usuario se conservan.
-Python 3.14 accesible con el comando `python` es opcional para el runner científico.
+Installation and the executable are tested on a native GitHub Windows runner. Windows may show an unknown-publisher notice for the unsigned installer. Remove the app through Installed Apps or `Uninstall.exe` in its directory. Only its own PATH entry is removed; user data is retained. Python 3.14 available as `python` is optional for scientific experiments.
 
 ## macOS · Apple Silicon / Intel
 
-Escoge `research-pi-0.2.2-macos-arm64.pkg` para Apple Silicon o
-`research-pi-0.2.2-macos-x64.pkg` para Intel. Abre el instalador y, después, una
-terminal nueva: `repi`. También se puede instalar con:
+Use `research-pi-0.2.3-macos-arm64.pkg` for Apple Silicon or `research-pi-0.2.3-macos-x64.pkg` for Intel. Open the installer, then run `repi` in a new terminal. Command-line installation is also supported:
 
 ```sh
-sudo installer -pkg ./research-pi-0.2.2-macos-arm64.pkg -target /
+sudo installer -pkg ./research-pi-0.2.3-macos-arm64.pkg -target /
 ```
 
-Instala la aplicación en `/Library/ResearchPi` y el comando en `/usr/local/bin/repi`.
-Los paquetes se construyen y prueban por separado en macOS 15 para cada arquitectura.
-Al no tener firma ni notarización, macOS puede bloquear la apertura del instalador.
-No se declara verificada la compatibilidad con otras versiones de macOS.
+The app installs to `/Library/ResearchPi`, with `/usr/local/bin/repi`. Packages are built and tested separately on macOS 15 for each architecture. macOS may block an unsigned, unnotarized installer. Compatibility with other macOS versions is not verified.
 
-macOS no ofrece un desinstalador de CLI para este paquete. Para retirar únicamente
-la aplicación y su recibo de instalación:
+To remove the application and installation receipt:
 
 ```sh
 sudo rm -rf /Library/ResearchPi
@@ -58,70 +39,48 @@ sudo rm -f /usr/local/bin/repi
 sudo pkgutil --forget com.researchpi.cli
 ```
 
-No retires el comando si lo has sustituido manualmente por otra instalación.
-Las conexiones, entornos de experimentos y proyectos del usuario quedan guardados.
+Do not remove the command if you have replaced it with another installation. User connections, experiment environments and project data are retained.
 
-## Datos y uso
+## Data and usage
 
-La carpeta donde ejecutas `repi` es el proyecto; `--project <ruta>` selecciona otro.
-Protocolos, resultados y conversaciones se guardan en `<proyecto>/.research-pi/`.
-Las conexiones de los paquetes nativos y el entorno Python van en:
+The directory where you run `repi` is the project; `--project <path>` selects another. Protocols, results and conversations live under `<project>/.research-pi/`. Native packages store credentials and the Python environment in per-user directories:
 
-| Sistema | Datos del usuario |
+| Platform | User data |
 | --- | --- |
-| Linux | `$XDG_DATA_HOME/research-pi` o `~/.local/share/research-pi` |
+| Linux | `$XDG_DATA_HOME/research-pi` or `~/.local/share/research-pi` |
 | Windows | `%LOCALAPPDATA%\ResearchPi` |
 | macOS | `~/Library/Application Support/ResearchPi` |
 
-La aplicación no escribe en su carpeta de instalación. `RESEARCH_PI_DATA_DIR`
-permite elegir una carpeta absoluta distinta para conexiones y Python.
-Una instalación desde checkout conserva el almacenamiento anterior del repositorio;
-no se copian secretos automáticamente entre métodos de instalación.
+The installed application does not write into its system directory. `RESEARCH_PI_DATA_DIR` accepts an absolute directory override for credentials and Python. Source checkouts retain their checkout-local storage; credentials are not copied automatically between installation methods.
 
 ```sh
 repi --help
+repi connect opencode
+repi connect opencode-go
 repi connect codex
 repi connect claude
-repi models codex
 repi --offline
-repi --project ./mi-estudio demo
-repi --project ./mi-estudio audit
+repi --project ./my-study demo
+repi --project ./my-study audit
 ```
 
-`repi` abre el chat; el primer uso pide conexión. `--offline` prueba el harness
-sin razonamiento ni llamadas a proveedores. La [guía de conexiones](connections.md)
-explica ChatGPT, API keys y límites. Python 3.14 es necesario solo para experimentos;
-sus dependencias se instalan en el entorno del usuario cuando se ejecutan.
-No están verificadas aún las inferencias con cuentas reales de proveedores.
+`repi` opens the chat and requests connection setup on first use. The interface and default generated content are English regardless of locale. `--offline` tests the harness without scientific reasoning or provider requests. See [connections](connections.md). Real-account provider inference remains unverified.
 
-Si hay varias instalaciones, `which repi` (Linux/macOS) o `Get-Command repi`
-(PowerShell) muestra cuál está usando la terminal. Un enlace npm con nvm puede tener
-prioridad sobre el paquete nativo. Cambiar la versión activa de Node con nvm puede
-requerir repetir `npm run install:cli` para ese prefijo. Para retirar el enlace npm:
-`npm uninstall --global research-pi`; el checkout y sus datos se conservan.
+For multiple installations, `which repi` (Linux/macOS) or `Get-Command repi` (PowerShell) shows the selected executable. An npm/nvm link can precede the native package on PATH. Changing the active nvm Node version may require repeating `npm run install:cli` for that prefix. Remove the npm link with `npm uninstall --global research-pi`; the checkout and its data remain.
 
-## Construir los paquetes
+## Build packages
 
-En el sistema y arquitectura de destino, con Node >=22.19 y npm:
+Use the target OS and architecture with Node >=22.19 and npm:
 
 ```sh
 npm ci
 npm run package:native -- deb
 # macOS: npm run package:native -- macos
-# Windows con NSIS instalado: npm run package:native -- windows
+# Windows with NSIS: npm run package:native -- windows
 ```
 
-El builder utiliza `dpkg-deb`, `pkgbuild` o NSIS. Windows permite indicar
-`RESEARCH_PI_MAKENSIS` con la ruta al compilador. Copia el Node de la máquina de
-construcción y registra su versión, arquitectura y SHA-256 en `package-runtime.json`.
-La CI usa Node 22.23.0 y pruebas de instalación, chat, persistencia y retirada del paquete.
-Las pruebas de los paquetes no envían inferencias reales ni instalan Python.
-La CI científica independiente verifica las 25 pruebas y la demo de veinte fits en Linux.
-Los artefactos nativos se guardan durante catorce días y los paquetes publicados se
-ofrecen como assets de la release. Las builds locales aparecen en `release/`.
+Builders use `dpkg-deb`, `pkgbuild` or NSIS. `RESEARCH_PI_MAKENSIS` overrides the Windows compiler path. The builder copies its Node executable and records the version, architecture and SHA-256 in `package-runtime.json`.
 
-El código propio se distribuye bajo [MIT](../LICENSE).
-Las licencias de Pi, npm y Node se conservan; no se ha corregido el aviso transitivo
-de Pi señalado en [integridad y dependencias](integrity.md).
+CI uses Node 22.23.0 and verifies install, English onboarding/help, provider catalogs, offline chat, SDK tool calls, persistence and removal. Native smoke checks do not send real inference or install Python. Separate Linux scientific checks run the test suite and twenty-fit demo. Native CI artifacts remain for fourteen days; published packages are release assets. Local builds appear in `release/`.
 
-La publicación automática se describe en [releases.md](releases.md).
+Original code is [MIT licensed](../LICENSE). Pi, npm and Node notices are retained. The [known Pi transitive advisory](integrity.md) remains unresolved. See [release automation](releases.md).

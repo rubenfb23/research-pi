@@ -93,31 +93,31 @@ export function draftPaper(project: string, options: { type?: string; venueId?: 
   ];
   const complete = table !== undefined;
   const first = selected[0]?.measurement;
-  const methods = p.methods.map(m => `${m.id} (${m.algorithm}), parámetros ${JSON.stringify(m.hyperparameters)}`).join('; ');
-  let methodology = complete
-    ? `Se ejecutaron ${selected.length} entrenamientos en CPU: ${methods}. Se generaron ${p.dataset.nSamples} muestras sintéticas con ${p.dataset.nFeatures} features (${p.dataset.nInformative} informativas; dos redundantes), seed de datos ${p.dataset.dataSeed}. La partición estratificada fija usa testFraction=${p.split.testFraction} y splitSeed=${p.split.splitSeed}: ${first!.trainSamples} muestras de entrenamiento y ${first!.testSamples} de evaluación. StandardScaler se ajustó exclusivamente en train dentro del pipeline SGD; el forest no usa escalado. SGD usa pérdida log_loss, tol=None y shuffle=True; el forest usa bootstrap y n_jobs=1.\n\n`
-      + `Cada configuración se entrenó con las seeds predefinidas ${p.trainingSeeds.join(', ')}. No hubo selección de hiperparámetros ni del mejor seed sobre test. ${md(p.selection)} Se midieron accuracy y log_loss binarios; las probabilidades para log_loss se limitaron a [1e-15, 1-1e-15]. Media y SD muestral (ddof=1) se recalculan desde predicciones. ${md(p.uncertainty.assumptions)}\n\n`
-      + `Entorno medido: ${JSON.stringify(first!.environment)}. Presupuesto: hasta ${p.budget.maxAttempts} intentos y ${p.budget.secondsPerAttempt} segundos por intento. Las duraciones medidas y warnings se conservan en cada recibo. Intentos no terminados/reintentos históricos: ${audit.groups.reduce((s,g) => s+g.historicalFailures,0)}.\n\n`
-      + `Procedencia: [protocolo](protocol.json), [tabla](aggregate.json), [CSV](results.csv), [auditoría recalculada](audit.json) y [journal](journal.jsonl). Protocol hash: ${frozen.protocolHash}. Code hash: ${frozen.codeHash}. Table hash: ${table!.tableHash}.`
-    : `PLAN PENDIENTE DE EJECUCIÓN VALIDADA: ${methods}. Seeds previstas: ${p.trainingSeeds.join(', ')}. Protocolo ${frozen.protocolHash}. No se presentan cifras como resultados medidos.`;
-  const results = table ? '| Configuración | n | Accuracy media | SD | Log loss media | SD |\n|---|---:|---:|---:|---:|---:|\n'
+  const methods = p.methods.map(m => `${m.id} (${m.algorithm}), parameters ${JSON.stringify(m.hyperparameters)}`).join('; ');
+  const methodology = complete
+    ? `${selected.length} CPU training runs were completed: ${methods}. The synthetic dataset contains ${p.dataset.nSamples} samples and ${p.dataset.nFeatures} features (${p.dataset.nInformative} informative; two redundant), with data seed ${p.dataset.dataSeed}. The fixed stratified split uses testFraction=${p.split.testFraction} and splitSeed=${p.split.splitSeed}: ${first!.trainSamples} training samples and ${first!.testSamples} evaluation samples. StandardScaler was fitted exclusively on training data inside the SGD pipeline; the forest uses no scaling. SGD uses log_loss, tol=None and shuffle=True; the forest uses bootstrap and n_jobs=1.\n\n`
+      + `Each configuration was trained with predefined seeds ${p.trainingSeeds.join(', ')}. No hyperparameters or best seed were selected on test data. ${md(p.selection)} Binary accuracy and log_loss were measured; log_loss probabilities were clipped to [1e-15, 1-1e-15]. Means and sample standard deviations (ddof=1) are recalculated from predictions. ${md(p.uncertainty.assumptions)}\n\n`
+      + `Measured environment: ${JSON.stringify(first!.environment)}. Budget: up to ${p.budget.maxAttempts} attempts and ${p.budget.secondsPerAttempt} seconds per attempt. Each receipt retains measured durations and warnings. Historical incomplete attempts/retries: ${audit.groups.reduce((sum,g) => sum+g.historicalFailures,0)}.\n\n`
+      + `Provenance: [protocol](protocol.json), [table](aggregate.json), [CSV](results.csv), [recalculated audit](audit.json) and [journal](journal.jsonl). Protocol hash: ${frozen.protocolHash}. Code hash: ${frozen.codeHash}. Table hash: ${table!.tableHash}.`
+    : `PLAN PENDING VALIDATED EXECUTION: ${methods}. Planned seeds: ${p.trainingSeeds.join(', ')}. Protocol ${frozen.protocolHash}. No numbers are presented as measured results.`;
+  const results = table ? '| Configuration | n | Mean accuracy | SD | Mean log loss | SD |\n|---|---:|---:|---:|---:|---:|\n'
     + table.rows.map(row => `| ${row.methodId} | ${row.metrics.accuracy!.n} | ${row.metrics.accuracy!.mean.toFixed(6)} | ${row.metrics.accuracy!.sampleSd.toFixed(6)} | ${row.metrics.log_loss!.mean.toFixed(6)} | ${row.metrics.log_loss!.sampleSd.toFixed(6)} |`).join('\n')
-    + '\n\nCada fila enlaza mediante receiptIds en aggregate.json con las diez ejecuciones originales. Variabilidad de entrenamiento en un único split; ninguna afirmación de significancia o generalización poblacional.'
-    : 'PENDIENTE: cobertura/evidencia insuficiente. No hay tabla de resultados respaldada.';
+    + '\n\nEach row links through receiptIds in aggregate.json to its ten original runs. This describes training variability on a single split; it makes no claim of statistical significance or population generalization.'
+    : 'PENDING: insufficient coverage/evidence. No supported results table is available.';
   const sections = outline.sections.map(section => {
-    if (section === 'Título') return '# Demo reproducible de clasificación con ResearchPi\n\nBorrador de demostración; revisión científica y editorial pendientes.';
-    if (section === 'Metodología') return '## Metodología\n\n' + methodology;
-    if (section === 'Resultados') return '## Resultados\n\n' + results;
-    if (section === 'Limitaciones') return '## Limitaciones\n\nDatos sintéticos y un único split. Los presupuestos no se optimizan como benchmark y la demo no establece superioridad general, contribución nueva ni efecto causal. Diez seeds cumple una política del usuario. Se requiere revisión científica.';
-    if (section === 'Referencias') return '## Referencias\n\n' + review.references.map(ref => `- [${md(ref.title)}](${ref.url}) — ${ref.status}, consulta ${ref.verifiedAt ?? 'pendiente'}`).join('\n');
-    if (section === 'Apéndice de reproducibilidad') return '## Apéndice de reproducibilidad\n\n`node dist/cli.js demo` en proyecto nuevo con versiones fijadas.\n\n' + selected.map(r => `- ${r.methodId}, seed ${r.seed}: [recibo](runs/${r.id}.json), [predicciones](artifacts/${r.id}.json)`).join('\n');
-    return '## ' + section + '\n\nPENDIENTE: redactar y revisar con evidencia. No se infiere una contribución científica de esta demo.';
+    if (section === 'Title') return '# Reproducible classification demo with ResearchPi\n\nDemonstration draft; scientific and editorial review pending.';
+    if (section === 'Methodology') return '## Methodology\n\n' + methodology;
+    if (section === 'Results') return '## Results\n\n' + results;
+    if (section === 'Limitations') return '## Limitations\n\nSynthetic data and a single split. Budgets were not optimized as a benchmark, and the demo establishes no general superiority, novel contribution or causal effect. Ten seeds implement a user policy. Scientific review is required.';
+    if (section === 'References') return '## References\n\n' + review.references.map(ref => `- [${md(ref.title)}](${ref.url}) — ${ref.status}, reviewed ${ref.verifiedAt ?? 'pending'}`).join('\n');
+    if (section === 'Reproducibility appendix') return '## Reproducibility appendix\n\nRun `repi demo` in a new project with pinned versions.\n\n' + selected.map(r => `- ${r.methodId}, seed ${r.seed}: [receipt](runs/${r.id}.json), [predictions](artifacts/${r.id}.json)`).join('\n');
+    return '## ' + section + '\n\nPENDING: write and review against evidence. This demo does not establish a scientific contribution.';
   });
   const report = { mechanicalEvidence: audit, manuscript: review, outline, missing, submissionReady: false };
   writeJson(join(stateDir(project), 'paper-review.json'), report);
   writeJson(join(stateDir(project), 'paper-manifest.json'), manifest);
   const path = join(stateDir(project), 'paper.md');
-  writeFileSync(path, sections.join('\n\n') + '\n\n## Perfil de publicación\n\n' + outline.venue?.id + ': ' + outline.venue?.freshnessNote + '\n');
+  writeFileSync(path, sections.join('\n\n') + '\n\n## Publication profile\n\n' + outline.venue?.id + ': ' + outline.venue?.freshnessNote + '\n');
   return { path, reportPath: join(stateDir(project), 'paper-review.json'), report };
 }
 export function reviewProjectManifest(project: string, manifest: ManuscriptManifest) {

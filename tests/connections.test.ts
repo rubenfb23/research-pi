@@ -30,7 +30,7 @@ test('Claude onboarding stores an API key through Pi, private permissions and no
     assert.equal(JSON.parse(readFileSync(f.authPath, 'utf8')).anthropic.key, 'researchpi-fake-api-key');
     assert.equal(statSync(f.authPath).mode & 0o777, 0o600);
     assert(!f.messages.join('\n').includes('researchpi-fake-api-key'));
-    assert.match(f.messages.join('\n'), /primera respuesta real/);
+    assert.match(f.messages.join('\n'), /first real response/);
   } finally { f.cleanup(); }
 });
 
@@ -75,11 +75,11 @@ test('Invalid OAuth state and cancelled login do not commit a new model configur
   try {
     globalThis.fetch = async () => { tokensRequested = true; throw new Error('unexpected token request'); };
     f.ui.interaction.prompt = async () => 'http://127.0.0.1:1455/auth/callback?code=test&state=wrong&client_id=test';
-    await assert.rejects(connect(f.dir, 'codex', f.ui, 'gpt-5.3-codex', f.runtime, f.persist), /No se completó/);
+    await assert.rejects(connect(f.dir, 'codex', f.ui, 'gpt-5.3-codex', f.runtime, f.persist), /Connection setup did not complete/);
     assert(!tokensRequested); assert.equal(f.persisted, undefined);
     assert.equal(await f.runtime.checkAuth('openai'), undefined);
     f.ui.interaction.prompt = async () => { throw new Error('cancelled'); };
-    await assert.rejects(connect(f.dir, 'claude', f.ui, 'claude-sonnet-4-6', f.runtime, f.persist), /No se completó/);
+    await assert.rejects(connect(f.dir, 'claude', f.ui, 'claude-sonnet-4-6', f.runtime, f.persist), /Connection setup did not complete/);
     assert.equal(f.persisted, undefined);
   } finally { globalThis.fetch = originalFetch; f.cleanup(); }
 });
@@ -89,13 +89,13 @@ test('Unknown models are rejected before login; existing credentials can be reus
   let prompts = 0;
   try {
     f.ui.interaction.prompt = async () => { prompts++; return 'test-key'; };
-    await assert.rejects(connect(f.dir, 'claude', f.ui, 'imaginary-model', f.runtime, f.persist), /Modelo desconocido/);
+    await assert.rejects(connect(f.dir, 'claude', f.ui, 'imaginary-model', f.runtime, f.persist), /Unknown model/);
     assert.equal(prompts, 0);
     await connect(f.dir, 'claude', f.ui, 'claude-sonnet-4-6', f.runtime, f.persist);
     f.ui.choose = async (_title, options) => options.find(o => o.id === 'reuse')!.id;
     await connect(f.dir, 'claude', f.ui, 'claude-haiku-4-5', f.runtime, f.persist);
     assert.equal(prompts, 1); assert.equal(f.persisted?.model, 'claude-haiku-4-5');
-    assert.throws(() => connectionName('other'), /Elige/);
+    assert.throws(() => connectionName('other'), /Choose/);
     assert.equal(deviceId(), deviceId());
   } finally { f.cleanup(); }
 });

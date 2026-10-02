@@ -18,7 +18,7 @@ export async function chat(project: string, prompt?: string, options: { offline?
   try {
     let config = options.offline ? mockConfig : selectedConfig(project);
     if (!config) {
-      if (!process.stdin.isTTY) throw new Error('Conecta con repi connect o usa chat --offline para una prueba sin conexión.');
+      if (!process.stdin.isTTY) throw new Error('Connect using repi connect, or use chat --offline for an offline test.');
       ui = terminalUI(controller.signal);
       config = await connect(project, undefined, ui);
     }
@@ -29,15 +29,15 @@ export async function chat(project: string, prompt?: string, options: { offline?
         if (event.type === 'message_update' && event.assistantMessageEvent.type === 'text_delta') {
           streamed = true; process.stdout.write(event.assistantMessageEvent.delta);
         }
-        if (event.type === 'tool_execution_start') console.error(`Herramienta: ${event.toolName}`);
+        if (event.type === 'tool_execution_start') console.error(`Tool: ${event.toolName}`);
       });
       generating = true;
       try {
         await opened!.session.prompt(text); opened!.savePointer();
         const last = opened!.session.messages.at(-1);
         if (last?.role === 'assistant' && (last.stopReason === 'error' || last.stopReason === 'aborted')) {
-          if (last.stopReason === 'aborted') { console.error('\nRespuesta cancelada.'); return; }
-          throw new Error('El proveedor no completó la respuesta. Comprueba acceso al modelo, saldo y conexión con connect.');
+          if (last.stopReason === 'aborted') { console.error('\nResponse cancelled.'); return; }
+          throw new Error('The provider did not complete the response. Check model access, balance and connection using connect.');
         }
         if (!streamed) console.log(opened!.session.getLastAssistantText());
         else process.stdout.write('\n');
@@ -45,12 +45,12 @@ export async function chat(project: string, prompt?: string, options: { offline?
     };
     if (prompt !== undefined) {
       await respond(prompt);
-      if (options.compact) { await opened.session.compact(); opened.savePointer(); console.error('Conversación compactada.'); }
+      if (options.compact) { await opened.session.compact(); opened.savePointer(); console.error('Conversation compacted.'); }
       return;
     }
     ui ??= terminalUI(controller.signal);
-    ui.message(`ResearchPi · ${opened.selected.provider}/${opened.selected.model}\nProyecto: ${project}\n${help}`);
-    if (config.provider === mockConfig.provider) ui.message('OFFLINE TEST: transporte de prueba, sin respuestas científicas reales.');
+    ui.message(`ResearchPi · ${opened.selected.provider}/${opened.selected.model}\nProject: ${project}\n${help}`);
+    if (config.provider === mockConfig.provider) ui.message('OFFLINE TEST: test transport without real scientific responses.');
     while (!controller.signal.aborted) {
       let text: string;
       try { text = (await ui.read('repi >')).trim(); }
@@ -62,21 +62,21 @@ export async function chat(project: string, prompt?: string, options: { offline?
         if (text === '/status') {
           console.log(JSON.stringify({ connection: opened.selected, ...projectStatus(project) }, null, 2)); continue;
         }
-        if (text === '/compact') { await opened.session.compact(); opened.savePointer(); ui.message('Conversación compactada; evidencia científica conservada.'); continue; }
+        if (text === '/compact') { await opened.session.compact(); opened.savePointer(); ui.message('Conversation compacted; scientific evidence preserved.'); continue; }
         if (text === '/connect' || text.startsWith('/connect ')) {
           const value = text.slice('/connect'.length).trim();
           config = await connect(project, value ? connectionName(value) : undefined, ui);
         } else if (text.startsWith('/model ')) {
           await changeModel(project, text.slice(7).trim()); config = selectedConfig(project)!;
-        } else if (text.startsWith('/')) { ui.message('Comando desconocido. ' + help); continue; }
+        } else if (text.startsWith('/')) { ui.message('Unknown command. ' + help); continue; }
         else { await respond(text); continue; }
         opened.savePointer();
         const next = await openResearchSession(project, config, researchTools(project));
         opened.session.dispose(); opened = next;
-        ui.message(`Conexión activa: ${opened.selected.provider}/${opened.selected.model}`);
+        ui.message(`Active connection: ${opened.selected.provider}/${opened.selected.model}`);
       } catch (error) {
         if (controller.signal.aborted) break;
-        ui.message(error instanceof Error ? error.message : 'No se completó la operación.');
+        ui.message(error instanceof Error ? error.message : 'The operation did not complete.');
       }
     }
   } finally {

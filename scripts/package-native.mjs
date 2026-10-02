@@ -9,16 +9,16 @@ const root = fileURLToPath(new URL('../', import.meta.url));
 const target = process.argv[2] ?? ({ linux: 'deb', win32: 'windows', darwin: 'macos' }[process.platform]);
 const expected = { deb: 'linux', windows: 'win32', macos: 'darwin' }[target];
 if (!expected || process.platform !== expected || !['x64', 'arm64'].includes(process.arch)) {
-  throw new Error('Construye deb/windows/macos en su sistema nativo, con arquitectura x64 o arm64.');
+  throw new Error('Build deb/windows/macos on its native system with x64 or arm64 architecture.');
 }
 function run(exe, args, cwd = root) {
   const result = spawnSync(exe, args, { cwd, stdio: 'inherit', shell: process.platform === 'win32' && exe.endsWith('.cmd') });
-  if (result.error || result.status !== 0) throw new Error(`Falló ${exe}: ${result.error?.message ?? result.status}`);
+  if (result.error || result.status !== 0) throw new Error(`${exe} failed: ${result.error?.message ?? result.status}`);
 }
 const sha = path => createHash('sha256').update(readFileSync(path)).digest('hex');
 const pkg = JSON.parse(readFileSync(join(root, 'package.json'), 'utf8'));
 const version = pkg.version;
-if (!/^\d+\.\d+\.\d+$/.test(version)) throw new Error('La versión del instalador debe ser semántica sin sufijo.');
+if (!/^\d+\.\d+\.\d+$/.test(version)) throw new Error('The installer version must use semantic versioning without a suffix.');
 run(process.execPath, ['node_modules/typescript/bin/tsc']);
 const stage = join(root, 'build', `${target}-${process.arch}`);
 rmSync(stage, { recursive: true, force: true }); mkdirSync(stage, { recursive: true });
@@ -36,7 +36,7 @@ const runtime = join(payload, 'runtime'); mkdirSync(runtime, { recursive: true }
 const nodeName = process.platform === 'win32' ? 'node.exe' : 'node';
 cpSync(process.execPath, join(runtime, nodeName)); chmodSync(join(runtime, nodeName), 0o755);
 const licenseResponse = await fetch(`https://raw.githubusercontent.com/nodejs/node/v${process.versions.node}/LICENSE`);
-if (!licenseResponse.ok) throw new Error('No se pudo conservar la licencia del runtime Node.');
+if (!licenseResponse.ok) throw new Error('Could not retain the Node runtime license.');
 writeFileSync(join(runtime, 'Node-LICENSE.txt'), await licenseResponse.text());
 const release = join(root, 'release'); mkdirSync(release, { recursive: true });
 let output;
@@ -68,4 +68,4 @@ if (target === 'deb') {
   run(compiler, [`/DOUTPUT=${output}`, `/DPAYLOAD=${resolve(payload)}`, `/DVERSION=${version}`, join(root, 'packaging', 'windows.nsi')]);
 }
 writeFileSync(output + '.sha256', `${sha(output)}  ${output.split(/[\\/]/).at(-1)}\n`);
-console.log(`Instalador generado: ${output}`);
+console.log(`Installer generated: ${output}`);

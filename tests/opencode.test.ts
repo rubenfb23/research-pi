@@ -65,11 +65,11 @@ test('Zen/Go onboarding stores separate keys, reuses them and preserves previous
     await connect(directory, 'opencode', noPrompt, 'claude-sonnet-4-6', runtime, value => { saved = value; });
     assert.equal(saved?.model, 'claude-sonnet-4-6');
     const cancelled = { ...ui, choose: async () => 'replace', interaction: { ...ui.interaction, prompt: async () => { throw new Error('cancelled'); } } };
-    await assert.rejects(connect(directory, 'opencode-go', cancelled, 'glm-5.3', runtime, value => { saved = value; }), /No se completó/);
+    await assert.rejects(connect(directory, 'opencode-go', cancelled, 'glm-5.3', runtime, value => { saved = value; }), /Connection setup did not complete/);
     assert.equal(saved?.provider, 'opencode');
     await runtime.logout('opencode'); assert.equal(await runtime.checkAuth('opencode'), undefined);
     assert((await runtime.checkAuth('opencode-go'))?.type === 'api_key');
-    await assert.rejects(connect(directory, 'opencode-go', ui, 'claude-sonnet-4-6', runtime), /Modelo desconocido/);
+    await assert.rejects(connect(directory, 'opencode-go', ui, 'claude-sonnet-4-6', runtime), /Unknown model/);
   } finally { rmSync(directory, { recursive: true, force: true }); }
 });
 
@@ -169,7 +169,7 @@ test('CLI exposes Zen/Go catalogs, connects with environment credentials, switch
       assert.equal(JSON.parse(run(['connection']).stdout).selected.model, 'glm-5.3-flash');
       assert.equal(run(['disconnect', provider]).status, 0);
       const refused = run(['connect', provider, '--model', 'glm-5.3'], fakeKey + '\n', false);
-      assert.equal(refused.status, 1); assert.match(refused.stderr, /No se completó la conexión/);
+      assert.equal(refused.status, 1); assert.match(refused.stderr, /Connection setup did not complete/);
       assert(![refused.stdout, refused.stderr].join('').includes(fakeKey));
       assert.equal(JSON.parse(run(['connection']).stdout).selected.model, 'glm-5.3-flash');
     }
