@@ -4,6 +4,10 @@ import { join, resolve } from 'node:path';
 import { openResearchSession } from './agent.js';
 import { stateDir } from './paths.js';
 import { projectStatus, writeJson } from './storage.js';
+import { readJson } from './storage.js';
+import { demoProtocol, freezeProtocol } from './protocol.js';
+import { aggregateProject, auditProject, runExperiment, withProjectLock } from './experiments.js';
+import type { Protocol } from './protocol.js';
 
 const program = new Command().name('research-pi').version('0.1.0')
   .description('Scientific harness on the Pi SDK').option('--project <directory>', 'project directory', '.');
@@ -13,6 +17,35 @@ program.command('config').requiredOption('--provider <id>').requiredOption('--mo
   console.log('Model configuration saved; credentials stay in environment variables.');
 });
 program.command('status').action(() => console.log(JSON.stringify(projectStatus(project()), null, 2)));
+program.command('freeze').option('--file <json>', 'protocol file; otherwise use the prespecified demo')
+  .option('--replace', 'explicitly freeze a new version; old evidence becomes incompatible').action(opts => {
+    const frozen = withProjectLock(project(), () => freezeProtocol(project(), opts.file ? readJson<Protocol>(resolve(opts.file)) : demoProtocol(), opts.replace));
+    console.log(JSON.stringify(frozen, null, 2));
+  });
+async function run(retryFailed = false) {
+  const controller = new AbortController();
+  const stop = () => controller.abort();
+  process.once('SIGINT', stop);
+  try {
+    const audit = await runExperiment(project(), { signal: controller.signal, retryFailed,
+      onProgress: r => console.error(`${r.methodId} seed=${r.seed} attempt=${r.attempt}: ${r.status}`) });
+    console.log(JSON.stringify(audit, null, 2));
+    if (controller.signal.aborted) process.exitCode = 130;
+    else if (audit.status !== 'complete') process.exitCode = 1;
+    return audit;
+  } finally { process.removeListener('SIGINT', stop); }
+}
+program.command('run').option('--retry', 'retry failed/cancelled attempts explicitly').action(async opts => { await run(opts.retry); });
+program.command('audit').action(() => {
+  const audit = auditProject(project()); console.log(JSON.stringify(audit, null, 2));
+  if (audit.status !== 'complete') process.exitCode = 1;
+});
+program.command('aggregate').action(() => console.log(JSON.stringify(aggregateProject(project()), null, 2)));
+program.command('demo').description('Freeze, execute twenty CPU fits and aggregate actual results').action(async () => {
+  withProjectLock(project(), () => freezeProtocol(project(), demoProtocol()));
+  const audit = await run();
+  if (audit.status === 'complete') console.log(JSON.stringify(aggregateProject(project()), null, 2));
+});
 program.command('chat').argument('<prompt>').option('--compact', 'compact conversation after the reply').action(async (prompt, opts) => {
   const opened = await openResearchSession(project());
   const stop = () => { void opened.session.abort(); };

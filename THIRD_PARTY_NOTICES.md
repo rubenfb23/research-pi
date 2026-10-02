@@ -1,0 +1,22 @@
+# Third-party notices
+
+ResearchPi embeds **Pi 1.0.0** through `@earendil-works/pi-coding-agent` and
+`@earendil-works/pi-ai`. Upstream: https://github.com/earendil-works/pi
+
+Pi is MIT licensed, copyright (c) 2025 Mario Zechner. The full notice is retained in
+[docs/Pi-LICENSE.txt](docs/Pi-LICENSE.txt). ResearchPi follows the public SDK interfaces;
+it does not fork or distribute a modified Pi core. SDK integration patterns are adapted
+from Pi's SDK documentation/examples; the retained MIT notice applies to those portions.
+
+Installed npm packages and Python wheels retain their own license files. The source
+repository does not vendor node_modules, Python wheels, scientific datasets or book PDFs.
+The lockfiles identify the exact dependencies. See `docs/dependency-licenses.md` for
+the license metadata inventory; redistributing a bundled application requires preserving
+the full notices and checking the actual bundle contents.
+
+The scientific library contains attributed original summaries and links, not copied
+papers/books. Source licenses do not derive from Pi. Mensh & Kording's article is
+attributed with DOI and authors; other resources have their own rights and terms.
+
+MIT for original ResearchPi code remains a proposal, as specified in the implementation
+brief. `package.json` declares UNLICENSED until the owner chooses a license.
