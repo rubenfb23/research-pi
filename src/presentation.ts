@@ -88,6 +88,7 @@ export function welcome(version: string, provider: string, model: string, projec
     + `  ${paint('Project', 'accent')}    ${clean(project)}\n`
     + `  ${paint('Reasoning', 'accent')}  ${thinking} · stream ${visible ? 'on' : 'off'}\n\n`
     + `  ${paint('/help', 'accent')} commands   ${paint('/model', 'accent')} select model   ${paint('/exit', 'accent')} quit\n`
+    + `  ${paint('Tab', 'accent')} complete · ${paint('↑ / ↓', 'accent')} history\n`
     + `${paint(line, 'accent')}\n`;
 }
 

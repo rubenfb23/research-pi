@@ -85,7 +85,7 @@ Version **1.0.0** adds a colored, responsive terminal with streamed answers, a s
 
 ```text
 ────────────────────────────────────────────────────────────
-  ResearchPi  v1.0.0 · ML / AI / Computer Science
+  ResearchPi  v1.1.0 · ML / AI / Computer Science
 
   Model      opencode-go/glm-5.3-flash
   Project    /path/to/my-study
@@ -97,6 +97,10 @@ repi ❯ Help me design an ablation study
 ```
 
 Use `/model` to open the picker, `/model <id>` to switch directly, and `/models` to inspect the catalog. `/thinking low` adjusts reasoning effort; `/thinking` shows the levels available for your model. `/reasoning off` hides the reasoning stream without disabling model reasoning. These settings persist per project. The default effort is `medium` on reasoning models and `off` on other models. Providers may expose reasoning text or summaries, or no visible reasoning at all; ResearchPi displays only what they send. Higher effort can increase latency and usage.
+
+From **1.1.0**, Tab completes slash commands and their provider/model/reasoning arguments. A second Tab lists ambiguous matches. Model pickers also complete model IDs. Use ↑ and ↓ to browse your project input history; typing a prefix first filters history navigation to that prefix. Your unfinished prefix is restored when you return with ↓. Ctrl+U clears the current line. Completion uses the loaded SDK catalog without making inference requests.
+
+The last 500 distinct submitted chat inputs are kept in `.research-pi/input-history.json` and restored on startup. Setup answers, API keys and manual authorization codes are excluded; starting a chat line with a space omits it from this input history. That does not remove the submitted message from the conversation transcript. Redirected/piped input does not populate the history.
 
 Other commands: `/help`, `/status`, `/connect`, `/compact`, `/exit`. Ctrl+C cancels an active response. Ctrl+D or `/exit` closes the session. Answers go to stdout; reasoning and tool activity go to stderr, so `repi chat 'question' > answer.md` captures the answer. Hide reasoning in chat first if you do not want it in terminal logs.
 

@@ -10,6 +10,14 @@ The terminal streams answers immediately on stdout. Provider-exposed reasoning o
 
 `/thinking` shows supported effort levels; `/thinking medium` selects a supported level. Default effort is medium on reasoning models and off on other models, subject to SDK clamping. `/reasoning on` and `/reasoning off` control display independently of computation. Preferences are stored in project `.research-pi/ui.json`, preserved on resume, and applied after switching models. Reasoning can include sensitive research context; hide its display when recording terminal sessions if appropriate.
 
+## Keyboard editing and input history
+
+Version 1.1.0 adds native readline editing, Tab completion, double-Tab candidate lists, and ↑/↓ history navigation. Completion covers slash commands, provider IDs, the active SDK model catalog and model-supported reasoning levels; pickers complete their own choice IDs. A typed prefix filters ↑/↓ history and is restored when returning to the draft. Ctrl+U clears the current input. The prompt is redrawn correctly during editing and terminal resize.
+
+Only submitted interactive chat input enters history. The latest 500 distinct entries are restored per project from `.research-pi/input-history.json`, created atomically with mode 0600 on POSIX inside the private project state directory. Setup and hidden credential input have no history or completion access. Leading whitespace opts a line out of input history; it remains part of the submitted conversation. Piped input is excluded. The history is plaintext research context and is ignored by Git with the other project state. Corrupt history does not block startup; valid new input recovers it.
+
+The implementation uses the documented [Node 22 readline completion and history APIs](https://nodejs.org/docs/latest-v22.x/api/readline.html). Tests distinguish actual Tab keystrokes from pasted tab characters, which readline intentionally treats differently. No shell command is executed by completion.
+
 ## Research behavior
 
 - Experiments: formulate question/hypothesis, select baselines and evaluation, prevent leakage, prespecify ten distinct training seeds per stochastic configuration, separate seed roles, freeze before confirmatory execution, retain failures and deviations, and aggregate measured evidence.

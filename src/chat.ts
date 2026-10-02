@@ -9,6 +9,7 @@ import { preferences, savePreferences, thinkingLevels, type ThinkingLevel } from
 import { ROOT } from './paths.js';
 import { readJson } from './storage.js';
 import { join } from 'node:path';
+import { completeChat } from './input-completion.js';
 
 const help = [
   '/help                    Show commands',
@@ -20,6 +21,8 @@ const help = [
   '/reasoning [on|off]       Show or hide the provider reasoning stream',
   '/compact                 Compact conversation; preserve scientific evidence',
   '/exit                    Close the session',
+  'Tab completes; double Tab lists matches. Up/Down browse project history.',
+  'Start a line with a space to omit it from input history.',
   'Ctrl+C cancels a response. Ctrl+D closes the session.',
 ].join('\n');
 export async function chat(project: string, prompt?: string, options: { offline?: boolean; compact?: boolean } = {}) {
@@ -37,7 +40,7 @@ export async function chat(project: string, prompt?: string, options: { offline?
     let config = options.offline ? mockConfig : selectedConfig(project);
     if (!config) {
       if (!process.stdin.isTTY) throw new Error('Connect using repi connect, or use chat --offline for an offline test.');
-      ui = terminalUI(controller.signal);
+      ui = terminalUI(controller.signal, { project });
       config = await connect(project, undefined, ui);
     }
     opened = await openResearchSession(project, config, researchTools(project));
@@ -71,13 +74,18 @@ export async function chat(project: string, prompt?: string, options: { offline?
       if (options.compact) { await opened.session.compact(); opened.savePointer(); console.error('Conversation compacted.'); }
       return;
     }
-    ui ??= terminalUI(controller.signal);
+    ui ??= terminalUI(controller.signal, { project });
+    const complete = (line: string) => completeChat(line, {
+      providers: Object.keys(connections), thinking: opened!.session.getAvailableThinkingLevels(),
+      models: /^\/model\s/.test(line) ? opened!.selected.provider === mockConfig.provider ? [mockConfig.model]
+        : opened!.getModels().filter(model => model.input.includes('text')).map(model => model.id) : [],
+    });
     ui.message(welcome(readJson<{ version: string }>(join(ROOT, 'package.json')).version,
       opened.selected.provider, opened.selected.model, project, opened.session.thinkingLevel, settings.showReasoning));
     if (config.provider === mockConfig.provider) ui.message('OFFLINE TEST: test transport without real scientific responses.');
     while (!controller.signal.aborted) {
       let text: string;
-      try { text = (await ui.read('repi ❯')).trim(); }
+      try { text = (await ui.read('repi ❯', { history: true, completer: complete })).trim(); }
       catch (error) { if (error instanceof EndOfInput || controller.signal.aborted) break; throw error; }
       if (!text) continue;
       if (text === '/exit' || text === '/quit') break;
