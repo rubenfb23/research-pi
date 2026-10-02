@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
 import { spawnSync } from 'node:child_process';
-import { existsSync, mkdtempSync, readFileSync, rmSync } from 'node:fs';
+import { existsSync, mkdtempSync, readFileSync, realpathSync, rmSync } from 'node:fs';
 import { tmpdir, homedir } from 'node:os';
 import { join } from 'node:path';
 
@@ -25,7 +25,8 @@ try {
   assert(existsSync(join(data, 'connections', 'config.json')));
   const first = run([], 'hola\n[tool:project_status]\n/exit\n');
   assert.match(first.stdout, /OFFLINE TEST/); assert.match(first.stderr, /Herramienta: project_status/);
-  assert.equal(JSON.parse(run(['status']).stdout).project, project);
+  // macOS exposes temporary directories through /var -> /private/var.
+  assert.equal(realpathSync(JSON.parse(run(['status']).stdout).project), realpathSync(project));
   const pointer = readFileSync(join(project, '.research-pi/session-pointer.json'), 'utf8');
   run(['chat', '--offline', 'resume']);
   assert.equal(readFileSync(join(project, '.research-pi/session-pointer.json'), 'utf8'), pointer);
