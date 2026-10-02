@@ -51,9 +51,17 @@ Go asks clients to identify themselves with their own `User-Agent` and send a st
 
 ## Verification and limitations
 
-The SDK review confirmed 79 Zen chat models and 29 Go chat models in the installed catalog, their formats, their bases, and API-key resolution. This is a local check without real credentials. Tests using simulated HTTP responses check selection, routes for seven provider/format combinations, headers, separate storage, tool calls, and stable sessions on resume. They do not establish successful inference against OpenCode.
+The SDK review confirmed 79 Zen chat models and 29 Go chat models in the installed catalog, their formats, their bases, and API-key resolution. This is a local check without real credentials. Tests using simulated HTTP responses check selection, routes for seven provider/format combinations, headers, separate storage, tool calls, and stable sessions on resume. These simulations do not establish live model access. A separate real-account check on October 2, 2026 received an actual `OK` text response through ResearchPi with Go `glm-5.3-flash`; it verified basic text inference only. A later 1.0 prompt check also received a brief English greeting and exposed reasoning deltas; live tool execution and scientific judgment remain unverified.
 
-Without a valid API key, real authentication, real responses, and tool use with each model remain unverified. Check limits, balances, availability, and policies in your provider account. Go lets you configure use of your Zen balance after reaching its quota; that option belongs to the console and ResearchPi does not enable it. [Go](https://opencode.ai/docs/go/#usage-beyond-limits).
+Authentication and inference for other models/accounts, live tool execution, and research reasoning quality remain unverified. Check limits, balances, availability, and policies in your provider account. Go lets you configure use of your Zen balance after reaching its quota; that option belongs to the console and ResearchPi does not enable it. [Go](https://opencode.ai/docs/go/#usage-beyond-limits).
+
+## Model selection and request failures
+
+Inside `repi`, `/model` opens the current provider picker without asking for credentials again; `/models` lists the catalog. From the shell, use `repi model` or `repi model glm-5.3-flash`. Changing models retains conversation history.
+
+A real Go `deepseek-v4.1-flash` request returned HTTP 400 with the diagnostic that the model requires **Global regions** in the workspace Privacy settings. ResearchPi now explains this specific rejection. Choose another model with `/model`, or review the region policy in your [OpenCode console](https://opencode.ai/auth) if that data-processing choice suits your project. ResearchPi does not change workspace privacy settings. `glm-5.3-flash` answered under the tested account's existing settings; access for your account may differ.
+
+A console message saying it cannot load a request log describes a failed request-log retrieval. It does not establish the cause of the model request. Use the specific inference diagnostic in ResearchPi to distinguish authentication, workspace policy, quota and provider failures. Raw upstream bodies are withheld because they may contain credentials or private account data.
 
 ## SDK sources
 

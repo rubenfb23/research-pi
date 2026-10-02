@@ -6,13 +6,13 @@ Updated 2026-10-02. ResearchPi uses Pi SDK 1.0.0 without modifying its core. Ori
 
 | Area | Implemented and tested behavior | Verification boundary |
 | --- | --- | --- |
-| Pi integration | Explicit scientific resources, bounded tools, persistent sessions, actual SDK tool dispatch, resume and compaction | Provider transport is simulated; real-account inference remains unverified |
+| Pi integration | Explicit scientific resources, bounded tools, persistent sessions, actual SDK tool dispatch, resume and compaction | Simulated transports plus a live OpenCode Go text/reasoning check; broader provider and scientific judgment coverage remains unverified |
 | Experiments | Twenty real CPU fits, ten distinct seeds per configuration, frozen protocols, receipts, predictions, journal, retries and recalculated metrics | Synthetic binary classification with logistic SGD and random forest |
 | Scientific library | Six attributed notes, topic/lexical retrieval, experimental/methodology/causal protocols | Small curated library; no semantic search or universal citation checking |
 | Causal planning | Missing-field and non-identifiability states | Fields do not prove assumptions, identification or causality; no causal estimators |
 | Papers | Five editorial profiles, evidence-derived methodology/results, numerical provenance manifest and missing-items report | Human scientific/editorial review remains required |
 | Venues | Officially checked NeurIPS 2026 and TMLR snapshots | Partial profiles; recheck before submission; NeurIPS 2026's submission window has passed |
-| Connections | Claude API, OpenAI API/ChatGPT OAuth, OpenCode Zen/Go API keys and offline testing | Simulated token exchanges/HTTP responses do not establish real provider access |
+| Connections | Claude API, OpenAI API/ChatGPT OAuth, OpenCode Zen/Go API keys and offline testing | Basic Go glm-5.3-flash live response checked; other models/accounts and OAuth remain unverified |
 | Packaging | Linux/Windows x64 and macOS arm64/x64 installers with bundled Node and notices | Native install/chat/resume/removal checked; no signing or notarization |
 | Repository | MIT, protected main, PR checks and verified release upload | Checksums establish consistency rather than publisher identity |
 
@@ -49,11 +49,17 @@ Native package tests verified help/version, chat, SDK tool calls, resume, invoca
 
 OpenCode uses native Pi providers rather than an OpenCode local server. Tests simulate seven provider/API routes, verify key/client/session headers, independent credential storage, cancellation, actual bounded tool execution and stable session IDs after resume. CLI checks cover both catalogs, environment-key setup, model switching and rejection of piped keys. Native smoke tests check both catalogs. See [OpenCode](opencode.md).
 
-Version 0.2.3 passes 33 local tests, including twenty actual CPU fits. English-interface checks exercise fresh connection setup under a Spanish locale, English help/errors and paper/resource output. A separate pseudo-terminal check verified no-argument startup of the globally linked `repi`, fresh English onboarding under `es_ES.UTF-8`, offline chat and clean exit. Native smoke tests exercise the actual installed onboarding and help. Release publication runs scientific and all four native installer checks before uploading four packages, four checksums and a source-commit manifest. See [releases](releases.md).
+Version 1.0.0 passes 37 local tests, including twenty actual CPU fits. English-interface checks exercise fresh connection setup under a Spanish locale, English help/errors and paper/resource output. A separate pseudo-terminal check verified no-argument startup of the globally linked `repi`, fresh English onboarding under `es_ES.UTF-8`, offline chat and clean exit. Native smoke tests exercise the actual installed onboarding and help. Release publication runs scientific and all four native installer checks before uploading four packages, four checksums and a source-commit manifest. See [releases](releases.md).
+
+## Terminal and prompt 1.0.0
+
+The CLI uses a colored scrolling layout, immediate answer streaming, separate provider reasoning, tool progress/completion, a model picker, and persisted effort/display preferences. Plain output and `NO_COLOR` remain supported. Tests verify text arrives before completion, reasoning stays off answer stdout, split terminal controls are stripped, and settings survive resume. A real pseudo-terminal verified colored startup, input, tool boundaries and clean exit. [Assistant contract](assistant.md).
+
+The initial live greeting check found a Spanish, lengthy response; the prompt was strengthened with an explicit English response contract and short greeting example. A subsequent fresh-project Go `glm-5.3-flash` call returned exactly “Hi! What research question are you working on?”, emitted 58 characters of provider reasoning, and called no tools. This is one behavior check, not a general model-compliance evaluation. SDK-clamped effort was high for this model although the project default is medium.
 
 ## Pending capabilities and limitations
 
-- Real-account ChatGPT login, Anthropic/OpenAI/OpenCode authentication, access to individual models and live model reasoning remain unverified.
+- Real-account ChatGPT login, Anthropic/OpenAI/Zen access and other Go models remain unverified. Live Go glm-5.3-flash text and provider-exposed reasoning were checked on October 2, 2026; this does not establish research judgment or real tool execution.
 - Causal estimation/automatic identification, real datasets, RL, LLM evaluation, theory and deterministic runners remain future extensions.
 - The model cannot reduce ten seeds. An explicit human-exception mechanism would require separate implementation.
 - Hernán/Robins chapter-level recommendations still need specific curation; the current note verifies the website and bibliographic identity.

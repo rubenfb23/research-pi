@@ -24,7 +24,7 @@ test('Fresh onboarding and chat remain English under a Spanish terminal locale',
     assert.match(cli(['--help']).stdout, /ResearchPi: research with Claude, OpenAI or OpenCode on the Pi SDK/);
     const conversation = cli([], '/unknown\n[tool:project_status]\n/exit\n');
     assert.equal(conversation.status, 0, conversation.stderr);
-    assert.match(conversation.stderr, /Project:/);
+    assert.match(conversation.stderr, /Project\s+/);
     assert.match(conversation.stderr, /Unknown command/);
     assert.match(conversation.stderr, /Tool: project_status/);
     assert.doesNotMatch(setup.stderr + conversation.stderr, /Cómo|Elige|Opción|Comando desconocido|Herramienta/);
@@ -43,7 +43,7 @@ test('No-argument launch enters interactive chat, responds to multiple messages 
     const first = cli('--offline');
     assert.equal(first.status, 0, first.stderr);
     assert.match(first.stdout, /OFFLINE TEST/); assert.match(first.stderr, /Tool: project_status/);
-    assert.match(first.stderr, /\/connect/); assert.match(first.stdout, /scientificState/);
+    assert.match(first.stderr, /\/connect/); assert.match(first.stderr, /scientificState/);
     const pointer = readFileSync(join(project, '.research-pi/session-pointer.json'), 'utf8');
     const second = cli('chat', '--offline', 'retomar');
     assert.equal(second.status, 0, second.stderr);

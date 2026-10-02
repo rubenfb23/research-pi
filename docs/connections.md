@@ -34,7 +34,7 @@ Stored credentials are scoped separately by provider. Both support `OPENCODE_API
 
 ## Daily use and data
 
-`repi` resumes the chat; `repi chat '<question>'` submits a prompt and exits. `models <connection>` lists models; `model <id>` switches without deleting history. `connect <connection> --model <id>` skips model selection.
+`repi` resumes the chat; `repi chat '<question>'` submits a prompt and exits. `models <connection>` lists models; `model` opens the picker; `model <id>` switches without deleting history or reconnecting. Chat provides `/model` and `/models` too. `connect <connection> --model <id>` skips model selection.
 
 `connection` reports the selected model and whether credentials are configured. It sends no model request. `disconnect <connection>` removes the locally stored credential without revoking it at the provider; environment credentials remain active until removed separately.
 
@@ -44,7 +44,7 @@ Source-checkout credentials live at `<checkout>/.research-pi/connections/auth.js
 
 For CI, use environment variables and explicit configuration. Piped secret entry is rejected. `chat --offline` and `--offline` test the harness without provider calls; simulated transport does not verify real authentication or inference.
 
-Cancelled or failed connection setup leaves the previous selection intact. Retry `connect` and check browser authorization. For inference errors, check account access, balance, network and the selected model. Login errors do not print provider token responses.
+Cancelled or failed connection setup leaves the previous selection intact. Retry `connect` and check browser authorization. Inference errors identify HTTP authentication, quota, server and known workspace-policy failures without displaying raw provider responses. For inference errors, check account access, balance, network and the selected model. Login errors do not print provider token responses.
 
 After changing code, run demos in a new project, for example `repi --project examples/demo-v3 demo`. Earlier evidence remains intact and its audit reports incompatibility with the new code fingerprint. The launcher does not rewrite evidence to hide that change.
 

@@ -2,7 +2,7 @@ import { test } from 'node:test';
 import { spawnSync } from 'node:child_process';
 import { ROOT } from '../src/paths.js';
 import assert from 'node:assert/strict';
-import { mkdtempSync, readFileSync, rmSync, statSync } from 'node:fs';
+import { mkdtempSync, readFileSync, rmSync, statSync, writeFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { tmpdir } from 'node:os';
 import { connect, connectionRuntime, type ConnectionUI, type AgentConfig } from '../src/connections.js';
@@ -10,6 +10,66 @@ import { openResearchSession } from '../src/agent.js';
 import { researchTools } from '../src/tools.js';
 
 const fakeKey = 'opencode-test-key-never-send';
+
+test('CLI reports the actual Go region rejection without exposing upstream secrets', () => {
+  const directory = mkdtempSync(join(tmpdir(), 'repi-opencode-errors-'));
+  const preload = join(directory, 'fake-provider.mjs');
+  const providerMessage = "Upstream request failed: This Go model requires Global regions. Select Global in your workspace's Privacy settings to use it.";
+  writeFileSync(preload, `globalThis.fetch = async () => new Response(JSON.stringify({type: 'server_error', message: process.env.TEST_PROVIDER_ERROR}), {status: Number(process.env.TEST_PROVIDER_STATUS), headers: {'Content-Type': 'application/json'}});`);
+  const env = { ...process.env, RESEARCH_PI_DATA_DIR: join(directory, 'data'), OPENCODE_API_KEY: fakeKey };
+  const run = (args: string[], message: string, status: number, input = '') => spawnSync(process.execPath,
+    ['--import', preload, join(ROOT, 'dist/cli.js'), '--project', directory, ...args],
+    { env: { ...env, TEST_PROVIDER_ERROR: message, TEST_PROVIDER_STATUS: String(status) }, encoding: 'utf8', input, timeout: 20000 });
+  try {
+    assert.equal(run(['config', '--provider', 'opencode-go', '--model', 'deepseek-v4.1-flash'], '', 400).status, 0);
+    const result = run(['chat', 'hello'], providerMessage + ' token=' + fakeKey, 400);
+    assert.equal(result.status, 1);
+    assert.match(result.stderr, /HTTP 400/);
+    assert.match(result.stderr, /Global regions/);
+    assert.match(result.stderr, /Privacy settings/);
+    assert.match(result.stderr, /\/model/);
+    assert(!result.stderr.includes(fakeKey));
+    const interactive = run([], providerMessage, 400, 'hello\n/model\nglm-5.3-flash\n/exit\n');
+    assert.equal(interactive.status, 0, interactive.stderr);
+    assert.match(interactive.stderr, /Global regions/);
+    assert.match(interactive.stderr, /Choose a model/);
+    assert.match(interactive.stderr, /Active connection: opencode-go\/glm-5.3-flash/);
+    assert.doesNotMatch(interactive.stderr, /Unknown command/);
+    for (const [status, message, expected] of [
+      [401, `Invalid API key: ${fakeKey}`, /HTTP 401.*Authentication/s],
+      [429, `Quota exceeded: ${fakeKey}`, /HTTP 429.*quota|HTTP 429.*rate limit/s],
+      [500, `Unexpected error: ${fakeKey}`, /HTTP 500.*provider/s],
+    ] as const) {
+      const failure = run(['chat', 'hello'], message, status);
+      assert.equal(failure.status, 1);
+      assert.match(failure.stderr, expected);
+      assert(!failure.stderr.includes(fakeKey));
+    }
+  } finally { rmSync(directory, { recursive: true, force: true }); }
+});
+
+test('Bare model commands open the current provider picker without reconnecting or deleting history', () => {
+  const directory = mkdtempSync(join(tmpdir(), 'repi-opencode-picker-'));
+  const env = { ...process.env, RESEARCH_PI_DATA_DIR: join(directory, 'data'), OPENCODE_API_KEY: fakeKey };
+  const run = (args: string[], input = '') => spawnSync(process.execPath, [join(ROOT, 'dist/cli.js'), '--project', directory, ...args],
+    { env, encoding: 'utf8', input, timeout: 20000 });
+  try {
+    assert.equal(run(['connect', 'opencode-go', '--model', 'glm-5.3'], 'reuse\n').status, 0);
+    const command = run(['model'], 'glm-5.3-flash\n');
+    assert.equal(command.status, 0, command.stderr);
+    assert.match(command.stderr, /Choose a model/);
+    assert.equal(JSON.parse(run(['connection']).stdout).selected.model, 'glm-5.3-flash');
+    const chat = run([], '/model\nglm-5.3\n/models\n/exit\n');
+    assert.equal(chat.status, 0, chat.stderr);
+    assert.match(chat.stderr, /Active connection: opencode-go\/glm-5.3/);
+    assert.match(chat.stdout, /deepseek-v4.1-flash/);
+    const pointer = readFileSync(join(directory, '.research-pi/session-pointer.json'), 'utf8');
+    const cancelled = run(['model']);
+    assert.equal(cancelled.status, 1);
+    assert.equal(JSON.parse(run(['connection']).stdout).selected.model, 'glm-5.3');
+    assert.equal(readFileSync(join(directory, '.research-pi/session-pointer.json'), 'utf8'), pointer);
+  } finally { rmSync(directory, { recursive: true, force: true }); }
+});
 const text = 'Simulated OpenCode HTTP response';
 const ui: ConnectionUI = {
   choose: async (_title, options) => options.find(o => o.id === 'reuse')?.id ?? options[0]!.id,
