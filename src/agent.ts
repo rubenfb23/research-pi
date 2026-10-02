@@ -3,14 +3,17 @@ import { join, resolve } from 'node:path';
 import { Type, type AssistantMessage, type TranscriptContext } from '@earendil-works/pi-ai';
 import { createAssistantMessageEventStream } from '@earendil-works/pi-ai/utils/event-stream';
 import {
-  createAgentSession, createExtensionRuntime, defineTool, ModelRuntime,
-  SessionManager, SettingsManager, type ResourceLoader, type ToolDefinition,
+  createAgentSessionFromServices, createAgentSessionServices, createAgentSessionRuntime, defineTool, ModelRuntime,
+  SessionManager, type CreateAgentSessionRuntimeFactory, type ToolDefinition,
 } from '@earendil-works/pi-coding-agent';
-import { resource, stateDir } from './paths.js';
-import { projectStatus, readJson, writeJson } from './storage.js';
+import { stateDir } from './paths.js';
+import { projectStatus } from './storage.js';
 import { connectionAuth, connectionRuntime, mockConfig, selectedConfig, type AgentConfig } from './connections.js';
 import { preferences } from './preferences.js';
 import { researchSystemPrompt } from './prompts.js';
+import { Conversations, piDirectory, conversationDirectory } from './conversations.js';
+import { piExtensions, researchSettings, type ResearchSettings } from './pi-features.js';
+import { researchTools } from './tools.js';
 
 export { mockConfig, type AgentConfig } from './connections.js';
 export const toolResult = (data: unknown) => ({
@@ -49,7 +52,7 @@ function mockStream(model: Parameters<NonNullable<Parameters<ModelRuntime['regis
   return stream;
 }
 
-export async function openResearchSession(project: string, config?: AgentConfig, customTools?: ToolDefinition[]) {
+export async function openResearchSession(project: string, config?: AgentConfig, customTools?: ToolDefinition[], options: { interactive?:boolean; sessionId?:string; newSession?:boolean; name?:string; settings?:ResearchSettings } = {}) {
   const cwd = resolve(project);
   const dir = stateDir(cwd);
   mkdirSync(dir, { recursive: true, mode: 0o700 });
@@ -72,32 +75,49 @@ export async function openResearchSession(project: string, config?: AgentConfig,
     if (process.env.RESEARCH_PI_API_KEY) await runtime.setRuntimeApiKey(selected.provider, process.env.RESEARCH_PI_API_KEY);
     if (!await runtime.checkAuth(selected.provider)) throw new Error('No credentials. Run repi connect to choose a provider.');
   }
-  const promptFile = resource('system.md');
-  const loader: ResourceLoader = {
-    getExtensions: () => ({ extensions: [], errors: [], runtime: createExtensionRuntime() }),
-    getSkills: () => ({ skills: [], diagnostics: [] }),
-    getPrompts: () => ({ prompts: [], diagnostics: [] }),
-    getThemes: () => ({ themes: [], diagnostics: [] }),
-    getAgentsFiles: () => ({ agentsFiles: [] }),
-    getSystemPrompt: researchSystemPrompt,
-    getSystemPromptSource: () => ({ path: promptFile }),
-    getAppendSystemPrompt: () => [], getAppendSystemPromptSources: () => [],
-    extendResources: () => {}, reload: async () => {},
+  const conversations = new Conversations(cwd);
+  const manager = options.sessionId ? await conversations.find(options.sessionId).then(item => {
+    if (resolve(item.cwd) !== cwd) throw new Error('Open this conversation from its recorded project directory.');
+    return conversationsFromPath(item.path);
+  }) : options.newSession ? conversations.create(options.name) : conversations.current();
+  let first = true;
+  const createRuntime: CreateAgentSessionRuntimeFactory = async ({cwd:targetCwd,sessionManager,sessionStartEvent}) => {
+    const settings = researchSettings(targetCwd);
+    const services = await createAgentSessionServices({
+      cwd:targetCwd,agentDir:piDirectory(),modelRuntime:runtime,settingsManager:settings,
+      resourceLoaderOptions:{
+        extensionFactories:piExtensions(),
+        systemPromptOverride:base => [base ? '# Additional workspace instructions\n'+base : '',researchSystemPrompt()].filter(Boolean).join('\n\n'),
+      },
+    });
+    if (options.settings) settings.applyOverrides(options.settings);
+    const configured=selectedConfig(targetCwd) ?? selected;
+    const restored=sessionManager.buildSessionContext().model;
+    const active = first ? model : (restored ? runtime.getModel(restored.provider,restored.modelId) : undefined)
+      ?? runtime.getModel(settings.getDefaultProvider() ?? configured.provider,settings.getDefaultModel() ?? configured.model) ?? model;
+    first = false;
+    const result = await createAgentSessionFromServices({
+      services,sessionManager,sessionStartEvent,model:active,
+      customTools:customTools ?? researchTools(targetCwd),
+      thinkingLevel:options.interactive ? undefined : active.reasoning ? preferences(targetCwd).thinkingLevel : 'off',
+    });
+    result.session.subscribe(event => {
+      if (['agent_settled','message_end','session_info_changed','session_tree'].includes(event.type)) new Conversations(targetCwd).save(sessionManager);
+    });
+    return {...result,services,diagnostics:services.diagnostics};
   };
-  const pointer = join(dir, 'session-pointer.json');
-  const sessions = join(dir, 'sessions');
-  const manager = existsSync(pointer)
-    ? SessionManager.open(readJson<{ path: string }>(pointer).path, sessions, cwd)
-    : SessionManager.create(cwd, sessions);
-  const tools = customTools ?? [statusTool(cwd)];
-  const result = await createAgentSession({
-    cwd, agentDir: dir, modelRuntime: runtime, model, resourceLoader: loader,
-    tools: tools.map(t => t.name), customTools: tools, sessionManager: manager,
-    settingsManager: SettingsManager.inMemory({ compaction: { enabled: false, keepRecentTokens: 128 }, retry: { enabled: false } }),
-    thinkingLevel: model.reasoning ? preferences(cwd).thinkingLevel : 'off',
-  });
-  return { ...result, manager, selected, getModels: () => runtime.getModels(selected.provider), savePointer() {
-    const path = manager.getSessionFile();
-    if (path) writeJson(pointer, { path });
-  } };
+  const host = await createAgentSessionRuntime(createRuntime,{cwd,agentDir:piDirectory(),sessionManager:manager});
+  if (!options.interactive) {
+    const bind = async () => { await host.session.bindExtensions({}); new Conversations(host.cwd).save(host.session.sessionManager); };
+    host.setRebindSession(bind); await bind();
+  }
+  return {
+    runtime:host,get session(){return host.session;},get manager(){return host.session.sessionManager;},
+    get selected(){return {...selected,provider:host.session.model?.provider ?? selected.provider,model:host.session.model?.id ?? selected.model};},
+    getModels:() => runtime.getModels(host.session.model?.provider ?? selected.provider),
+    savePointer(){new Conversations(host.cwd).save(host.session.sessionManager);},
+    async dispose(){await host.dispose();},
+  };
 }
+
+function conversationsFromPath(path:string) { return SessionManager.open(path,conversationDirectory()); }

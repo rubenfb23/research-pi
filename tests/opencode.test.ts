@@ -259,7 +259,7 @@ test('Manuscript policy reaches research turns after model switching, compaction
       return completions(false, 2000);
     };
     const project = join(directory, 'first');
-    const opened = await openResearchSession(project, config);
+    const opened = await openResearchSession(project, config, undefined, {settings:{compaction:{keepRecentTokens:128}}});
     try {
       await opened.session.prompt('Study context for the manuscript.');
       await opened.session.prompt('Draft context: ' + 'synthetic manuscript background '.repeat(500));
@@ -273,7 +273,7 @@ test('Manuscript policy reaches research turns after model switching, compaction
       await opened.session.prompt('Continue with the introduction.');
       opened.savePointer();
     } finally { opened.session.dispose(); }
-    const resumed = await openResearchSession(project, config);
+    const resumed = await openResearchSession(project, config, undefined, {settings:{compaction:{keepRecentTokens:128}}});
     try { await resumed.session.prompt('Review the conclusion.'); } finally { resumed.session.dispose(); }
     const fresh = await openResearchSession(join(directory, 'second'), config);
     try { await fresh.session.prompt('Outline a different study.'); } finally { fresh.session.dispose(); }

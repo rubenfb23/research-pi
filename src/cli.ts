@@ -14,12 +14,55 @@ import type { Protocol } from './protocol.js';
 import { searchLibrary, scientificProtocol, reviewCausal, type CausalPlan } from './science.js';
 import { draftPaper, outlinePaper, reviewProjectManifest, venueProfiles, type ManuscriptManifest } from './papers.js';
 import { WebResearch } from './web.js';
+import { Conversations, conversationDirectory, piDirectory } from './conversations.js';
+import { SessionManager, runRpcMode } from '@earendil-works/pi-coding-agent';
 
 const program = new Command().name('repi').version(readJson<{ version: string }>(join(ROOT, 'package.json')).version)
   .description('ResearchPi: research with Claude, OpenAI or OpenCode on the Pi SDK')
   .option('--project <directory>', 'project directory', '.')
-  .option('--offline', 'offline test chat without scientific reasoning');
+  .option('--offline', 'offline test chat without scientific reasoning')
+  .option('--plain', 'use the simple scrolling interface instead of the native Pi interface')
+  .option('--new [name]', 'start a new conversation')
+  .option('--session <id>', 'open a saved conversation by ID');
 const project = () => resolve(program.opts().project);
+const chats=program.command('chats').description('Create, find and manage persisted conversations');
+chats.command('list').option('--all','include every visited project').option('--query <text>','filter names, first messages, project paths or IDs','')
+  .action(async opts => console.log(JSON.stringify(await new Conversations(project()).list(opts.all,opts.query),null,2)));
+chats.command('new').argument('[name]','conversation name','').action(name => {
+  const manager=new Conversations(project()).create(name);
+  console.log(JSON.stringify({id:manager.getSessionId(),name:manager.getSessionName(),project:manager.getCwd()},null,2));
+});
+chats.command('open').argument('<id>').option('--offline').option('--plain').action(async (id,opts) => {
+  const item=await new Conversations(project()).find(id);
+  await chat(item.cwd,undefined,{offline:opts.offline || program.opts().offline,plain:opts.plain || program.opts().plain,sessionId:item.id});
+});
+chats.command('show').argument('<id>').option('--tree','show all branches instead of the current path').action(async (id,opts) => {
+  const item=await new Conversations(project()).find(id),manager=SessionManager.open(item.path,conversationDirectory());
+  console.log(JSON.stringify({id:manager.getSessionId(),name:manager.getSessionName(),project:manager.getCwd(),entries:opts.tree ? manager.getTree() : manager.getBranch()},null,2));
+});
+chats.command('rename').argument('<id>').argument('<name>').action(async (id,name) => console.log(JSON.stringify(await new Conversations(project()).rename(id,name),null,2)));
+chats.command('fork').argument('<id>').option('--entry <id>','fork through a selected entry; defaults to the current leaf').option('--name <name>').action(async (id,opts) => {
+  const manager=await new Conversations(project()).fork(id,opts.entry,opts.name);
+  console.log(JSON.stringify({id:manager.getSessionId(),name:manager.getSessionName(),project:manager.getCwd()},null,2));
+});
+program.command('resources').description('Inspect loaded Pi capabilities without a model request').action(async () => {
+  const { openResearchSession,mockConfig }=await import('./agent.js');
+  const opened=await openResearchSession(project(),mockConfig);
+  try {
+    const loader=opened.session.resourceLoader;
+    console.log(JSON.stringify({agentDirectory:piDirectory(),tools:opened.session.getActiveToolNames(),autoCompaction:opened.session.autoCompactionEnabled,autoRetry:opened.session.autoRetryEnabled,
+      skills:loader.getSkills(),prompts:loader.getPrompts(),themes:loader.getThemes().themes.map(theme => theme.name),
+      contextFiles:loader.getAgentsFiles().agentsFiles.map(file=>file.path),extensions:loader.getExtensions().extensions.map(extension=>extension.path),errors:loader.getExtensions().errors},null,2));
+  } finally { await opened.dispose(); }
+});
+program.command('rpc').description('Run Pi JSONL RPC for application integration').option('--offline').action(async opts => {
+  const {openResearchSession,mockConfig}=await import('./agent.js');
+  const config=opts.offline || program.opts().offline ? mockConfig : selectedConfig(project());
+  if (!config) throw new Error('Connect with repi connect, or use repi rpc --offline for testing.');
+  process.env.PI_CODING_AGENT_DIR=piDirectory();
+  const opened=await openResearchSession(project(),config,undefined,{interactive:true});
+  await runRpcMode(opened.runtime);
+});
 const web = program.command('web').description('Read and search public sources with direct HTTP and your installed browser');
 web.command('status').action(() => console.log(JSON.stringify(new WebResearch(project()).status(),null,2)));
 async function webAction(action: (web: WebResearch, signal: AbortSignal) => Promise<unknown>) {
@@ -145,9 +188,13 @@ program.command('demo').description('Freeze, execute twenty CPU fits and aggrega
     console.log(JSON.stringify({ table: aggregateProject(project()), paper: draft.path, review: draft.reportPath }, null, 2));
   }
 });
-program.command('chat').argument('[prompt]').option('--offline', 'offline test transport')
-  .option('--compact', 'compact after the response').action(async (prompt, opts) => {
-    await chat(project(), prompt, { ...opts, offline: opts.offline || program.opts().offline });
-  });
-program.action(async () => { await chat(project(), undefined, { offline: program.opts().offline }); });
+async function startChat(prompt?:string,opts:Record<string,any>={}) {
+  const global=program.opts(), sessionId=opts.session ?? global.session,newSession=opts.new ?? global.new;
+  if (sessionId && newSession) throw new Error('Choose either --session or --new.');
+  const target=sessionId ? (await new Conversations(project()).find(sessionId)).cwd : project();
+  await chat(target,prompt,{offline:opts.offline || global.offline,plain:opts.plain || global.plain,json:opts.json,compact:opts.compact,sessionId,newSession:Boolean(newSession),name:typeof newSession === 'string' ? newSession : undefined});
+}
+program.command('chat').argument('[prompt]').option('--offline', 'offline test transport').option('--plain').option('--new [name]').option('--session <id>')
+  .option('--json','stream Pi JSONL events').option('--compact', 'compact after the response').action(async (prompt, opts) => { await startChat(prompt,opts); });
+program.action(async () => { await startChat(); });
 await program.parseAsync().catch(error => { console.error(error.message); process.exitCode = 1; });

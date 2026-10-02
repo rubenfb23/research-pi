@@ -72,7 +72,7 @@ class Terminal:
 
 
 try:
-    args = [str(ROOT / 'dist/cli.js'), '--project', str(project), '--offline']
+    args = [str(ROOT / 'dist/cli.js'), '--project', str(project), '--offline', '--plain']
     first = Terminal(args)
     try:
         first.prompt()
@@ -187,7 +187,7 @@ try:
     # Use the actual SDK model catalog for completion, with a fake local credential.
     env = dict(os.environ, RESEARCH_PI_DATA_DIR=str(project / 'data'), OPENCODE_API_KEY='synthetic-catalog-key')
     subprocess.run([NODE, str(ROOT / 'dist/cli.js'), '--project', str(project), 'config', '--provider', 'opencode-go', '--model', 'glm-5.3'], env=env, capture_output=True, check=True)
-    fourth = Terminal(args[:-1], {'OPENCODE_API_KEY': 'synthetic-catalog-key'})
+    fourth = Terminal([arg for arg in args if arg != '--offline'], {'OPENCODE_API_KEY': 'synthetic-catalog-key'})
     try:
         fourth.prompt()
         start = len(fourth.buffer)

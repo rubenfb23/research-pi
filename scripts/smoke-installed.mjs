@@ -40,6 +40,9 @@ try {
     [fileURLToPath(new URL('./smoke-web.mjs',import.meta.url)),app],{encoding:'utf8',timeout:70000});
   assert.equal(webSmoke.status,0,webSmoke.error?.message || webSmoke.stderr);
   console.log(webSmoke.stdout.trim());
+  const piSmoke=spawnSync(join(app,'..','runtime',process.platform === 'win32' ? 'node.exe' : 'node'),
+    [fileURLToPath(new URL('./smoke-pi-features.mjs',import.meta.url)),app],{encoding:'utf8',timeout:30000});
+  assert.equal(piSmoke.status,0,piSmoke.error?.message || piSmoke.stderr);console.log(piSmoke.stdout.trim());
   for (const provider of ['opencode', 'opencode-go']) {
     assert(JSON.parse(run(['models', provider]).stdout).some(model => model.id === 'glm-5.3'));
   }

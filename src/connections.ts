@@ -34,7 +34,7 @@ export function deviceId(): string {
 export async function connectionRuntime(authPath = connectionAuth()) {
   mkdirSync(connectionDir(), { recursive: true, mode: 0o700 });
   if (existsSync(authPath)) chmodSync(authPath, 0o600);
-  const runtime = await ModelRuntime.create({ authPath, modelsPath: null, refreshOnCreate: false });
+  const runtime = await ModelRuntime.create({ authPath, modelsPath: join(installationDataDirectory(),'pi','models.json'), refreshOnCreate: false });
   const version = readJson<{ version: string }>(join(ROOT, 'package.json')).version;
   // Preserve Pi's native API adapters and catalog; identify this harness to OpenCode.
   for (const provider of ['opencode', 'opencode-go']) {

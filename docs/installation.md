@@ -1,4 +1,4 @@
-# Installing ResearchPi 1.3.0
+# Installing ResearchPi 1.4.0
 
 Download your platform's package from [GitHub Releases](https://github.com/rubenfb23/research-pi/releases). Packages install `repi` and include Node, compiled CLI, scientific resources, source, lockfiles, production dependencies and license notices. Startup does not require npm or compilation.
 
@@ -7,7 +7,7 @@ Installers currently have no publisher signature; macOS packages are not notariz
 ## Ubuntu / Debian · x64
 
 ```sh
-sudo apt install ./research-pi_1.3.0_amd64.deb
+sudo apt install ./research-pi_1.4.0_amd64.deb
 repi
 ```
 
@@ -17,16 +17,16 @@ Uninstall with `sudo apt remove research-pi`. User projects, connections and exp
 
 ## Windows · x64
 
-Open `research-pi-1.3.0-windows-x64-setup.exe`. The English installer runs per user at `%LOCALAPPDATA%\Programs\ResearchPi` without administrator privileges and adds that directory to the user PATH. Open a new terminal and run `repi`.
+Open `research-pi-1.4.0-windows-x64-setup.exe`. The English installer runs per user at `%LOCALAPPDATA%\Programs\ResearchPi` without administrator privileges and adds that directory to the user PATH. Open a new terminal and run `repi`.
 
 Installation and the executable are tested on a native GitHub Windows runner. Windows may show an unknown-publisher notice for the unsigned installer. Remove the app through Installed Apps or `Uninstall.exe` in its directory. Only its own PATH entry is removed; user data is retained. Python 3.14 available as `python` is optional for scientific experiments.
 
 ## macOS · Apple Silicon / Intel
 
-Use `research-pi-1.3.0-macos-arm64.pkg` for Apple Silicon or `research-pi-1.3.0-macos-x64.pkg` for Intel. Open the installer, then run `repi` in a new terminal. Command-line installation is also supported:
+Use `research-pi-1.4.0-macos-arm64.pkg` for Apple Silicon or `research-pi-1.4.0-macos-x64.pkg` for Intel. Open the installer, then run `repi` in a new terminal. Command-line installation is also supported:
 
 ```sh
-sudo installer -pkg ./research-pi-1.3.0-macos-arm64.pkg -target /
+sudo installer -pkg ./research-pi-1.4.0-macos-arm64.pkg -target /
 ```
 
 The app installs to `/Library/ResearchPi`, with `/usr/local/bin/repi`. Packages are built and tested separately on macOS 15 for each architecture. macOS may block an unsigned, unnotarized installer. Compatibility with other macOS versions is not verified.
@@ -43,7 +43,7 @@ Do not remove the command if you have replaced it with another installation. Use
 
 ## Data and usage
 
-The directory where you run `repi` is the project; `--project <path>` selects another. Protocols, results and conversations live under `<project>/.research-pi/`. Native packages store credentials and the Python environment in per-user directories:
+The directory where you run `repi` is the project; `--project <path>` selects another. Protocols, results and web sources live under `<project>/.research-pi/`. Conversations use the shared SDK store in `<ResearchPi data>/pi/conversations/`; legacy histories are imported when visiting each project. Native packages store credentials and the Python environment in per-user directories:
 
 | Platform | User data |
 | --- | --- |
@@ -51,7 +51,7 @@ The directory where you run `repi` is the project; `--project <path>` selects an
 | Windows | `%LOCALAPPDATA%\ResearchPi` |
 | macOS | `~/Library/Application Support/ResearchPi` |
 
-The installed application does not write into its system directory. `RESEARCH_PI_DATA_DIR` accepts an absolute directory override for credentials and Python. Source checkouts retain their checkout-local storage; credentials are not copied automatically between installation methods.
+The installed application does not write into its system directory. `RESEARCH_PI_DATA_DIR` accepts an absolute directory override for credentials, Pi configuration, conversations and Python. Source checkouts retain their checkout-local storage; credentials are not copied automatically between installation methods.
 
 ```sh
 repi --help

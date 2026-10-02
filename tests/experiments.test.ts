@@ -63,14 +63,14 @@ test('Actual experiment evidence survives Pi resume and real SDK compaction', as
   let first;
   let second;
   try {
-    first = await openResearchSession(project, mockConfig);
+    first = await openResearchSession(project, mockConfig, undefined, {settings:{compaction:{keepRecentTokens:128}}});
     await first.session.prompt('[tool:project_status]');
     await first.session.prompt('Research background: ' + 'scientific context '.repeat(500));
     await first.session.prompt('Persist state.');
     first.savePointer();
     await first.session.compact();
     first.session.dispose();
-    second = await openResearchSession(project, mockConfig);
+    second = await openResearchSession(project, mockConfig, undefined, {settings:{compaction:{keepRecentTokens:128}}});
     assert(second.manager.getEntries().some(e => e.type === 'compaction'));
     await second.session.prompt('[tool:project_status]');
     assert.equal(hash(readReceipts(project)), before);
