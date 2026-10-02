@@ -51,7 +51,7 @@ program.command('disconnect').argument('<connection>', 'claude, codex u openai')
 });
 program.command('setup').option('--experiments', 'preparar también Python para los experimentos').action(async opts => {
   if (opts.experiments) await ensureExperiments();
-  console.log('ResearchPi está preparado. Ejecuta repi (tras instalar la CLI) o ./research-pi para abrir el chat.');
+  console.log('ResearchPi está preparado. Ejecuta repi para abrir el chat.');
 });
 program.command('status').action(() => console.log(JSON.stringify(projectStatus(project()), null, 2)));
 program.command('search').argument('[query]', 'Spanish/English lexical query', '').option('--topic <topic>').action((query, opts) => {

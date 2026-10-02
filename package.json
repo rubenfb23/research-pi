@@ -1,25 +1,25 @@
 {
   "name": "research-pi",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "private": true,
   "type": "module",
-  "license": "UNLICENSED",
+  "license": "MIT",
   "engines": {
     "node": ">=22.19.0"
   },
   "bin": {
-    "repi": "research-pi",
-    "research-pi": "research-pi"
+    "repi": "repi",
+    "research-pi": "repi"
   },
   "scripts": {
     "build": "tsc",
-    "start": "node research-pi",
+    "start": "node repi",
     "install:cli": "node scripts/install-cli.mjs",
     "uninstall:cli": "npm uninstall --global research-pi",
     "package:native": "node scripts/package-native.mjs",
     "test": "tsx --test tests/*.test.ts",
     "check": "npm run build && npm test",
-    "demo": "node research-pi demo"
+    "demo": "node repi demo"
   },
   "dependencies": {
     "@earendil-works/pi-ai": "1.0.0",
@@ -33,5 +33,15 @@
   },
   "overrides": {
     "esbuild": "0.28.1"
-  }
+  },
+  "description": "Research harness built on Pi: reproducible ML experiments, scientific protocols and evidence-linked papers",
+  "homepage": "https://github.com/rubenfb23/research-pi",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/rubenfb23/research-pi.git"
+  },
+  "bugs": {
+    "url": "https://github.com/rubenfb23/research-pi/issues"
+  },
+  "author": "Ruben Fernandez Boullon"
 }

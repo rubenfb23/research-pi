@@ -1,21 +1,18 @@
 # Inicio y conexiones
 
-Los [paquetes nativos](installation.md) y `npm run install:cli` permiten invocar
-`repi` desde cualquier carpeta. Los comandos de esta guía también funcionan con
-`repi` en lugar de `./research-pi`. En los paquetes nativos las conexiones y Python
-usan el directorio de datos del usuario; el checkout mantiene su ubicación anterior.
+Los [paquetes nativos](installation.md) y `npm run install:cli` instalan el comando
+`repi`. Desde el código fuente también puedes ejecutar `node repi` o `npm start`,
+con Node >=22.19 y npm. El lanzador instala las dependencias fijadas si faltan,
+compila si cambia el código y abre el chat. Los paquetes nativos ya lo incluyen todo.
 
-Ejecuta `./research-pi` desde el checkout (Linux/macOS; Windows puede usar WSL).
-Necesitas Node >=22.19 y npm instalados. El lanzador instala el lock de npm si falta,
-compila si cambia el código y abre un chat interactivo. `npm start` hace lo mismo.
 No instala Node, Python ni paquetes del sistema, y no usa sudo. Python 3.14 con venv
 solo es necesario para `demo`, `run` o la herramienta de experimentos del chat:
 ResearchPi crea `.venv` e instala `requirements.lock` cuando hace falta.
-Puedes prepararlo antes con `./research-pi setup --experiments`.
+Puedes prepararlo antes con `repi setup --experiments`.
 
 ## Claude
 
-`./research-pi connect claude` ofrece modelos de Anthropic y pide una API key sin
+`repi connect claude` ofrece modelos de Anthropic y pide una API key sin
 mostrarla. Puedes obtenerla en [Claude Console](https://platform.claude.com/settings/keys).
 Las llamadas se facturan a esa clave. No se verifica la validez por red durante el alta:
 la primera respuesta comprueba autenticación, saldo y acceso al modelo.
@@ -29,7 +26,7 @@ indica que una aplicación propia debe utilizar API keys o un proveedor cloud ad
 
 ## Codex / OpenAI con ChatGPT
 
-`./research-pi connect codex` usa **Sign in with ChatGPT**, implementado por Pi 1.0.0
+`repi connect codex` usa **Sign in with ChatGPT**, implementado por Pi 1.0.0
 en el proveedor `openai`. Se abre un navegador y, al completar la autorización, se
 reanuda el terminal. Si no funciona la apertura automática, abre el enlace mostrado.
 Si el callback local no llega (por ejemplo, una sesión remota), pega la URL completa
@@ -49,13 +46,13 @@ es la comprobación real. Consulta [Sign in with ChatGPT](https://developers.ope
 y [modelos e inferencia](https://developers.openai.com/siwc/token-sharing-open-source/models-and-inference).
 La integración autenticada en vivo permanece pendiente si no se completa un login real.
 
-`./research-pi connect openai` permite usar una API key de OpenAI, con facturación de API,
+`repi connect openai` permite usar una API key de OpenAI, con facturación de API,
 como alternativa. Las dos opciones comparten el proveedor `openai` y su entrada de
 credenciales: conectar otra cuenta o método sustituye esa entrada.
 
 ## Uso cotidiano
 
-`./research-pi` reanuda el chat. `chat '<pregunta>'` envía una pregunta y termina.
+`repi` reanuda el chat. `chat '<pregunta>'` envía una pregunta y termina.
 `models claude` o `models codex` lista los modelos; `model <id>` cambia el modelo
 sin borrar el historial. `connect <opción> --model <id>` evita el selector de modelo.
 `connection` muestra la selección y si hay credenciales configuradas; no envía una
@@ -85,7 +82,7 @@ falla, comprueba el acceso al modelo, saldo y red; usa `models` para elegir otro
 Los errores de login no imprimen respuestas con tokens del proveedor.
 
 Al actualizar código, usa un proyecto nuevo para la demo, por ejemplo:
-`./research-pi --project examples/demo-v2 demo`. El protocolo anterior seguirá
+`repi --project examples/demo-v2 demo`. El protocolo anterior seguirá
 guardado y su auditoría indicará incompatibilidad con la nueva huella del código;
 el lanzador no elimina ni reescribe evidencias para ocultarla.
 

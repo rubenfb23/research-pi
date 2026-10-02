@@ -21,5 +21,6 @@ The scientific library contains attributed original summaries and links, not cop
 papers/books. Source licenses do not derive from Pi. Mensh & Kording's article is
 attributed with DOI and authors; other resources have their own rights and terms.
 
-MIT for original ResearchPi code remains a proposal, as specified in the implementation
-brief. `package.json` declares UNLICENSED until the owner chooses a license.
+Original ResearchPi code is licensed under MIT; see [LICENSE](LICENSE).
+This license does not replace the licenses of Pi, Node, npm dependencies, Python
+packages, or referenced scientific publications. Preserve each applicable notice.

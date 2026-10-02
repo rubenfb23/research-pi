@@ -25,7 +25,7 @@ rmSync(stage, { recursive: true, force: true }); mkdirSync(stage, { recursive: t
 const payload = join(stage, 'payload');
 const app = join(payload, 'app');
 mkdirSync(app, { recursive: true });
-for (const name of ['dist', 'src', 'python', 'resources', 'docs', 'package.json', 'package-lock.json', 'requirements.lock', 'research-pi', 'README.md', 'THIRD_PARTY_NOTICES.md']) {
+for (const name of ['dist', 'src', 'python', 'resources', 'docs', 'package.json', 'package-lock.json', 'requirements.lock', 'repi', 'research-pi', 'LICENSE', 'README.md', 'THIRD_PARTY_NOTICES.md']) {
   cpSync(join(root, name), join(app, name), { recursive: true });
 }
 writeFileSync(join(app, 'package-runtime.json'), JSON.stringify({ version, platform: process.platform,
@@ -40,7 +40,7 @@ if (!licenseResponse.ok) throw new Error('No se pudo conservar la licencia del r
 writeFileSync(join(runtime, 'Node-LICENSE.txt'), await licenseResponse.text());
 const release = join(root, 'release'); mkdirSync(release, { recursive: true });
 let output;
-const unixCommand = install => `#!/bin/sh\nexec "${install}/runtime/node" "${install}/app/research-pi" "$@"\n`;
+const unixCommand = install => `#!/bin/sh\nexec "${install}/runtime/node" "${install}/app/repi" "$@"\n`;
 if (target === 'deb') {
   const packageRoot = join(stage, 'deb');
   const install = '/opt/research-pi';
@@ -62,7 +62,7 @@ if (target === 'deb') {
     '--install-location', '/', '--ownership', 'recommended', output]);
 } else {
   cpSync(join(root, 'packaging', 'windows-path.ps1'), join(payload, 'windows-path.ps1'));
-  writeFileSync(join(payload, 'repi.cmd'), '@echo off\r\n"%~dp0runtime\\node.exe" "%~dp0app\\research-pi" %*\r\nexit /b %errorlevel%\r\n');
+  writeFileSync(join(payload, 'repi.cmd'), '@echo off\r\n"%~dp0runtime\\node.exe" "%~dp0app\\repi" %*\r\nexit /b %errorlevel%\r\n');
   output = join(release, `research-pi-${version}-windows-${process.arch}-setup.exe`);
   const compiler = process.env.RESEARCH_PI_MAKENSIS ?? 'C:\\Program Files (x86)\\NSIS\\makensis.exe';
   run(compiler, [`/DOUTPUT=${output}`, `/DPAYLOAD=${resolve(payload)}`, `/DVERSION=${version}`, join(root, 'packaging', 'windows.nsi')]);

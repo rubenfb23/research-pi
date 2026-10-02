@@ -20,7 +20,9 @@ function run(args, input = '') {
 }
 try {
   assert.match(run(['--help']).stdout, /Usage: repi/);
-  assert.match(run(['--version']).stdout, /0\.2\.0/);
+  assert.equal(run(['--version']).stdout.trim(), JSON.parse(readFileSync(join(app, 'package.json'), 'utf8')).version);
+  assert(existsSync(join(app, 'LICENSE')));
+  assert(existsSync(join(app, 'docs/Pi-LICENSE.txt')));
   run(['connect', 'offline']);
   assert(existsSync(join(data, 'connections', 'config.json')));
   const first = run([], 'hola\n[tool:project_status]\n/exit\n');
