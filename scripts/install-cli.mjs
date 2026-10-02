@@ -9,7 +9,7 @@ function run(exe, args) {
   if (result.error) { console.error(`No se pudo iniciar ${exe}: ${result.error.message}`); process.exit(1); }
   if (result.status !== 0) process.exit(result.signal === 'SIGINT' ? 130 : result.status ?? 1);
 }
-run(process.execPath, [join(root, 'research-pi'), 'setup']);
+run(process.execPath, [join(root, 'repi'), 'setup']);
 // npm owns the executable links and checks collisions; no sudo, force or shell edits.
 run(process.platform === 'win32' ? 'npm.cmd' : 'npm', ['link', '--no-audit', '--no-fund']);
 console.log('\nrepi instalado en el prefijo de npm. Desde cualquier carpeta: repi');

@@ -154,3 +154,15 @@ ARM en Linux/Windows, experimentos Python verificados en Windows/macOS e inferen
 con cuentas reales. Continúan pendientes la licencia propia y el aviso transitivo
 de Pi. No se modificaron ni eliminaron evidencias científicas de versiones anteriores.
 La [guía de instalación](installation.md) documenta requisitos, carpetas y retirada.
+
+## Actualización open source y releases · 0.2.1
+
+El código propio adopta MIT en `LICENSE`; los avisos de Pi y de dependencias siguen
+vigentes por separado. Esta decisión sustituye las menciones históricas anteriores
+a una licencia pendiente. `repi` es el lanzador principal y el bin de npm; el comando
+anterior se conserva como alias. Las guías actuales usan `repi`.
+
+Las comprobaciones incluyen validación de tags/versiones, pertenencia a `main`,
+conjunto completo de instaladores y rechazo de checksums alterados. El workflow
+`release.yml` ejecuta pruebas científicas y cuatro instalaciones nativas antes de
+subir los assets de una release publicada. Consulta [releases.md](releases.md).

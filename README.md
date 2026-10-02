@@ -1,36 +1,43 @@
 # ResearchPi
 
-Harness de investigación para ML, AI y computer science basado en el SDK de Pi 1.0.0.
+[![Checks](https://github.com/rubenfb23/research-pi/actions/workflows/check.yml/badge.svg)](https://github.com/rubenfb23/research-pi/actions/workflows/check.yml)
+[![Native installers](https://github.com/rubenfb23/research-pi/actions/workflows/packages.yml/badge.svg)](https://github.com/rubenfb23/research-pi/actions/workflows/packages.yml)
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 
-Repositorio independiente: https://github.com/rubenfb23/research-pi
-Implementa los cuatro hitos del [encargo](docs/encargo-codex-research-pi.md).
+**A research harness for machine learning, AI, and computer science, built on the [Pi SDK](https://github.com/earendil-works/pi).**
 
-## Instalar la CLI
+Start a research conversation with `repi`, run reproducible experiments, and connect measured results to manuscript drafts. ResearchPi combines an interactive assistant with bounded scientific tools and persistent experiment evidence.
 
-Los [instaladores nativos](https://github.com/rubenfb23/research-pi/releases) incluyen Node
-y las dependencias: `.deb` para Ubuntu/Debian x64, `.exe` para Windows x64 y `.pkg`
-para macOS Apple Silicon e Intel. Consulta [instalación y paquetes](docs/installation.md).
+ResearchPi is an early-stage open-source project. Its experiment runner currently supports synthetic binary classification with logistic SGD and random forest. Causal protocols guide and validate planning; they do not execute causal estimators. Live inference with real provider accounts remains unverified. See [verification status](docs/status.md) for the evidence and limitations.
 
-Descargas de la [versión preliminar 0.2.0](https://github.com/rubenfb23/research-pi/releases/tag/v0.2.0):
+## Install
 
-| Sistema | Instalador |
-| --- | --- |
-| Ubuntu/Debian x64 | [.deb](https://github.com/rubenfb23/research-pi/releases/download/v0.2.0/research-pi_0.2.0_amd64.deb) |
-| Windows x64 | [.exe](https://github.com/rubenfb23/research-pi/releases/download/v0.2.0/research-pi-0.2.0-windows-x64-setup.exe) |
-| macOS Apple Silicon | [.pkg arm64](https://github.com/rubenfb23/research-pi/releases/download/v0.2.0/research-pi-0.2.0-macos-arm64.pkg) |
-| macOS Intel | [.pkg x64](https://github.com/rubenfb23/research-pi/releases/download/v0.2.0/research-pi-0.2.0-macos-x64.pkg) |
+Download a native installer from [GitHub Releases](https://github.com/rubenfb23/research-pi/releases). Each package includes Node.js, the compiled CLI, scientific resources, production dependencies, and license notices.
 
-Tras instalar, abre una terminal nueva y ejecuta:
+| Platform | Package | Architecture |
+| --- | --- | --- |
+| Ubuntu / Debian | `.deb` | x64 |
+| Windows | `.exe` | x64 |
+| macOS | `.pkg` | Apple Silicon (arm64) and Intel (x64) |
+
+On Ubuntu / Debian, install the downloaded package:
 
 ```sh
-repi
-repi --help
-repi connect codex
-repi connect claude
-repi chat 'Ayúdame a diseñar un experimento'
+sudo apt install ./research-pi_<version>_amd64.deb
 ```
 
-Para instalar desde el código fuente, requiere Node >=22.19 y npm:
+On Windows and macOS, open the installer. Open a new terminal afterwards:
+
+```sh
+repi --help
+repi
+```
+
+The installers are currently unsigned; macOS packages are not notarized. Python **3.14** with venv support is required only for experiments and must be installed separately. See the [installation guide](docs/installation.md) for requirements, data locations, checksums, and uninstall instructions.
+
+### Install from source
+
+Requires Node.js **22.19 or later** and npm:
 
 ```sh
 git clone https://github.com/rubenfb23/research-pi.git
@@ -39,137 +46,111 @@ npm run install:cli
 repi
 ```
 
-Se crea el comando `repi` en el prefijo global de npm, sin sudo. El checkout debe
-permanecer en su ubicación; puedes seguir usando `./research-pi` o `npm start`.
-Python 3.14 se necesita únicamente para experimentos. La instalación del entorno
-científico es automática cuando Python está disponible; el chat no lo necesita.
+This links `repi` into your npm prefix. Keep the checkout in place and ensure the prefix's executable directory is on your PATH. You can also launch directly with `node repi` or `npm start`. The former `research-pi` command remains a compatibility alias. The project is not published to npm.
 
-El primer arranque instala las dependencias, prepara la CLI y muestra un asistente:
-elige **Claude**, **Codex / OpenAI con ChatGPT**, **OpenAI con API key** o **prueba offline**.
-Después se abre el chat interactivo y los siguientes arranques recuerdan tu conexión
-y la conversación del proyecto. También puedes usar `npm start`.
+## Connect a model
 
-Para conectar directamente o cambiar de proveedor:
+The first launch offers connection setup and remembers the selection. You can also choose explicitly:
 
 ```sh
-./research-pi connect claude
-./research-pi connect codex
-./research-pi connect openai
-./research-pi
+repi connect codex
+# or:
+repi connect claude
+repi connect openai
 ```
 
-- **Claude**: introduce una clave de [Claude Console](https://platform.claude.com/settings/keys).
-  La terminal oculta la clave; el uso se factura como API. ResearchPi no ofrece OAuth
-  de Claude Pro/Max: [Anthropic reserva ese acceso para sus aplicaciones](https://code.claude.com/docs/en/legal-and-compliance).
-- **Codex / OpenAI**: el SDK de Pi abre **Sign in with ChatGPT** y guarda su propia sesión.
-  Usa el proveedor actual `openai` y la Responses API; no ejecuta el programa Codex ni
-  importa su `auth.json`. El acceso depende del plan, autorización y modelo disponible.
-- **Prueba offline**: sirve para comprobar el harness; no razona ni responde científicamente.
+| Connection | Authentication | Status |
+| --- | --- | --- |
+| `codex` | Sign in with ChatGPT through Pi's OpenAI provider | Access depends on your account, authorization, and model; real-account inference is pending verification. |
+| `claude` | Anthropic API key | API billing applies; Claude Pro/Max subscription login is not implemented. |
+| `openai` | OpenAI API key | API billing applies; shares the provider credential entry with `codex`. |
+| `offline` | None | Deterministic harness testing; no scientific reasoning or model inference. |
 
-Comandos dentro del chat: `/help`, `/status`, `/connect claude`, `/connect codex`,
-`/model <id>`, `/compact` y `/exit`. Ctrl+C cancela una respuesta en curso;
-Ctrl+C cuando esperas entrada, Ctrl+D o `/exit` cierran el chat.
+`codex` connects to OpenAI through the SDK; it does not launch the Codex CLI. See [connections and credentials](docs/connections.md) for provider documentation, storage, and recovery.
 
 ```sh
-./research-pi models codex
-./research-pi model gpt-5.3-codex
-./research-pi connection
-./research-pi chat 'Ayúdame a diseñar un experimento de clasificación'
-./research-pi --project examples/otro-estudio
+repi chat 'Help me design a reproducible classification experiment'
+repi models claude
+repi --project ./my-study
+repi --offline
 ```
 
-El selector usa el catálogo del SDK: estar listado no certifica acceso. Solo una respuesta
-real lo verifica. `connection` comprueba credenciales configuradas, sin afirmar haber
-completado una inferencia. Consulta [la guía de conexiones](docs/connections.md) para
-credenciales, recuperación y límites de verificación.
+Inside the chat: `/help`, `/status`, `/connect`, `/model <id>`, `/compact`, `/exit`. Ctrl+C cancels an active response. Ctrl+D or `/exit` closes the session.
 
-La demo no requiere conexión con un modelo. Prepara Python y ejecuta veinte fits reales:
+## Reproduce the experiment demo
+
+With Python 3.14 available, no model account is required:
 
 ```sh
-./research-pi --project examples/demo-inicio demo
-./research-pi --project examples/demo-inicio audit
-./research-pi --project examples/demo-inicio aggregate
-./research-pi search 'redactar metodología paper'
-./research-pi protocol causal
-./research-pi venues
-./research-pi outline --type theory
+repi --project ./demo-study demo
+repi --project ./demo-study audit
+repi --project ./demo-study aggregate
 ```
 
-Para probar el chat sin cuenta:
+The demo runs **20 real CPU fits: two configurations × ten distinct training seeds**. Data-generation and split seeds remain fixed. ResearchPi creates the isolated Python environment and installs the pinned scientific dependencies when needed.
+
+The project stores its evidence under `demo-study/.research-pi/`:
+
+| Output | Purpose |
+| --- | --- |
+| `protocol.json` | Frozen experiment design and code fingerprint |
+| `runs/`, `artifacts/`, `journal.jsonl` | Attempt history, predictions, measurements, and integrity links |
+| `results.csv`, `aggregate.json` | Means and sample standard deviations linked to receipts |
+| `audit.json` | Completeness and integrity checks |
+| `paper.md`, `paper-manifest.json`, `paper-review.json` | Draft manuscript and numerical provenance review |
+
+`demo` resumes completed work. Use a **new project directory** to reproduce from scratch or after changing code or dependencies; existing evidence is retained and audited against its original fingerprint. Seed variation describes training variability on a fixed dataset and split, not a population confidence interval. Hashes detect inconsistencies; they do not certify scientific validity or protect against a user rewriting all local evidence.
+
+## Scientific tools
 
 ```sh
-./research-pi chat --offline '[tool:project_status]'
-./research-pi --offline
+repi search 'writing a methodology'
+repi protocol experimental
+repi protocol causal
+repi protocol methodology
+repi venues
+repi outline --type theory
+repi causal --file examples/causal-incomplete.json
+repi review-manifest --file examples/manuscript-pending.json
 ```
 
-Protocolos, registros y evidencias se guardan en `.research-pi/`, fuera de la conversación.
-La aplicación carga sus recursos explícitamente y no descubre extensiones ni instrucciones
-del entorno. El agente no tiene herramientas de escritura libre ni terminal.
+- **Experiments:** frozen protocols, ten distinct training seeds per configuration, pinned environments, explicit retries, prediction-derived metrics, and traceable aggregation.
+- **Scientific library:** attributed summaries and source links with scope, verification metadata, and Spanish/English lexical search.
+- **Causal planning:** structured protocols and missing-field checks. Estimation and identification assessment remain future work.
+- **Papers:** empirical, theory, dataset, systems, and survey outlines; methodology and results drafts; evidence-linked numerical claims.
+- **Venues:** initial, edition-specific profiles for NeurIPS and TMLR. Coverage is partial; recheck current official requirements before submission.
 
-La demo ejecuta veinte entrenamientos en CPU: SGD logístico y random forest, diez seeds
-por configuración. Guarda protocolo congelado, historial de intentos, predicciones,
-versiones y fingerprints. `results.csv` contiene medias y SD muestral calculadas desde
-las predicciones; `aggregate.json` enlaza las filas con recibos y hashes.
-Las seeds de datos y split se mantienen fijas; no se calcula un IC poblacional.
+The last two examples intentionally exit with status `1` to report missing information. A complete causal form is ready for human review, not a certification of identification or causality.
 
-Salidas locales (ignoradas por Git): `.research-pi/protocol.json`, `runs/`, `artifacts/`,
-`journal.jsonl`, `aggregate.json`, `results.csv`, `audit.json`, `paper.md`, `paper-manifest.json`
-y `paper-review.json`. El borrador incluye metodología, cifras enlazadas con recibos y
-una lista de lo que falta revisar. La demo no descubre una contribución publicable.
+The assistant receives bounded tools; it has no arbitrary shell or unrestricted file-writing tool. See [integrity and dependency limits](docs/integrity.md). An upstream Pi transitive dependency advisory remains documented; the project does not claim a clean dependency audit.
 
-`demo` reanuda sin repetir ejecuciones completas. Para repetir todo desde cero
-conservando evidencia anterior, usa un proyecto nuevo:
+## Development and contributions
 
 ```sh
-./research-pi --project examples/replica-2 demo
+npm ci
+node repi setup --experiments
+npm run check
+node repi --project ./dev-demo demo
+node repi --project ./dev-demo audit
 ```
 
-El papel de cada seed y los límites de la incertidumbre se registran en el protocolo.
-Las ejecuciones fallidas siguen en el historial; reintentar no borra el fallo.
+Tests exercise the SDK with a simulated transport and run real scikit-learn experiments without paid APIs. Native CI additionally installs, exercises, and removes packages on Linux, Windows, and both macOS architectures. Published releases run scientific and installer checks before uploading packages and SHA-256 checksums.
 
-Para un protocolo propio compatible con el runner: `freeze --file protocolo.json` y `run`.
-Con un modelo configurado, el agente también puede consultar `get_experiment_template`
-y proponer/congelar un protocolo mediante `freeze_experiment_protocol`; el host valida
-seeds, algoritmos, parámetros y presupuesto. El modelo no puede sustituir un protocolo
-congelado ni introducir métricas o recibos como si fueran ejecuciones.
-Tras cancelar o fallar, usa `run --retry` explícitamente: el intento anterior se conserva.
-Las configuraciones admitidas están en `src/protocol.ts`; el MVP solo ejecuta clasificación
-sintética binaria con estos dos algoritmos. Los cambios de protocolo/código invalidan
-la evidencia anterior. Usa otro `--project` para un nuevo estudio o versión; `freeze --replace`
-es explícito y no convierte registros antiguos en evidencia válida del protocolo nuevo.
+Read [CONTRIBUTING.md](CONTRIBUTING.md) for the development workflow, scientific resource requirements, and architecture. Bug reports and feature proposals are welcome in [Issues](https://github.com/rubenfb23/research-pi/issues). Release maintainers should follow the [release guide](docs/releases.md). Security concerns can be reported through [GitHub private vulnerability reporting](https://github.com/rubenfb23/research-pi/security/advisories/new); see [SECURITY.md](SECURITY.md).
 
-Los hitos y sus comprobaciones están en [docs/status.md](docs/status.md).
-La licencia MIT del código propio es una propuesta pendiente; Pi y las dependencias
-mantienen sus licencias y atribuciones.
+## Documentation
 
-Para comprobar un análisis causal incompleto o un manifest con cifras/referencias pendientes:
+- [Installation and platform support](docs/installation.md)
+- [Model connections and credentials](docs/connections.md)
+- [Verified capabilities and remaining work](docs/status.md)
+- [Integrity model and dependency advisory](docs/integrity.md)
+- [Research harness design](docs/diseno-harness-research.md)
+- [Third-party notices](THIRD_PARTY_NOTICES.md)
 
-```sh
-node dist/cli.js causal --file examples/causal-incomplete.json
-node dist/cli.js review-manifest --file examples/manuscript-pending.json
-```
+Detailed scientific and operational guides are currently in Spanish. The CLI accepts both Spanish and English research queries.
 
-Esos ejemplos deben salir con código 1 y explicar los faltantes. `ready_for_scientific_review`
-solo significa que el protocolo causal está rellenado; el MVP no ejecuta estimadores causales.
-Los perfiles empírico, teoría, dataset, sistemas y survey son esquemas editoriales extensibles.
-El generador de resultados del MVP trabaja con los experimentos de clasificación admitidos.
+## License
 
-Las pruebas usan Pi con transporte simulado y experimentos reales de scikit-learn; no
-requieren credenciales ni APIs pagadas. La integración con un modelo real sigue pendiente
-si no hay claves disponibles. El transporte simulado no responde preguntas científicas;
-en pruebas se puede invocar una herramienta con `[tool:nombre] {"argumento":"valor"}`.
+Original ResearchPi code is released under the [MIT License](LICENSE), copyright © 2026 Ruben Fernandez Boullon.
 
-Consulta [el límite de integridad y dependencias](docs/integrity.md) y
-[los avisos de terceros](THIRD_PARTY_NOTICES.md). Hay un aviso transitivo de Pi pendiente
-de actualización upstream; no se declara `npm audit` limpio.
-
-Para ampliar la biblioteca: añade JSON en `resources/library/` siguiendo una nota existente,
-con autores, URL/DOI, sección revisada, fecha/edición, tipo de recomendación, interpretación,
-alcance y límites. Revisa realmente el pasaje antes de marcar `verified`. No copies libros
-o papers completos sin derechos. Añade perfiles de venues por año/track con fuentes oficiales,
-fecha y campos por revalidar; no arrastres deadlines de otra edición.
-
-El runner está concentrado en `src/protocol.ts`, `src/experiments.ts` y `python/experiment.py`.
-Para admitir otro experimento: ampliar la validación acotada, el worker, predicciones/métricas
-y las pruebas de incompatibilidad. `src/tools.ts` controla la autoridad del modelo; conceder
-escritura libre o terminal rompe el límite de integridad actual.
+ResearchPi uses Pi as an SDK dependency and does not fork its core. Pi's MIT notice is preserved in [docs/Pi-LICENSE.txt](docs/Pi-LICENSE.txt). Bundled runtimes and dependencies retain their own notices. Scientific publications, datasets, and other referenced material retain their respective rights; ResearchPi's license does not grant rights over them. See [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md).
