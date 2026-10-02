@@ -23,6 +23,9 @@ try {
   assert.equal(run(['--version']).stdout.trim(), JSON.parse(readFileSync(join(app, 'package.json'), 'utf8')).version);
   assert(existsSync(join(app, 'LICENSE')));
   assert(existsSync(join(app, 'docs/Pi-LICENSE.txt')));
+  for (const provider of ['opencode', 'opencode-go']) {
+    assert(JSON.parse(run(['models', provider]).stdout).some(model => model.id === 'glm-5.3'));
+  }
   run(['connect', 'offline']);
   assert(existsSync(join(data, 'connections', 'config.json')));
   const first = run([], 'hola\n[tool:project_status]\n/exit\n');

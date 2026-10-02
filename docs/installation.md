@@ -1,4 +1,4 @@
-# Instalación de ResearchPi 0.2.1
+# Instalación de ResearchPi 0.2.2
 
 Descarga el paquete de tu sistema en [GitHub Releases](https://github.com/rubenfb23/research-pi/releases).
 Todos añaden el comando `repi` e incluyen un runtime Node, la CLI compilada, recursos,
@@ -10,7 +10,7 @@ no sustituyen una firma del editor.
 ## Ubuntu / Debian · x64
 
 ```sh
-sudo apt install ./research-pi_0.2.1_amd64.deb
+sudo apt install ./research-pi_0.2.2_amd64.deb
 repi
 ```
 
@@ -24,7 +24,7 @@ del usuario se conservan; no se eliminan datos de investigación automáticament
 
 ## Windows · x64
 
-Abre `research-pi-0.2.1-windows-x64-setup.exe`. Se instala por usuario en
+Abre `research-pi-0.2.2-windows-x64-setup.exe`. Se instala por usuario en
 `%LOCALAPPDATA%\Programs\ResearchPi`, sin solicitar permisos de administrador,
 y añade esa carpeta al PATH del usuario. Abre una terminal nueva y escribe `repi`.
 El instalador y ejecutable se verifican en el runner nativo Windows de GitHub.
@@ -36,12 +36,12 @@ Python 3.14 accesible con el comando `python` es opcional para el runner cientí
 
 ## macOS · Apple Silicon / Intel
 
-Escoge `research-pi-0.2.1-macos-arm64.pkg` para Apple Silicon o
-`research-pi-0.2.1-macos-x64.pkg` para Intel. Abre el instalador y, después, una
+Escoge `research-pi-0.2.2-macos-arm64.pkg` para Apple Silicon o
+`research-pi-0.2.2-macos-x64.pkg` para Intel. Abre el instalador y, después, una
 terminal nueva: `repi`. También se puede instalar con:
 
 ```sh
-sudo installer -pkg ./research-pi-0.2.1-macos-arm64.pkg -target /
+sudo installer -pkg ./research-pi-0.2.2-macos-arm64.pkg -target /
 ```
 
 Instala la aplicación en `/Library/ResearchPi` y el comando en `/usr/local/bin/repi`.

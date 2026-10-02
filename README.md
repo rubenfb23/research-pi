@@ -57,6 +57,8 @@ repi connect codex
 # or:
 repi connect claude
 repi connect openai
+repi connect opencode
+repi connect opencode-go
 ```
 
 | Connection | Authentication | Status |
@@ -64,9 +66,11 @@ repi connect openai
 | `codex` | Sign in with ChatGPT through Pi's OpenAI provider | Access depends on your account, authorization, and model; real-account inference is pending verification. |
 | `claude` | Anthropic API key | API billing applies; Claude Pro/Max subscription login is not implemented. |
 | `openai` | OpenAI API key | API billing applies; shares the provider credential entry with `codex`. |
+| `opencode` | OpenCode Zen API key | Uses Pi's native OpenCode gateway adapters; account access and API billing apply. |
+| `opencode-go` | OpenCode Go API key | Uses the Go endpoint and plan; intended for coding-agent traffic, subject to account limits. |
 | `offline` | None | Deterministic harness testing; no scientific reasoning or model inference. |
 
-`codex` connects to OpenAI through the SDK; it does not launch the Codex CLI. See [connections and credentials](docs/connections.md) for provider documentation, storage, and recovery.
+`codex` connects to OpenAI through the SDK; it does not launch the Codex CLI. See [connections and credentials](docs/connections.md) for provider documentation, storage, and recovery. See the [OpenCode guide](docs/opencode.md) for Zen/Go configuration and verified scope.
 
 ```sh
 repi chat 'Help me design a reproducible classification experiment'
@@ -141,6 +145,7 @@ Read [CONTRIBUTING.md](CONTRIBUTING.md) for the development workflow, scientific
 ## Documentation
 
 - [Installation and platform support](docs/installation.md)
+- [OpenCode Zen and Go](docs/opencode.md)
 - [Model connections and credentials](docs/connections.md)
 - [Verified capabilities and remaining work](docs/status.md)
 - [Integrity model and dependency advisory](docs/integrity.md)

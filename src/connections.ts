@@ -4,7 +4,7 @@ import { join } from 'node:path';
 import { spawn } from 'node:child_process';
 import { ModelRuntime } from '@earendil-works/pi-coding-agent';
 import type { AuthInteraction, AuthType } from '@earendil-works/pi-ai';
-import { installationDataDirectory, stateDir } from './paths.js';
+import { ROOT, installationDataDirectory, stateDir } from './paths.js';
 import { readJson, writeJson } from './storage.js';
 
 export interface AgentConfig { provider: string; model: string; authMode?: AuthType; }
@@ -34,17 +34,26 @@ export function deviceId(): string {
 export async function connectionRuntime(authPath = connectionAuth()) {
   mkdirSync(connectionDir(), { recursive: true, mode: 0o700 });
   if (existsSync(authPath)) chmodSync(authPath, 0o600);
-  return ModelRuntime.create({ authPath, modelsPath: null, refreshOnCreate: false });
+  const runtime = await ModelRuntime.create({ authPath, modelsPath: null, refreshOnCreate: false });
+  const version = readJson<{ version: string }>(join(ROOT, 'package.json')).version;
+  // Preserve Pi's native API adapters and catalog; identify this harness to OpenCode.
+  for (const provider of ['opencode', 'opencode-go']) {
+    runtime.registerProvider(provider, { headers: { 'User-Agent': `ResearchPi/${version}`, 'x-opencode-client': 'ResearchPi' } });
+  }
+  return runtime;
 }
 export const connections = {
   claude: { provider: 'anthropic', authMode: 'api_key', label: 'Claude · clave de API', preferred: 'claude-sonnet-4-6' },
   codex: { provider: 'openai', authMode: 'oauth', label: 'Codex / OpenAI · iniciar sesión con ChatGPT', preferred: 'gpt-5.3-codex' },
   openai: { provider: 'openai', authMode: 'api_key', label: 'OpenAI · clave de API', preferred: 'gpt-5.3-codex' },
+  opencode: { provider: 'opencode', authMode: 'api_key', label: 'OpenCode Zen · clave de API', preferred: 'claude-sonnet-4-6' },
+  'opencode-go': { provider: 'opencode-go', authMode: 'api_key', label: 'OpenCode Go · clave de API', preferred: 'glm-5.3' },
   offline: { provider: mockConfig.provider, label: 'Prueba sin conexión (sin razonamiento científico)', preferred: mockConfig.model },
 } as const;
+export const connectionNames = Object.keys(connections).join(', ');
 export type ConnectionName = keyof typeof connections;
 export function connectionName(value: string): ConnectionName {
-  if (!Object.hasOwn(connections, value)) throw new Error('Elige claude, codex, openai u offline.');
+  if (!Object.hasOwn(connections, value)) throw new Error(`Elige ${connectionNames}.`);
   return value as ConnectionName;
 }
 export interface ConnectionUI {
@@ -61,7 +70,7 @@ export async function connect(project: string, name: ConnectionName | undefined,
     if (modelId && modelId !== mockConfig.model) throw new Error('La prueba offline solo admite offline-test.');
     persist(mockConfig); return mockConfig;
   }
-  const live = entry as typeof connections.claude | typeof connections.codex | typeof connections.openai;
+  const live = entry as Extract<(typeof connections)[ConnectionName], { authMode: AuthType }>;
   const models = runtime ?? await connectionRuntime();
   const catalog = [...models.getModels(live.provider)].filter(m => m.input.includes('text'));
   catalog.sort((a, b) => Number(b.id === live.preferred) - Number(a.id === live.preferred) || a.id.localeCompare(b.id));
@@ -70,6 +79,7 @@ export async function connect(project: string, name: ConnectionName | undefined,
   if (!catalog.some(m => m.id === selected)) throw new Error('Modelo desconocido; usa models para consultar el catálogo.');
   if (chosen === 'claude') ui.message('Claude usa la API de Anthropic, con facturación de API. Crea tu clave en https://platform.claude.com/settings/keys');
   if (chosen === 'codex') ui.message('Pi abrirá Sign in with ChatGPT. Usa tu propia cuenta; no se importan credenciales de la app Codex.');
+  if (chosen === 'opencode' || chosen === 'opencode-go') ui.message(`OpenCode ${chosen === 'opencode' ? 'Zen' : 'Go'} usa tu API key de https://opencode.ai/auth. El acceso y los cargos dependen de tu cuenta y plan.`);
   try {
     const available = await models.checkAuth(live.provider);
     const reuse = available?.type === live.authMode && await ui.choose('Ya hay credenciales configuradas:',
