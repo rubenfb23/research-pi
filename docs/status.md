@@ -113,5 +113,7 @@ Comprobaciones locales completadas:
 Pendiente: login con cuenta real de ChatGPT, clave real de Anthropic/OpenAI y
 respuesta autenticada de cada proveedor. También siguen pendientes las
 capacidades científicas y la actualización transitiva detalladas más arriba.
-La CI comprueba el mismo lanzador desde un checkout limpio; su resultado remoto
-se informa al completar la publicación de esta actualización.
+La CI del commit `2a4d91e3716bc7aa38a4ebddcd9e5987e52a4e03` terminó correctamente:
+https://github.com/rubenfb23/research-pi/actions/runs/37003788440
+Comprobó preparación automática desde checkout limpio, las 23 pruebas, demo de
+veinte fits, auditoría y subida del artefacto `demo-evidence` (retención: siete días).
