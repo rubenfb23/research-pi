@@ -4,6 +4,7 @@ import { aggregateProject, auditProject, runExperiment, withProjectLock } from '
 import { demoProtocol, freezeProtocol } from './protocol.js';
 import { getNote, reviewCausal, scientificProtocol, searchLibrary, type CausalPlan } from './science.js';
 import { projectStatus } from './storage.js';
+import { draftPaper, outlinePaper, venueProfiles } from './papers.js';
 
 const result = (data: unknown) => ({ content: [{ type: 'text' as const, text: JSON.stringify(data) }], details: {} });
 export function researchTools(project: string): ToolDefinition[] {
@@ -42,5 +43,16 @@ export function researchTools(project: string): ToolDefinition[] {
       description: 'Recalculate mean and sample SD from valid ten-seed measurements; rejects incomplete or inconsistent evidence.',
       parameters: Type.Object({}), executionMode: 'sequential',
       async execute() { return result(withProjectLock(project, () => aggregateProject(project))); } }),
+    defineTool({ name: 'venue_profiles', label: 'Publication profiles',
+      description: 'Read verified partial NeurIPS 2026 main and TMLR guidance snapshots, dates, expired windows and required official rechecks.',
+      parameters: Type.Object({}), async execute() { return result(venueProfiles()); } }),
+    defineTool({ name: 'paper_outline', label: 'Paper structure',
+      description: 'Create empirical, theory, dataset, systems or survey outline. Venue requirements and scientific writing remain reviewable.',
+      parameters: Type.Object({ type: Type.String({ maxLength: 40 }), venueId: Type.Optional(Type.String({ maxLength: 100 })) }),
+      async execute(_id, params) { return result(outlinePaper(params.type, params.venueId)); } }),
+    defineTool({ name: 'draft_evidence_paper', label: 'Evidence-linked methodology and results',
+      description: 'Host-generated empirical draft from frozen protocol and actual audited runs. Results absent/incomplete remain pending; no arbitrary write or invented numeric evidence.',
+      parameters: Type.Object({ venueId: Type.Optional(Type.String({ maxLength: 100 })) }), executionMode: 'sequential',
+      async execute(_id, params) { return result(withProjectLock(project, () => draftPaper(project, { venueId: params.venueId }))); } }),
   ];
 }

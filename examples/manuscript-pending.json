@@ -1,0 +1,9 @@
+{
+  "claims": [
+    { "id": "unsupported-number", "text": "Nuestro método alcanza accuracy 0.99", "numericValue": 0.99 },
+    { "id": "unsupported-citation", "text": "El método ya ha sido validado externamente", "referenceIds": ["unverified-paper"] }
+  ],
+  "references": [
+    { "id": "unverified-paper", "title": "Referencia aún no verificada", "url": "https://example.invalid/paper", "status": "verified" }
+  ]
+}

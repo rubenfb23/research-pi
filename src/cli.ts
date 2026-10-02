@@ -10,6 +10,7 @@ import { aggregateProject, auditProject, runExperiment, withProjectLock } from '
 import type { Protocol } from './protocol.js';
 import { searchLibrary, scientificProtocol, reviewCausal, type CausalPlan } from './science.js';
 import { researchTools } from './tools.js';
+import { draftPaper, outlinePaper, reviewProjectManifest, venueProfiles, type ManuscriptManifest } from './papers.js';
 
 const program = new Command().name('research-pi').version('0.1.0')
   .description('Scientific harness on the Pi SDK').option('--project <directory>', 'project directory', '.');
@@ -29,6 +30,20 @@ program.command('causal').requiredOption('--file <json>', 'causal plan JSON').ac
   const review = reviewCausal(readJson<CausalPlan>(resolve(opts.file)));
   console.log(JSON.stringify(review, null, 2));
   if (review.status !== 'ready_for_scientific_review') process.exitCode = 1;
+});
+program.command('venues').action(() => console.log(JSON.stringify(venueProfiles(), null, 2)));
+program.command('outline').option('--type <type>', 'empirical, theory, dataset, systems, survey', 'empirical')
+  .option('--venue <id>').action(opts => console.log(JSON.stringify(outlinePaper(opts.type, opts.venue), null, 2)));
+program.command('paper').option('--type <type>', 'paper type', 'empirical').option('--venue <id>', 'venue/year/track', 'tmlr-2026-journal')
+  .option('--manifest <file>', 'additional structured claims and references').action(opts => {
+    const result = withProjectLock(project(), () => draftPaper(project(), { type: opts.type, venueId: opts.venue,
+      manifest: opts.manifest ? readJson<ManuscriptManifest>(resolve(opts.manifest)) : undefined }));
+    console.log(JSON.stringify({ paper: result.path, review: result.reportPath, missing: result.report.missing }, null, 2));
+  });
+program.command('review-manifest').requiredOption('--file <json>').action(opts => {
+  const result = withProjectLock(project(), () => reviewProjectManifest(project(), readJson<ManuscriptManifest>(resolve(opts.file))));
+  console.log(JSON.stringify(result, null, 2));
+  if (result.status === 'pending') process.exitCode = 1;
 });
 program.command('freeze').option('--file <json>', 'protocol file; otherwise use the prespecified demo')
   .option('--replace', 'explicitly freeze a new version; old evidence becomes incompatible').action(opts => {
@@ -57,7 +72,10 @@ program.command('aggregate').action(() => console.log(JSON.stringify(aggregatePr
 program.command('demo').description('Freeze, execute twenty CPU fits and aggregate actual results').action(async () => {
   withProjectLock(project(), () => freezeProtocol(project(), demoProtocol()));
   const audit = await run();
-  if (audit.status === 'complete') console.log(JSON.stringify(aggregateProject(project()), null, 2));
+  if (audit.status === 'complete') {
+    const draft = withProjectLock(project(), () => draftPaper(project()));
+    console.log(JSON.stringify({ table: aggregateProject(project()), paper: draft.path, review: draft.reportPath }, null, 2));
+  }
 });
 program.command('chat').argument('<prompt>').option('--compact', 'compact conversation after the reply').action(async (prompt, opts) => {
   const opened = await openResearchSession(project(), undefined, researchTools(project()));

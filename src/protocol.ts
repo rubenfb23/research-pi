@@ -25,7 +25,8 @@ export interface Protocol {
 export interface FrozenProtocol { protocol: Protocol; protocolHash: string; codeHash: string; frozenAt: string; }
 export function codeFingerprint(): string {
   const sources = readdirSync(join(ROOT, 'src')).filter(x => x.endsWith('.ts')).sort().map(x => 'src/' + x);
-  const paths = [...sources, 'python/experiment.py', 'requirements.lock', 'package-lock.json'];
+  const compiled = existsSync(join(ROOT, 'dist')) ? readdirSync(join(ROOT, 'dist')).filter(x => x.endsWith('.js')).sort().map(x => 'dist/' + x) : [];
+  const paths = [...sources, ...compiled, 'python/experiment.py', 'requirements.lock', 'package-lock.json'];
   return hash(paths.map(path => [path, fileHash(join(ROOT, path))]));
 }
 export function demoProtocol(): Protocol {

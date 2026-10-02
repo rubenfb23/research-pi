@@ -1,0 +1,7 @@
+{
+  "empirical": ["Título", "Abstract", "Introducción", "Trabajo relacionado", "Problema y método", "Metodología", "Resultados", "Discusión", "Limitaciones", "Conclusiones", "Referencias", "Apéndice de reproducibilidad"],
+  "theory": ["Título", "Abstract", "Introducción", "Trabajo relacionado", "Definiciones y supuestos", "Teoremas", "Demostraciones", "Discusión", "Limitaciones", "Conclusiones", "Referencias", "Apéndices"],
+  "dataset": ["Título", "Abstract", "Motivación", "Trabajo relacionado", "Recogida y documentación", "Derechos y consentimiento", "Estadísticas y evaluación", "Sesgos y limitaciones", "Acceso y mantenimiento", "Referencias"],
+  "systems": ["Título", "Abstract", "Introducción", "Trabajo relacionado", "Diseño del sistema", "Implementación", "Metodología", "Resultados", "Costes y escalabilidad", "Limitaciones", "Conclusiones", "Referencias"],
+  "survey": ["Título", "Abstract", "Pregunta y alcance", "Metodología de búsqueda y selección", "Taxonomía", "Síntesis y comparación", "Vacíos de evidencia", "Limitaciones", "Conclusiones", "Referencias"]
+}

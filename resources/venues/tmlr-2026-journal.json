@@ -1,0 +1,15 @@
+{
+  "id": "tmlr-2026-journal", "name": "TMLR", "year": 2026, "track": "journal-guidance-snapshot", "verifiedAt": "2026-10-02",
+  "verificationScope": "Author Guidelines consultadas; 2026 identifica fecha de snapshot, no una edición anual del journal",
+  "audience": "Machine learning", "articleTypes": ["empirical", "theory"],
+  "templateUrl": "https://github.com/JmlrOrg/tmlr-style-file",
+  "rules": [
+    { "field": "pageLimit", "value": "Sin límite fijo en la guía; longitud justificada por contenido", "sourceUrl": "https://jmlr.org/tmlr/author-guide.html", "sourceSection": "Format" },
+    { "field": "anonymization", "value": "Manuscrito y suplementos anonimizados para revisión doble ciego", "sourceUrl": "https://jmlr.org/tmlr/author-guide.html", "sourceSection": "Overview of submission process and Format" },
+    { "field": "template", "value": "PDF generado con estilo y plantilla LaTeX oficiales de TMLR", "sourceUrl": "https://jmlr.org/tmlr/author-guide.html", "sourceSection": "Format" },
+    { "field": "impact", "value": "Statement of Broader Impact cuando el trabajo suponga riesgo significativo de daño", "sourceUrl": "https://jmlr.org/tmlr/author-guide.html", "sourceSection": "Broader impact statement" }
+  ],
+  "deadlines": null,
+  "requiresRecheck": ["Editorial policies y acceptance criteria", "AI policy", "Plantilla vigente", "Condiciones actuales de submission", "Licencia del manuscrito"],
+  "sources": ["https://jmlr.org/tmlr/author-guide.html"]
+}

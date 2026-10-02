@@ -1,0 +1,15 @@
+{
+  "id": "neurips-2026-main", "name": "NeurIPS", "year": 2026, "track": "main", "verifiedAt": "2026-10-02",
+  "verificationScope": "CFP 2026, Main Track Handbook V2026.3 y checklist consultados; perfil parcial, revisar antes del envío",
+  "audience": "Investigación de ML y áreas afines", "articleTypes": ["empirical", "theory", "systems"],
+  "templateUrl": "https://neurips.cc/Conferences/2026/CallForPapers",
+  "rules": [
+    { "field": "pageLimit", "value": "9 páginas de contenido en submission; referencias, apéndices y checklist excluidos", "sourceUrl": "https://neurips.cc/Conferences/2026/MainTrackHandbook", "sourceSection": "Paper Formatting Instructions" },
+    { "field": "anonymization", "value": "Submission y material enlazado/suplementario deben preservar revisión doble ciego", "sourceUrl": "https://neurips.cc/Conferences/2026/MainTrackHandbook", "sourceSection": "Double-blind Reviewing: For Authors" },
+    { "field": "checklist", "value": "Incluir checklist; justificar respuestas con evidencia y limitaciones", "sourceUrl": "https://neurips.cc/public/guides/PaperChecklist", "sourceSection": "Checklist guidelines" },
+    { "field": "aiPolicy", "value": "Autores responsables del contenido y referencias; describir agentes/LLMs cuando sean un componente importante, original o no estándar del método", "sourceUrl": "https://neurips.cc/Conferences/2026/MainTrackHandbook", "sourceSection": "Author Use of Agents and Large Language Models" }
+  ],
+  "deadlines": { "abstract": "2026-05-04", "paper": "2026-05-06", "timezone": "AoE", "sourceUrl": "https://neurips.cc/Conferences/2026/CallForPapers" },
+  "requiresRecheck": ["Reglas vigentes del año/track", "Plantilla exacta", "AI policy completa", "Fechas y portal", "Elegibilidad y conflictos"],
+  "sources": ["https://neurips.cc/Conferences/2026/CallForPapers", "https://neurips.cc/Conferences/2026/MainTrackHandbook", "https://neurips.cc/public/guides/PaperChecklist"]
+}
