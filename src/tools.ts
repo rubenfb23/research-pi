@@ -1,7 +1,7 @@
 import { Type } from '@earendil-works/pi-ai';
 import { defineTool, type ToolDefinition } from '@earendil-works/pi-coding-agent';
 import { aggregateProject, auditProject, runExperiment, withProjectLock } from './experiments.js';
-import { demoProtocol, freezeProtocol } from './protocol.js';
+import { demoProtocol, freezeProtocol, type Protocol } from './protocol.js';
 import { getNote, reviewCausal, scientificProtocol, searchLibrary, type CausalPlan } from './science.js';
 import { projectStatus } from './storage.js';
 import { draftPaper, outlinePaper, venueProfiles } from './papers.js';
@@ -32,6 +32,13 @@ export function researchTools(project: string): ToolDefinition[] {
       description: 'Freeze the built-in bounded CPU demo. Does not accept arbitrary code, methods, reduced seeds or replacement of an existing protocol.',
       parameters: Type.Object({}), executionMode: 'sequential',
       async execute() { return result(withProjectLock(project, () => freezeProtocol(project, demoProtocol()))); } }),
+    defineTool({ name: 'get_experiment_template', label: 'Structured experiment template',
+      description: 'Read the complete supported protocol schema example: question, hypothesis, fixed synthetic dataset/split, metrics, allowlisted configurations, ten training seeds, budget and uncertainty.',
+      parameters: Type.Object({}), async execute() { return result(demoProtocol()); } }),
+    defineTool({ name: 'freeze_experiment_protocol', label: 'Validate and freeze scientific protocol',
+      description: 'Freeze a proposed JSON protocol after host validation. Requires ten distinct seeds, bounded CPU budget and allowlisted algorithms; cannot replace an existing protocol or bypass seed policy.',
+      parameters: Type.Object({ protocolJson: Type.String({ maxLength: 100000 }) }), executionMode: 'sequential',
+      async execute(_id, params) { return result(withProjectLock(project, () => freezeProtocol(project, JSON.parse(params.protocolJson) as Protocol))); } }),
     defineTool({ name: 'run_frozen_experiment', label: 'Execute frozen CPU experiment',
       description: 'Run the validated frozen configurations with ten seeds, genuine receipts and measured predictions. Failures require explicit user CLI run --retry; tool never silently retries.',
       parameters: Type.Object({}), executionMode: 'sequential',

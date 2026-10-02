@@ -7,6 +7,7 @@ import { openResearchSession } from '../src/agent.js';
 import { stateDir } from '../src/paths.js';
 import { projectStatus, writeJson, canonical } from '../src/storage.js';
 import { researchTools } from '../src/tools.js';
+import { demoProtocol, loadFrozen } from '../src/protocol.js';
 
 test('H1: real Pi SDK mock tool call, persistent resume and actual compaction preserve scientific state', async () => {
   const project = mkdtempSync(join(tmpdir(), 'researchpi-session-'));
@@ -47,5 +48,13 @@ test('H3: research tools operate through Pi with no free filesystem/shell tool',
     const message = opened.session.messages.find(m => m.role === 'toolResult' && m.toolName === 'search_library');
     assert(message && message.role === 'toolResult' && !message.isError);
     assert.match(JSON.stringify(message.content), /dowhy-causal/);
+    const proposed = demoProtocol(); proposed.question = 'A user-defined supported experiment';
+    await opened.session.prompt('[tool:freeze_experiment_protocol] ' + JSON.stringify({ protocolJson: JSON.stringify(proposed) }));
+    assert.equal(loadFrozen(project).protocol.question, proposed.question);
+    const reduced = demoProtocol(); reduced.trainingSeeds.pop();
+    await opened.session.prompt('[tool:freeze_experiment_protocol] ' + JSON.stringify({ protocolJson: JSON.stringify(reduced) }));
+    const rejection = opened.session.messages.filter(m => m.role === 'toolResult' && m.toolName === 'freeze_experiment_protocol').at(-1);
+    assert(rejection && rejection.role === 'toolResult' && rejection.isError);
+    assert.equal(loadFrozen(project).protocol.question, proposed.question);
   } finally { opened.session.dispose(); rmSync(project, { recursive: true, force: true }); }
 });

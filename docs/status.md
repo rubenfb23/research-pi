@@ -65,7 +65,15 @@ no en un número escrito manualmente por el modelo. Resultados completos ignorad
   Pi MIT se conserva íntegra y 173 dependencias npm tienen inventario de metadatos.
 
 Repositorio público creado: https://github.com/rubenfb23/research-pi.
-La publicación de los commits y resultado remoto de CI se verifican en la entrega.
+Los commits de los cuatro hitos están publicados en `main`. La primera CI remota
+pasó instalación, las 17 pruebas, demo, auditoría y subida de evidencias:
+https://github.com/rubenfb23/research-pi/actions/runs/36997449500
+La herramienta de protocolos propios y la actualización de acciones de CI se validan
+en una segunda ejecución antes de la entrega.
+
+El agente puede crear protocolos propios compatibles mediante herramientas específicas:
+plantilla estructurada y congelación con validación del host. Una prueba atraviesa el
+SDK, persiste una pregunta propia y comprueba el rechazo de una reducción de seeds.
 
 ResearchPi usa el SDK de Pi 1.0.0 como dependencia; no modifica su núcleo.
 La licencia MIT para el código propio queda como propuesta; hasta elegirla, el paquete

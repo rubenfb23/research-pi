@@ -66,6 +66,10 @@ El papel de cada seed y los límites de la incertidumbre se registran en el prot
 Las ejecuciones fallidas siguen en el historial; reintentar no borra el fallo.
 
 Para un protocolo propio compatible con el runner: `freeze --file protocolo.json` y `run`.
+Con un modelo configurado, el agente también puede consultar `get_experiment_template`
+y proponer/congelar un protocolo mediante `freeze_experiment_protocol`; el host valida
+seeds, algoritmos, parámetros y presupuesto. El modelo no puede sustituir un protocolo
+congelado ni introducir métricas o recibos como si fueran ejecuciones.
 Tras cancelar o fallar, usa `run --retry` explícitamente: el intento anterior se conserva.
 Las configuraciones admitidas están en `src/protocol.ts`; el MVP solo ejecuta clasificación
 sintética binaria con estos dos algoritmos. Los cambios de protocolo/código invalidan
