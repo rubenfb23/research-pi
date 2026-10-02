@@ -10,6 +10,16 @@ Implementa los cuatro hitos del [encargo](docs/encargo-codex-research-pi.md).
 Los [instaladores nativos](https://github.com/rubenfb23/research-pi/releases) incluyen Node
 y las dependencias: `.deb` para Ubuntu/Debian x64, `.exe` para Windows x64 y `.pkg`
 para macOS Apple Silicon e Intel. Consulta [instalación y paquetes](docs/installation.md).
+
+Descargas de la [versión preliminar 0.2.0](https://github.com/rubenfb23/research-pi/releases/tag/v0.2.0):
+
+| Sistema | Instalador |
+| --- | --- |
+| Ubuntu/Debian x64 | [.deb](https://github.com/rubenfb23/research-pi/releases/download/v0.2.0/research-pi_0.2.0_amd64.deb) |
+| Windows x64 | [.exe](https://github.com/rubenfb23/research-pi/releases/download/v0.2.0/research-pi-0.2.0-windows-x64-setup.exe) |
+| macOS Apple Silicon | [.pkg arm64](https://github.com/rubenfb23/research-pi/releases/download/v0.2.0/research-pi-0.2.0-macos-arm64.pkg) |
+| macOS Intel | [.pkg x64](https://github.com/rubenfb23/research-pi/releases/download/v0.2.0/research-pi-0.2.0-macos-x64.pkg) |
+
 Tras instalar, abre una terminal nueva y ejecuta:
 
 ```sh

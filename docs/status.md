@@ -117,3 +117,40 @@ La CI del commit `2a4d91e3716bc7aa38a4ebddcd9e5987e52a4e03` terminó correctamen
 https://github.com/rubenfb23/research-pi/actions/runs/37003788440
 Comprobó preparación automática desde checkout limpio, las 23 pruebas, demo de
 veinte fits, auditoría y subida del artefacto `demo-evidence` (retención: siete días).
+
+## repi e instaladores nativos 0.2.0 · 2026-10-02
+
+El comando `repi` está declarado en npm y se instala desde el checkout con
+`npm run install:cli`. Se comprobó en la máquina local desde otra carpeta.
+El chat, ayuda y todos los subcomandos existentes usan la misma CLI.
+
+La [release preliminar 0.2.0](https://github.com/rubenfb23/research-pi/releases/tag/v0.2.0)
+contiene cuatro instaladores con Node 22.23.0 y dependencias de producción:
+Ubuntu/Debian x64 `.deb`, Windows x64 `.exe`, macOS Apple Silicon `.pkg` y
+macOS Intel `.pkg`, más sus cuatro archivos SHA-256. Los ocho assets se
+comprobaron publicados y los hashes de los paquetes descargados de CI coinciden.
+Los paquetes conservan los avisos de Pi, archivos de licencia distribuidos por
+las dependencias y el LICENSE completo de Node con sus avisos de terceros.
+
+Instalación, ayuda, versión, chat, llamada a herramienta, reanudación y retirada
+del paquete comprobados en los cuatro runners nativos. El proyecto se crea en
+la carpeta desde donde se invoca, incluyendo rutas con espacios; conexiones y
+Python se guardan en datos del usuario. La prueba de macOS se corrigió para
+comparar rutas físicas equivalentes `/var` y `/private/var`.
+CI de instaladores del commit `77711dc071416fc781efadc4d1379b3da1a7c8fa`:
+https://github.com/rubenfb23/research-pi/actions/runs/37005882068
+
+Las 25 pruebas y la demo de veinte fits con auditoría pasaron en la CI científica:
+https://github.com/rubenfb23/research-pi/actions/runs/37005882173
+Además, el `.deb` se instaló y desinstaló en un contenedor Ubuntu 24.04 sin Node
+preinstalado. En otro contenedor Debian Bookworm con Python 3.14, un usuario sin
+privilegios ejecutó veinte fits reales desde el paquete: auditoría completa, sin
+errores y venv en sus datos personales, ninguna escritura en `/opt/research-pi/app`.
+Huella científica de esa ejecución empaquetada:
+`cf055db6a46bd694cf4f6fc39d5396d64a2834ea770c71a107af45c1da2ca7b9`.
+
+Pendientes: firma de editor en Windows, firma/notarización en macOS, arquitectura
+ARM en Linux/Windows, experimentos Python verificados en Windows/macOS e inferencia
+con cuentas reales. Continúan pendientes la licencia propia y el aviso transitivo
+de Pi. No se modificaron ni eliminaron evidencias científicas de versiones anteriores.
+La [guía de instalación](installation.md) documenta requisitos, carpetas y retirada.
