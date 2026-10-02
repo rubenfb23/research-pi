@@ -9,6 +9,7 @@ import {
 import { resource, stateDir } from './paths.js';
 import { projectStatus, readJson, writeJson } from './storage.js';
 import { connectionAuth, connectionRuntime, mockConfig, selectedConfig, type AgentConfig } from './connections.js';
+import { preferences } from './preferences.js';
 
 export { mockConfig, type AgentConfig } from './connections.js';
 export const toolResult = (data: unknown) => ({
@@ -92,7 +93,7 @@ export async function openResearchSession(project: string, config?: AgentConfig,
     cwd, agentDir: dir, modelRuntime: runtime, model, resourceLoader: loader,
     tools: tools.map(t => t.name), customTools: tools, sessionManager: manager,
     settingsManager: SettingsManager.inMemory({ compaction: { enabled: false, keepRecentTokens: 128 }, retry: { enabled: false } }),
-    thinkingLevel: 'off',
+    thinkingLevel: model.reasoning ? preferences(cwd).thinkingLevel : 'off',
   });
   return { ...result, manager, selected, savePointer() {
     const path = manager.getSessionFile();

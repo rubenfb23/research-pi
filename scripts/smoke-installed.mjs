@@ -31,7 +31,12 @@ try {
   assert.match(onboarding.stderr, /OpenCode Zen · API key/);
   assert.match(onboarding.stderr, /Option \[1\]:/);
   assert(existsSync(join(data, 'connections', 'config.json')));
-  const first = run([], 'hello\n[tool:project_status]\n/unknown\n/exit\n');
+  assert.match(run(['model'], 'offline-test\n').stderr, /Choose a model/);
+  const first = run([], '/model\noffline-test\n/models\n/thinking\n/reasoning off\nhello\n[tool:project_status]\n/unknown\n/exit\n');
+  assert.match(first.stderr, /ResearchPi.*v[0-9]+\.[0-9]+\.[0-9]+/);
+  assert.match(first.stderr, /Active connection: researchpi-mock\/offline-test/);
+  assert.match(first.stderr, /Reasoning effort: off/);
+  assert.match(first.stderr, /reasoning stream: off/);
   assert.match(first.stdout, /OFFLINE TEST/); assert.match(first.stderr, /Tool: project_status/);
   assert.match(first.stderr, /Unknown command/);
   // macOS exposes temporary directories through /var -> /private/var.

@@ -95,12 +95,17 @@ export async function connect(project: string, name: ConnectionName | undefined,
   ui.message('Connection saved. Model access will be verified by the first real response.');
   return config;
 }
-export async function changeModel(project: string, modelId: string) {
+export async function changeModel(project: string, modelId?: string, ui?: Pick<ConnectionUI, 'choose'>) {
   const config = selectedConfig(project);
   if (!config) throw new Error('Connect first using connect.');
-  if (config.provider === mockConfig.provider ? modelId !== mockConfig.model
-    : !(await connectionRuntime()).getModel(config.provider, modelId)) throw new Error('Unknown model. Run models.');
-  saveConnection(project, { ...config, model: modelId });
+  const catalog = config.provider === mockConfig.provider ? [{ id: mockConfig.model, name: 'Offline test transport' }]
+    : [...(await connectionRuntime()).getModels(config.provider)].filter(model => model.input.includes('text'));
+  catalog.sort((a, b) => Number(b.id === config.model) - Number(a.id === config.model) || a.id.localeCompare(b.id));
+  if (!modelId && !ui) throw new Error('Specify a model ID or run repi model in an interactive terminal.');
+  const chosen = modelId ?? await ui!.choose('Choose a model (the catalog does not guarantee access for your account):',
+    catalog.map(model => ({ id: model.id, label: model.name + ' · ' + model.id + (model.id === config.model ? ' (current)' : '') })));
+  if (!catalog.some(model => model.id === chosen)) throw new Error('Unknown model. Run models.');
+  saveConnection(project, { ...config, model: chosen });
 }
 export function openAuthBrowser(url: string): void {
   const parsed = new URL(url);

@@ -8,7 +8,7 @@
 
 Start a research conversation with `repi`, run reproducible experiments, and connect measured results to manuscript drafts. ResearchPi combines an interactive assistant with bounded scientific tools and persistent experiment evidence.
 
-ResearchPi is an early-stage open-source project. Its experiment runner currently supports synthetic binary classification with logistic SGD and random forest. Causal protocols guide and validate planning; they do not execute causal estimators. Live inference with real provider accounts remains unverified. See [verification status](docs/status.md) for the evidence and limitations.
+The experiment runner currently supports synthetic binary classification with logistic SGD and random forest. Causal protocols guide and validate planning; they do not execute causal estimators. Basic live chat has been verified with OpenCode Go (`glm-5.3-flash`); provider/model coverage and scientific reasoning quality remain limited. See [verification status](docs/status.md) for the evidence and limitations.
 
 ## Install
 
@@ -79,7 +79,28 @@ repi --project ./my-study
 repi --offline
 ```
 
-Inside the chat: `/help`, `/status`, `/connect`, `/model <id>`, `/compact`, `/exit`. Ctrl+C cancels an active response. Ctrl+D or `/exit` closes the session.
+### A terminal built for research
+
+Version **1.0.0** adds a colored, responsive terminal with streamed answers, a separate provider reasoning stream, and visible tool activity. It uses a scrolling conversation so evidence stays in your terminal history. Colors are disabled for redirected output, `NO_COLOR`, or `TERM=dumb`.
+
+```text
+────────────────────────────────────────────────────────────
+  ResearchPi  v1.0.0 · ML / AI / Computer Science
+
+  Model      opencode-go/glm-5.3-flash
+  Project    /path/to/my-study
+  Reasoning  medium · stream on
+
+  /help commands   /model select model   /exit quit
+────────────────────────────────────────────────────────────
+repi ❯ Help me design an ablation study
+```
+
+Use `/model` to open the picker, `/model <id>` to switch directly, and `/models` to inspect the catalog. `/thinking low` adjusts reasoning effort; `/thinking` shows the levels available for your model. `/reasoning off` hides the reasoning stream without disabling model reasoning. These settings persist per project. The default effort is `medium` on reasoning models and `off` on other models. Providers may expose reasoning text or summaries, or no visible reasoning at all; ResearchPi displays only what they send. Higher effort can increase latency and usage.
+
+Other commands: `/help`, `/status`, `/connect`, `/compact`, `/exit`. Ctrl+C cancels an active response. Ctrl+D or `/exit` closes the session. Answers go to stdout; reasoning and tool activity go to stderr, so `repi chat 'question' > answer.md` captures the answer. Hide reasoning in chat first if you do not want it in terminal logs.
+
+The [curated research instructions](resources/system.md) apply ten-seed experiment policy, causal identification order, source attribution, methodology and paper workflows when relevant. Greetings stay brief; research tasks receive the detail they need. See the [assistant contract](docs/assistant.md).
 
 ## Reproduce the experiment demo
 

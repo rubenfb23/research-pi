@@ -2,12 +2,14 @@ import { createInterface } from 'node:readline';
 import { Writable } from 'node:stream';
 import type { AuthInteraction, AuthPrompt } from '@earendil-works/pi-ai';
 import { openAuthBrowser, type ConnectionUI } from './connections.js';
+import { clean, paint } from './presentation.js';
 
 export class EndOfInput extends Error { constructor() { super('Input closed.'); } }
 export function terminalUI(signal?: AbortSignal): ConnectionUI & { read(message: string): Promise<string>; close(): void } {
   let muted = false, ended = false;
   const output = new Writable({ write(chunk, _encoding, done) { if (!muted) process.stderr.write(chunk); done(); } });
   const rl = createInterface({ input: process.stdin, output, terminal: Boolean(process.stdin.isTTY), historySize: 0 });
+  rl.setPrompt('');
   const queued: string[] = [];
   let pending: { resolve(value: string): void; reject(error: Error): void } | undefined;
   rl.on('line', line => { if (pending) { const p = pending; pending = undefined; p.resolve(line); } else queued.push(line); });
@@ -17,7 +19,7 @@ export function terminalUI(signal?: AbortSignal): ConnectionUI & { read(message:
     if (secret && !process.stdin.isTTY) throw new Error('Enter keys only in an interactive terminal; use environment variables in CI.');
     const cancel = promptSignal && signal ? AbortSignal.any([promptSignal, signal]) : promptSignal ?? signal;
     cancel?.throwIfAborted();
-    process.stderr.write(message + ' ');
+    process.stderr.write(paint(clean(message), 'accent') + ' ');
     muted = secret;
     const abort = () => { pending?.reject(new Error('Operation cancelled.')); pending = undefined; };
     try {
@@ -31,7 +33,7 @@ export function terminalUI(signal?: AbortSignal): ConnectionUI & { read(message:
   const message = (text: string) => { process.stderr.write(text + '\n'); };
   async function choose(title: string, options: { id: string; label: string }[]): Promise<string> {
     message(title);
-    options.forEach((o, i) => message(`  ${i + 1}. ${o.label}`));
+    options.forEach((o, i) => message(`  ${paint(String(i + 1).padStart(2), 'accent')}. ${clean(o.label)}`));
     for (;;) {
       const input = (await read('Option [1]:')).trim();
       const selected = options.find(o => o.id === input) ?? options[input ? Number(input) - 1 : 0];

@@ -32,7 +32,18 @@ program.command('connect').alias('login').argument('[connection]', connectionNam
     try { await connect(project(), name ? connectionName(name) : undefined, ui, opts.model); }
     finally { ui.close(); process.removeListener('SIGINT', stop); }
   });
-program.command('model').argument('<id>').action(async id => { await changeModel(project(), id); console.log('Model saved.'); });
+program.command('model').argument('[id]', 'model ID; omit to open the selector').action(async id => {
+  if (id) await changeModel(project(), id);
+  else {
+    const controller = new AbortController();
+    const ui = terminalUI(controller.signal);
+    const stop = () => { controller.abort(); ui.close(); };
+    process.once('SIGINT', stop);
+    try { await changeModel(project(), undefined, ui); }
+    finally { ui.close(); process.removeListener('SIGINT', stop); }
+  }
+  console.log('Model saved.');
+});
 program.command('models').argument('[connection]', connectionNames).action(async name => {
   const provider = name ? connections[connectionName(name)].provider : selectedConfig(project())?.provider;
   if (!provider || provider === 'researchpi-mock') { console.log(`Select a connection: ${connectionNames}.`); return; }
