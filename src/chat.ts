@@ -1,7 +1,6 @@
 import { openResearchSession } from './agent.js';
 import { mockConfig, selectedConfig, connect, connectionName, changeModel, connectionRuntime, connections } from './connections.js';
 import { terminalUI, EndOfInput } from './terminal.js';
-import { researchTools } from './tools.js';
 import { projectStatus } from './storage.js';
 import { providerFailure } from './provider-errors.js';
 import { ResponseView, clean, paint, welcome } from './presentation.js';
@@ -10,6 +9,8 @@ import { ROOT } from './paths.js';
 import { readJson } from './storage.js';
 import { join } from 'node:path';
 import { completeChat } from './input-completion.js';
+import { InteractiveMode, runPrintMode } from '@earendil-works/pi-coding-agent';
+import { Conversations, piDirectory } from './conversations.js';
 
 const help = [
   '/help                    Show commands',
@@ -20,12 +21,20 @@ const help = [
   '/thinking [level]        Reasoning effort: off, minimal, low, medium, high, xhigh',
   '/reasoning [on|off]       Show or hide the provider reasoning stream',
   '/compact                 Compact conversation; preserve scientific evidence',
+  '/new [name]              Create a new conversation',
+  '/chats [query]           List conversations across projects',
+  '/resume <id>             Open a saved conversation',
+  '/name <name>             Rename this conversation',
+  '/fork [entry-id]         Fork this conversation',
+  '/tree                    Show the conversation tree',
+  '/export <path>           Export HTML or JSONL',
+  '/reload                  Reload skills, extensions and project instructions',
   '/exit                    Close the session',
   'Tab completes; double Tab lists matches. Up/Down browse project history.',
   'Start a line with a space to omit it from input history.',
   'Ctrl+C cancels a response. Ctrl+D closes the session.',
 ].join('\n');
-export async function chat(project: string, prompt?: string, options: { offline?: boolean; compact?: boolean } = {}) {
+export async function chat(project: string, prompt?: string, options: { offline?: boolean; compact?: boolean; plain?:boolean; json?:boolean; sessionId?:string; newSession?:boolean; name?:string } = {}) {
   const controller = new AbortController();
   let opened: Awaited<ReturnType<typeof openResearchSession>> | undefined;
   let ui: ReturnType<typeof terminalUI> | undefined;
@@ -43,7 +52,32 @@ export async function chat(project: string, prompt?: string, options: { offline?
       ui = terminalUI(controller.signal, { project });
       config = await connect(project, undefined, ui);
     }
-    opened = await openResearchSession(project, config, researchTools(project));
+    const native = prompt === undefined && process.stdin.isTTY && process.stdout.isTTY && !options.plain && !options.json;
+    if (native) process.env.PI_CODING_AGENT_DIR = piDirectory();
+    opened = await openResearchSession(project, config, undefined, {...options,interactive:Boolean(native || options.json)});
+    if (options.json) {
+      if (prompt === undefined) throw new Error('JSON mode requires a prompt: repi chat --json "Your request".');
+      process.exitCode=await runPrintMode(opened.runtime,{mode:'json',initialMessage:prompt});
+      if (options.compact) await opened.session.compact();
+      return;
+    }
+    if (native) {
+      ui?.close(); ui=undefined; process.removeListener('SIGINT',stop);
+      if (config.provider === mockConfig.provider) process.env.PI_OFFLINE='1';
+      const mode = new InteractiveMode(opened.runtime,{startupDiagnostics:[...opened.runtime.diagnostics],modelFallbackMessage:opened.runtime.modelFallbackMessage});
+      // The SDK's exit hint names its standalone CLI; route that one host hint to repi.
+      const originalWrite=process.stdout.write;
+      process.stdout.write=function(this:typeof process.stdout,chunk:any,...args:any[]) {
+        if (typeof chunk === 'string') {
+          const plain=chunk.replace(/\x1b\[[0-?]*[ -/]*[@-~]/g,'');
+          const hint=/^To resume this session: pi (?:--session-dir .+ )?--session ([a-f0-9-]+)\n$/.exec(plain);
+          if (hint) chunk=`To resume this session: repi --session ${hint[1]}\n`;
+        }
+        return Reflect.apply(originalWrite,this,[chunk,...args]);
+      } as typeof process.stdout.write;
+      try { await mode.run(); } finally { process.stdout.write=originalWrite; }
+      return;
+    }
     const respond = async (text: string) => {
       let streamed = false;
       const view = new ResponseView(prompt === undefined, settings.showReasoning);
@@ -91,6 +125,33 @@ export async function chat(project: string, prompt?: string, options: { offline?
       if (text === '/exit' || text === '/quit') break;
       try {
         if (text === '/help') { ui.message(help); continue; }
+        if (text === '/new' || text.startsWith('/new ')) {
+          opened.savePointer(); await opened.runtime.newSession();
+          if (text.slice(4).trim()) opened.session.setSessionName(text.slice(4).trim());
+          ui.message('New conversation: '+opened.session.sessionId); continue;
+        }
+        if (text === '/chats' || text.startsWith('/chats ')) {
+          const items=await new Conversations(opened.runtime.cwd).list(true,text.slice(6).trim());
+          ui.message(items.map(item => `${item.id}  ${item.name || item.firstMessage || 'Untitled'}  ${item.cwd}`).join('\n') || 'No conversations found.'); continue;
+        }
+        if (text.startsWith('/resume ')) {
+          const item=await new Conversations(opened.runtime.cwd).find(text.slice(8).trim());
+          await opened.runtime.switchSession(item.path); project=opened.runtime.cwd;
+          settings=preferences(project); ui.close(); ui=terminalUI(controller.signal,{project});
+          ui.message('Conversation opened: '+opened.session.sessionId); continue;
+        }
+        if (text.startsWith('/name ')) { opened.session.setSessionName(text.slice(6).trim()); ui.message('Conversation named: '+opened.session.sessionName); continue; }
+        if (text === '/fork' || text.startsWith('/fork ')) {
+          const id=text.slice(5).trim() || [...opened.manager.getEntries()].reverse().find(entry => entry.type === 'message' && entry.message.role === 'user')?.id;
+          if (!id) throw new Error('No user message is available to fork.');
+          await opened.runtime.fork(id,{position:'at'}); ui.message('Conversation forked: '+opened.session.sessionId); continue;
+        }
+        if (text === '/tree') { ui.message(JSON.stringify(opened.manager.getTree(),null,2)); continue; }
+        if (text.startsWith('/export ')) {
+          const path=text.slice(8).trim();
+          ui.message(path.endsWith('.jsonl') ? opened.session.exportToJsonl(path) : await opened.session.exportToHtml(path)); continue;
+        }
+        if (text === '/reload') { await opened.session.reload(); ui.message('Resources reloaded.'); continue; }
         if (text === '/reasoning' || text.startsWith('/reasoning ')) {
           const value = text.slice(10).trim();
           if (value && !['on', 'off'].includes(value)) throw new Error('Use /reasoning on or /reasoning off.');
@@ -122,11 +183,13 @@ export async function chat(project: string, prompt?: string, options: { offline?
           config = await connect(project, value ? connectionName(value) : undefined, ui);
         } else if (text === '/model' || text.startsWith('/model ')) {
           await changeModel(project, text.slice(6).trim() || undefined, ui); config = selectedConfig(project)!;
-        } else if (text.startsWith('/')) { ui.message('Unknown command. ' + help); continue; }
+        } else if (text.startsWith('/') && !opened.session.resourceLoader.getPrompts().prompts.some(p => text.startsWith('/'+p.name))
+          && !opened.session.resourceLoader.getSkills().skills.some(skill => text.startsWith('/skill:'+skill.name))
+          && !opened.session.extensionRunner.getRegisteredCommands().some(command => text.startsWith('/'+command.name))) { ui.message('Unknown command. ' + help); continue; }
         else { await respond(text); continue; }
         opened.savePointer();
-        const next = await openResearchSession(project, config, researchTools(project));
-        opened.session.dispose(); opened = next;
+        const next = await openResearchSession(project, config);
+        await opened.dispose(); opened = next;
         ui.message(`Active connection: ${opened.selected.provider}/${opened.selected.model}`);
       } catch (error) {
         if (controller.signal.aborted) break;
@@ -134,6 +197,6 @@ export async function chat(project: string, prompt?: string, options: { offline?
       }
     }
   } finally {
-    opened?.savePointer(); opened?.session.dispose(); ui?.close(); process.removeListener('SIGINT', stop);
+    opened?.savePointer(); await opened?.dispose(); ui?.close(); process.removeListener('SIGINT', stop);
   }
 }

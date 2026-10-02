@@ -74,6 +74,11 @@ const fixtureTarget: TargetResolver = async value => {
 };
 const web = () => new WebResearch(directory,{resolveTarget:fixtureTarget});
 
+const originalTestData = process.env.RESEARCH_PI_DATA_DIR;
+const isolatedTestData = mkdtempSync(join(tmpdir(),'repi-sdk-test-data-'));
+process.env.RESEARCH_PI_DATA_DIR=isolatedTestData;
+after(()=>{if(originalTestData===undefined)delete process.env.RESEARCH_PI_DATA_DIR;else process.env.RESEARCH_PI_DATA_DIR=originalTestData;rmSync(isolatedTestData,{recursive:true,force:true});});
+
 test('Public web policy rejects local, reserved, credentialed and non-HTTP destinations',async () => {
   for (const address of ['127.0.0.1','10.0.0.1','172.16.1.2','169.254.169.254','192.168.2.1','100.64.0.1','0.0.0.0','224.0.0.1','::1','::ffff:127.0.0.1','fe80::1','fd00::1','2001:db8::1','2001:0000::1','2002:c0a8::1']) assert(!publicAddress(address),address);
   for (const address of ['1.1.1.1','8.8.8.8','2606:4700:4700::1111']) assert(publicAddress(address),address);
@@ -153,7 +158,7 @@ test('Pi SDK executes web tools and recovers recorded evidence after resume with
   let id = ''; const previousHits = articleHits;
   try {
     assert.match(opened.session.systemPrompt,/Web research workflow/);
-    assert(!opened.session.getActiveToolNames().some(name => ['bash','read','write','edit'].includes(name)));
+    assert(['bash','read','write','edit','codemode'].every(name => opened.session.getActiveToolNames().includes(name)));
     await opened.session.prompt('[tool:read_web] '+JSON.stringify({url:origin+'/article'}));
     const message = opened.session.messages.find(m => m.role === 'toolResult' && m.toolName === 'read_web');
     assert(message?.role === 'toolResult' && !message.isError);

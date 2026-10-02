@@ -81,11 +81,11 @@ repi --offline
 
 ### A terminal built for research
 
-Version **1.0.0** adds a colored, responsive terminal with streamed answers, a separate provider reasoning stream, and visible tool activity. It uses a scrolling conversation so evidence stays in your terminal history. Colors are disabled for redirected output, `NO_COLOR`, or `TERM=dumb`.
+The simple interface (`repi --plain`) retains the colored, responsive terminal introduced in **1.0.0**. Native mode uses Pi’s complete interface. The simple interface provides streamed answers, a separate provider reasoning stream, and visible tool activity. It uses a scrolling conversation so evidence stays in your terminal history. Colors are disabled for redirected output, `NO_COLOR`, or `TERM=dumb`.
 
 ```text
 ────────────────────────────────────────────────────────────
-  ResearchPi  v1.3.0 · ML / AI / Computer Science
+  ResearchPi  v1.4.0 · ML / AI / Computer Science
 
   Model      opencode-go/glm-5.3-flash
   Project    /path/to/my-study
@@ -96,7 +96,7 @@ Version **1.0.0** adds a colored, responsive terminal with streamed answers, a s
 repi ❯ Help me design an ablation study
 ```
 
-Use `/model` to open the picker, `/model <id>` to switch directly, and `/models` to inspect the catalog. `/thinking low` adjusts reasoning effort; `/thinking` shows the levels available for your model. `/reasoning off` hides the reasoning stream without disabling model reasoning. These settings persist per project. The default effort is `medium` on reasoning models and `off` on other models. Providers may expose reasoning text or summaries, or no visible reasoning at all; ResearchPi displays only what they send. Higher effort can increase latency and usage.
+Use `/model` to open the picker, `/model <id>` to switch directly, and `/models` to inspect the catalog. `/thinking low` adjusts reasoning effort; `/thinking` shows the levels available for your model. `/reasoning off` hides the reasoning stream without disabling model reasoning. In simple mode, these settings persist per project. Native mode uses `/settings` and Ctrl+T for reasoning display. The default effort is `medium` on reasoning models and `off` on other models. Providers may expose reasoning text or summaries, or no visible reasoning at all; ResearchPi displays only what they send. Higher effort can increase latency and usage.
 
 From **1.1.0**, Tab completes slash commands and their provider/model/reasoning arguments. A second Tab lists ambiguous matches. Model pickers also complete model IDs. Use ↑ and ↓ to browse your project input history; typing a prefix first filters history navigation to that prefix. Your unfinished prefix is restored when you return with ↓. Ctrl+U clears the current line. Completion uses the loaded SDK catalog without making inference requests.
 
@@ -107,6 +107,19 @@ Other commands: `/help`, `/status`, `/connect`, `/compact`, `/exit`. Ctrl+C canc
 The [curated research instructions](resources/system.md) apply ten-seed experiment policy, causal identification order, source attribution, methodology and paper workflows when relevant. Greetings stay brief; research tasks receive the detail they need. See the [assistant contract](docs/assistant.md).
 
 From **1.2.0**, the [manuscript policy](resources/manuscript-policy.md) is also loaded into every session, including resumed chats and other projects. It guides writing, figures, tables and references without announcing the rules. DOI verification and print-readability checks require actual retrieved or rendered evidence; missing checks remain pending. Restart `repi` after updating to load the new instructions.
+
+## Full Pi capabilities and conversations
+
+`repi` now uses Pi's native terminal interface with file/shell tools, skills, extensions, templates, themes, MCP, codemode, automatic context management and model retries. ResearchPi's scientific/editorial policy stays loaded in every chat.
+
+```sh
+repi --new "My research study"
+repi chats list --all
+repi chats open CONVERSATION_ID
+repi resources
+```
+
+Inside the chat: `/new`, `/chats`, `/resume`, `/name`, `/fork`, `/tree`, `/settings`, `/reload` and `/mcp`. Enter while responding steers the run; Alt+Enter queues a follow-up. Use `repi --plain` for the previous scrolling interface, `repi chat --json "request"` for JSONL events and `repi rpc` for programmatic control. [Capabilities, configuration and migration](docs/pi-features.md).
 
 ## Local web research
 
@@ -166,7 +179,7 @@ repi review-manifest --file examples/manuscript-pending.json
 
 The last two examples intentionally exit with status `1` to report missing information. A complete causal form is ready for human review, not a certification of identification or causality.
 
-The assistant receives bounded tools; it has no arbitrary shell or unrestricted file-writing tool. See [integrity and dependency limits](docs/integrity.md). An upstream Pi transitive dependency advisory remains documented; the project does not claim a clean dependency audit.
+The assistant now receives native file/shell tools alongside the bounded scientific tools. General scripts execute with your user permissions and do not automatically receive audited runner receipts. See [integrity and dependency limits](docs/integrity.md). An upstream Pi transitive dependency advisory remains documented; the project does not claim a clean dependency audit.
 
 ## Development and contributions
 

@@ -6,7 +6,7 @@ Updated 2026-10-02. ResearchPi uses Pi SDK 1.0.0 without modifying its core. Ori
 
 | Area | Implemented and tested behavior | Verification boundary |
 | --- | --- | --- |
-| Pi integration | Explicit scientific resources, bounded tools, persistent sessions, actual SDK tool dispatch, resume and compaction | Simulated transports plus a live OpenCode Go text/reasoning check; broader provider and scientific judgment coverage remains unverified |
+| Pi integration | Native Pi UI, file/shell and scientific tools, resources, MCP, persistent sessions, queues, retries and compaction | Simulated transports plus a live OpenCode Go text/reasoning check; broader provider and scientific judgment coverage remains unverified |
 | Experiments | Twenty real CPU fits, ten distinct seeds per configuration, frozen protocols, receipts, predictions, journal, retries and recalculated metrics | Synthetic binary classification with logistic SGD and random forest |
 | Scientific library | Six attributed notes, topic/lexical retrieval, experimental/methodology/causal protocols | Small curated library; no semantic search or universal citation checking |
 | Causal planning | Missing-field and non-identifiability states | Fields do not prove assumptions, identification or causality; no causal estimators |
@@ -49,7 +49,7 @@ Native package tests verified help/version, chat, SDK tool calls, resume, invoca
 
 OpenCode uses native Pi providers rather than an OpenCode local server. Tests simulate seven provider/API routes, verify key/client/session headers, independent credential storage, cancellation, actual bounded tool execution and stable session IDs after resume. CLI checks cover both catalogs, environment-key setup, model switching and rejection of piped keys. Native smoke tests check both catalogs. See [OpenCode](opencode.md).
 
-Version 1.3.0 passes 52 local tests, including twenty actual CPU fits. English-interface checks exercise fresh connection setup under a Spanish locale, English help/errors and paper/resource output. A separate pseudo-terminal check verified no-argument startup of the globally linked `repi`, fresh English onboarding under `es_ES.UTF-8`, offline chat and clean exit. Native smoke tests exercise the actual installed onboarding and help. Release publication runs scientific and all four native installer checks before uploading four packages, four checksums and a source-commit manifest. See [releases](releases.md).
+Version 1.4.0 passes 64 local tests, including twenty actual CPU fits. English-interface checks exercise fresh connection setup under a Spanish locale, English help/errors and paper/resource output. A separate pseudo-terminal check verified no-argument startup of the globally linked `repi`, fresh English onboarding under `es_ES.UTF-8`, offline chat and clean exit. Native smoke tests exercise the actual installed onboarding and help. Release publication runs scientific and all four native installer checks before uploading four packages, four checksums and a source-commit manifest. See [releases](releases.md).
 
 ## Terminal and prompt 1.0.0
 
@@ -71,7 +71,7 @@ The automated keyboard test runs on POSIX. Windows native installer smoke tests 
 - Hernán/Robins chapter-level recommendations still need specific curation; the current note verifies the website and bibliographic identity.
 - Venue coverage is partial and current official instructions must be rechecked before submission.
 - Manuscript review uses structured manifests, not arbitrary PDF/prose claim extraction or scientific certification.
-- Bounded tools protect against unrestricted model edits. The host/user is trusted; there is no independently signed evidence store or host sandbox. See [integrity](integrity.md).
+- Native file/shell tools now execute with host-user permissions. The scientific runner remains bounded, but arbitrary scripts are not automatically audited. There is no separately signed evidence store or host sandbox. See [integrity](integrity.md).
 - Pi 1.0.0's shrinkwrap retains a high-severity brace-expansion advisory pending upstream update. The esbuild override applies; no clean dependency audit is claimed.
 - Windows signing, macOS signing/notarization, Linux/Windows ARM packages and scientific Python experiments on Windows/macOS remain pending.
 
@@ -88,3 +88,9 @@ Seven SDK tools provide direct public-source reading, installed Chrome/Chromium/
 Eleven web tests exercise real HTTP and local Chrome, JavaScript, link following, native PDF extraction, blocked-search fallback, query filters, text/link pagination, cancellation, size limits, tampering and actual SDK dispatch/resume. Live Linux retrieval checked the official scikit-learn page, an original Crossref DOI record and an exact-title paper query. Public search delivered CAPTCHA and poorly related results on this network; relevance remains a model/human review task. Installed-runtime smoke checks exercise direct reading on every platform and browser rendering when an installed browser is detected.
 
 Automatic full bibliographic certification, OCR, screenshots/image interpretation, authenticated browsing and arbitrary form/script actions remain pending. Historical 1.2.0 verification boundaries above describe that earlier version. [Local web details](web.md).
+
+## Native Pi capabilities and conversations 1.4.0
+
+The SDK default resource loader, session runtime and native interactive interface replace the restricted host loader. Read/write/edit/search/list, shell tools, codemode, tool_search, configured MCP, skills/extensions/templates/themes/context, automatic compaction, model retries and steering/follow-up queues are activated. JSONL events and RPC are exposed. Native `/new`, `/resume`, `/chats`, `/name`, `/fork`, `/clone` and `/tree` accompany CLI conversation creation, listing/search, opening, naming, inspection and forks. Project histories are imported without deleting originals; cross-project switches rebind scientific tools and mandatory policy.
+
+Twelve new integration tests exercise actual file/shell actions, codemode, a local MCP server, deferred discovery, resource reloads, legacy import, CLI/native conversation controls, SDK project switches, automatic compaction/retries/queues, JSON and RPC. Native POSIX and simple keyboard tests use real pseudo-terminals. Installed-runtime smoke checks require native file tools, codemode, new/resume and mandatory policy on each package platform. These checks do not establish real-account model research judgment, every third-party extension, remote MCP compatibility or native Windows keyboard behavior. [Pi capabilities](pi-features.md).

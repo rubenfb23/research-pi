@@ -1,12 +1,12 @@
-# ResearchPi 1.0 assistant contract
+# ResearchPi assistant contract
 
-The assistant combines a curated ML/AI/CS system prompt, Pi's provider adapters, persistent conversations and host-validated scientific tools. Version 1.0.0 defines this CLI and research workflow; the supported experiment runner is documented separately and has a specific execution scope.
+The assistant combines a curated ML/AI/CS system prompt, Pi's provider adapters, persistent conversations and host-validated scientific tools. Version 1.4.0 adds the full native Pi interface and conversation manager; the supported experiment runner is documented separately and has a specific execution scope.
 
 ## Interaction
 
 A greeting receives a short greeting and invitation to discuss the research question. The model applies scientific protocols to relevant tasks rather than listing every policy at startup. English remains the response language. Existing session history is preserved: previous assistant messages can still influence a model, so evaluate the new greeting in a fresh project when comparing prompts.
 
-The terminal streams answers immediately on stdout. Provider-exposed reasoning or summaries appear separately on stderr, followed by answer and tool activity blocks. ResearchPi does not request or fabricate hidden reasoning. Model/provider support determines what is visible. Terminal control sequences from streamed content are filtered, including sequences split across chunks. Colors require a capable terminal and respect `NO_COLOR` and `TERM=dumb`.
+In simple mode, the terminal streams answers immediately on stdout. Native mode uses Pi’s complete renderer, editor, model/settings menus and provider reasoning controls. Provider-exposed reasoning or summaries appear separately on stderr, followed by answer and tool activity blocks. ResearchPi does not request or fabricate hidden reasoning. Model/provider support determines what is visible. Terminal control sequences from streamed content are filtered, including sequences split across chunks. Colors require a capable terminal and respect `NO_COLOR` and `TERM=dumb`.
 
 `/thinking` shows supported effort levels; `/thinking medium` selects a supported level. Default effort is medium on reasoning models and off on other models, subject to SDK clamping. `/reasoning on` and `/reasoning off` control display independently of computation. Preferences are stored in project `.research-pi/ui.json`, preserved on resume, and applied after switching models. Reasoning can include sensitive research context; hide its display when recording terminal sessions if appropriate.
 
@@ -25,7 +25,7 @@ The implementation uses the documented [Node 22 readline completion and history 
 - Literature: retrieve attributed notes when relevant, distinguish source claims from inference, disclose missing external verification, and keep citation identity and scope explicit.
 - Papers: adapt empirical/theory/dataset/systems/survey structure; write methodology from the design and executed work, link results to audited artifacts, and verify current official venue requirements.
 
-See [system.md](../resources/system.md) and [manuscript-policy.md](../resources/manuscript-policy.md) for the authoritative instructions, and [status](status.md) for tested execution scope. The bundled research, manuscript and web resources are composed into every session's system prompt, including resumed conversations, without forking Pi. Restart `repi` after editing either resource; an already open session does not hot reload these files. Keep workflow references tied to tools the host actually registers. The model may propose methods/code beyond the runner's scope, but must distinguish proposals from execution.
+See [system.md](../resources/system.md) and [manuscript-policy.md](../resources/manuscript-policy.md) for the authoritative instructions, and [status](status.md) for tested execution scope. The bundled research, manuscript and web resources are composed into every session's system prompt, including resumed conversations, without forking Pi. Restart `repi` or use `/reload` after editing these resources. Keep workflow references tied to tools the host actually registers. The model can implement and execute requested code with native file/shell tools, while distinguishing actual measurements from proposals and the bounded runner audit.
 
 ## Manuscript policy
 
@@ -42,3 +42,9 @@ Automated tests verify SDK prompt loading, streaming before completion, reasonin
 ## Local web tools 1.3.0
 
 The host registers direct reading, local browser navigation, paper discovery, public search and source recovery as SDK tools. The [web workflow](../resources/web-policy.md) is always loaded alongside the research and manuscript policies. Source text is untrusted evidence, and pages cannot replace the host instructions. A blocked search is not proof that literature is absent. Check status, completeness, metadata scope and original sources before citing. [Web setup and execution scope](web.md).
+
+## Native Pi interface 1.4.0
+
+The native terminal is now the default for interactive input/output. `/new`, `/chats`, `/resume`, `/name`, `/fork`, `/clone` and `/tree` manage conversations. The runtime recreates project-bound tools and resources on a cross-project switch. Ctrl+T controls provider reasoning, `/settings` selects themes and context/retry settings, Enter steers a response, and Alt+Enter queues a follow-up. Native settings and history follow Pi's persisted conventions. The sections describing readline and `.research-pi/ui.json` above apply to `--plain`, which remains the default for piped input/output.
+
+File/shell tools, codemode, tool_search and configured MCP are activated alongside scientific tools. Skills, templates, themes, context files and extensions use the default SDK resource loader. Automatic compaction and model retries are enabled; recorded experimental failures still need explicit retries. [Complete controls and configuration](pi-features.md).
