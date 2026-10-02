@@ -1,6 +1,6 @@
 import { test } from 'node:test';
 import { spawnSync } from 'node:child_process';
-import { ROOT } from '../src/paths.js';
+import { ROOT, resource } from '../src/paths.js';
 import assert from 'node:assert/strict';
 import { mkdtempSync, readFileSync, rmSync, statSync, writeFileSync } from 'node:fs';
 import { join } from 'node:path';
@@ -79,12 +79,12 @@ const ui: ConnectionUI = {
 const sse = (events: object[], named = false) => new Response(events.map(event =>
   `${named ? `event: ${(event as { type: string }).type}\n` : ''}data: ${JSON.stringify(event)}\n\n`).join(''),
   { headers: { 'Content-Type': 'text/event-stream' } });
-function completions(tool = false) {
+function completions(tool = false, promptTokens = 10) {
   return sse([{ id: 'chat-test', object: 'chat.completion.chunk', choices: [{ index: 0, delta: tool
     ? { role: 'assistant', tool_calls: [{ index: 0, id: 'call_status', type: 'function', function: { name: 'project_status', arguments: '{}' } }] }
     : { role: 'assistant', content: text }, finish_reason: null }] },
   { id: 'chat-test', object: 'chat.completion.chunk', choices: [{ index: 0, delta: {}, finish_reason: tool ? 'tool_calls' : 'stop' }],
-    usage: { prompt_tokens: 10, completion_tokens: 4, total_tokens: 14 } }]);
+    usage: { prompt_tokens: promptTokens, completion_tokens: 4, total_tokens: promptTokens + 4 } }]);
 }
 function anthropic() {
   return sse([
@@ -173,6 +173,7 @@ test('Native OpenCode adapters stream using the correct routes, API key, client 
 test('OpenCode session executes a bounded research tool and retains its routing ID when resumed', async () => {
   const directory = mkdtempSync(join(tmpdir(), 'repi-opencode-session-'));
   const originalFetch = globalThis.fetch;
+  const policy = readFileSync(resource('manuscript-policy.md'), 'utf8').trim();
   const oldData = process.env.RESEARCH_PI_DATA_DIR, oldKey = process.env.OPENCODE_API_KEY;
   process.env.RESEARCH_PI_DATA_DIR = join(directory, 'data'); process.env.OPENCODE_API_KEY = fakeKey;
   try {
@@ -187,6 +188,8 @@ test('OpenCode session executes a bounded research tool and retains its routing 
         assert.equal(req.headers.get('x-opencode-client'), 'ResearchPi');
         ids.push(req.headers.get('x-opencode-session')!); assert(ids.at(-1));
         const body = await req.json(); assert(body.tools.some((tool: any) => tool.function.name === 'project_status'));
+        assert(body.messages.some((message: any) => message.role === 'system' && typeof message.content === 'string' && message.content.includes(policy)),
+          'The full editorial policy must reach the provider on every request, including resume and tool follow-up');
         requests++; return completions(requests === 1);
       };
       const config: AgentConfig = { provider, model: 'glm-5.3', authMode: 'api_key' };
@@ -234,4 +237,51 @@ test('CLI exposes Zen/Go catalogs, connects with environment credentials, switch
       assert.equal(JSON.parse(run(['connection']).stdout).selected.model, 'glm-5.3-flash');
     }
   } finally { rmSync(directory, { recursive: true, force: true }); }
+});
+
+test('Manuscript policy reaches research turns after model switching, compaction, resume and in another project', async () => {
+  const directory = mkdtempSync(join(tmpdir(), 'repi-editorial-policy-'));
+  const originalFetch = globalThis.fetch;
+  const oldData = process.env.RESEARCH_PI_DATA_DIR, oldKey = process.env.OPENCODE_API_KEY;
+  const policy = readFileSync(resource('manuscript-policy.md'), 'utf8').trim();
+  process.env.RESEARCH_PI_DATA_DIR = join(directory, 'data'); process.env.OPENCODE_API_KEY = fakeKey;
+  let compacting = false, researchRequests = 0;
+  const config: AgentConfig = { provider: 'opencode-go', model: 'glm-5.3', authMode: 'api_key' };
+  try {
+    globalThis.fetch = async (input, init) => {
+      const body = await new Request(input, init).json();
+      if (!compacting) {
+        const instructions = body.messages.filter((m: any) => m.role === 'system').map((m: any) => m.content).join('\n');
+        assert(instructions.includes(policy), 'The entire policy must be delivered, not only a retrieval pointer');
+        assert.match(instructions, /ten distinct/);
+        researchRequests++;
+      }
+      return completions(false, 2000);
+    };
+    const project = join(directory, 'first');
+    const opened = await openResearchSession(project, config);
+    try {
+      await opened.session.prompt('Study context for the manuscript.');
+      await opened.session.prompt('Draft context: ' + 'synthetic manuscript background '.repeat(500));
+      const alternate = opened.getModels().find(m => m.id === 'glm-5.3-flash')!;
+      assert(alternate);
+      await opened.session.setModel(alternate);
+      await opened.session.prompt('Revise the abstract.');
+      compacting = true;
+      try { await opened.session.compact(); } finally { compacting = false; }
+      assert(opened.manager.getEntries().some(e => e.type === 'compaction'));
+      await opened.session.prompt('Continue with the introduction.');
+      opened.savePointer();
+    } finally { opened.session.dispose(); }
+    const resumed = await openResearchSession(project, config);
+    try { await resumed.session.prompt('Review the conclusion.'); } finally { resumed.session.dispose(); }
+    const fresh = await openResearchSession(join(directory, 'second'), config);
+    try { await fresh.session.prompt('Outline a different study.'); } finally { fresh.session.dispose(); }
+    assert.equal(researchRequests, 6);
+  } finally {
+    globalThis.fetch = originalFetch;
+    if (oldData === undefined) delete process.env.RESEARCH_PI_DATA_DIR; else process.env.RESEARCH_PI_DATA_DIR = oldData;
+    if (oldKey === undefined) delete process.env.OPENCODE_API_KEY; else process.env.OPENCODE_API_KEY = oldKey;
+    rmSync(directory, { recursive: true, force: true });
+  }
 });

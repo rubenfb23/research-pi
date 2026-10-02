@@ -32,11 +32,14 @@ test('H4: absent results produce planned methodology and no invented table', () 
     freezeProtocol(project, demoProtocol());
     const draft = draftPaper(project);
     const text = readFileSync(draft.path, 'utf8');
-    for (const section of ['Methodology', 'Results', 'Limitations', 'References', 'Reproducibility appendix']) {
+    for (const section of ['Materials and Methods', 'Results', 'Limitations', 'References', 'Reproducibility appendix']) {
       assert(text.includes('## ' + section), section);
     }
     assert.match(text, /PLAN PENDING/);
     assert.match(text, /No supported results table is available/);
+    assert.match(text, /evidence-supported contribution consistently/);
+    assert.match(text, /Adapt this roadmap/);
+    assert(!text.includes('\u2014'));
     assert.equal(draft.report.mechanicalEvidence.status, 'incomplete');
   } finally { rmSync(project, { recursive: true, force: true }); }
 });

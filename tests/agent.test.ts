@@ -1,10 +1,10 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { mkdtempSync, rmSync } from 'node:fs';
+import { mkdtempSync, readFileSync, rmSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { openResearchSession, mockConfig } from '../src/agent.js';
-import { stateDir } from '../src/paths.js';
+import { resource, stateDir } from '../src/paths.js';
 import { projectStatus, writeJson, canonical } from '../src/storage.js';
 import { researchTools } from '../src/tools.js';
 import { demoProtocol, loadFrozen } from '../src/protocol.js';
@@ -16,9 +16,11 @@ test('H1: real Pi SDK mock tool call, persistent resume and actual compaction pr
   const before = canonical(projectStatus(project));
   let first;
   let second;
+  const policy = readFileSync(resource('manuscript-policy.md'), 'utf8').trim();
   try {
     first = await openResearchSession(project, mockConfig);
     assert.match(first.session.systemPrompt, /ten distinct/);
+    assert(first.session.systemPrompt.includes(policy));
     assert.deepEqual(first.session.getActiveToolNames(), ['project_status']);
     await first.session.prompt('[tool:project_status]');
     first.savePointer();
@@ -27,9 +29,11 @@ test('H1: real Pi SDK mock tool call, persistent resume and actual compaction pr
     await first.session.prompt('Context for compaction: ' + 'scientific reasoning background '.repeat(400));
     await first.session.prompt('Keep this conversation resumable.');
     await first.session.compact();
+    assert(first.session.systemPrompt.includes(policy));
     assert(first.manager.getEntries().some(e => e.type === 'compaction'));
     first.session.dispose();
     second = await openResearchSession(project, mockConfig);
+    assert(second.session.systemPrompt.includes(policy));
     assert.equal(second.manager.getSessionFile(), file);
     assert(second.manager.getEntries().some(e => e.type === 'compaction'));
     await second.session.prompt('[tool:project_status]');

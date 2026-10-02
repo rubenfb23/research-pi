@@ -25,7 +25,15 @@ The implementation uses the documented [Node 22 readline completion and history 
 - Literature: retrieve attributed notes when relevant, distinguish source claims from inference, disclose missing external verification, and keep citation identity and scope explicit.
 - Papers: adapt empirical/theory/dataset/systems/survey structure; write methodology from the design and executed work, link results to audited artifacts, and verify current official venue requirements.
 
-See [system.md](../resources/system.md) for the authoritative instructions and [status](status.md) for tested execution scope. Editing that file changes the prompt loaded by new sessions without forking Pi. Keep workflow references tied to tools the host actually registers. The model may propose methods/code beyond the runner's scope, but must distinguish proposals from execution.
+See [system.md](../resources/system.md) and [manuscript-policy.md](../resources/manuscript-policy.md) for the authoritative instructions, and [status](status.md) for tested execution scope. Both bundled resources are composed into every session's system prompt, including resumed conversations, without forking Pi. Restart `repi` after editing either resource; an already open session does not hot reload these files. Keep workflow references tied to tools the host actually registers. The model may propose methods/code beyond the runner's scope, but must distinguish proposals from execution.
+
+## Manuscript policy
+
+Version 1.2.0 loads a mandatory English editorial policy in all projects and providers. It applies implicitly when drafting or reviewing manuscripts, rather than announcing rules or adding a checklist to greetings. The policy covers consistent contribution statements in the abstract, introduction and conclusion; an introduction roadmap; impersonal prose; explained concepts and acronyms; venue-adapted sections; clear figures, tables and captions; print/grayscale checks; and primary, recent, relevant references. It avoids em dashes in generated prose while preserving scientific identifiers and quoted evidence.
+
+Limitations are concise and constructive but retain facts that affect interpretation. Novelty must be supported rather than invented. Venue requirements can override layout defaults. Bibliographic verification requires retrieved DOI/publisher metadata or a credible record for works without DOIs; initials are permitted only when identity remains consistent. ResearchPi currently has no external browsing or DOI lookup tool, and its curated-note manifest check does not validate title, authors, journal, volume or pages. Those checks remain pending until actual source evidence is available. The policy does not turn missing tools into verified capabilities.
+
+The empirical outline and evidence scaffold follow the section defaults, introduce table terms before the table, and leave novelty and editorial completion explicitly pending. This is not automatic manuscript certification. See the [integration study](research/manuscript-policy-integration.md) for primary-source rationale and the policy's scientific boundaries.
 
 ## Verification boundary
 

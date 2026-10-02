@@ -49,7 +49,7 @@ Native package tests verified help/version, chat, SDK tool calls, resume, invoca
 
 OpenCode uses native Pi providers rather than an OpenCode local server. Tests simulate seven provider/API routes, verify key/client/session headers, independent credential storage, cancellation, actual bounded tool execution and stable session IDs after resume. CLI checks cover both catalogs, environment-key setup, model switching and rejection of piped keys. Native smoke tests check both catalogs. See [OpenCode](opencode.md).
 
-Version 1.1.0 passes 40 local tests, including twenty actual CPU fits. English-interface checks exercise fresh connection setup under a Spanish locale, English help/errors and paper/resource output. A separate pseudo-terminal check verified no-argument startup of the globally linked `repi`, fresh English onboarding under `es_ES.UTF-8`, offline chat and clean exit. Native smoke tests exercise the actual installed onboarding and help. Release publication runs scientific and all four native installer checks before uploading four packages, four checksums and a source-commit manifest. See [releases](releases.md).
+Version 1.2.0 passes 41 local tests, including twenty actual CPU fits. English-interface checks exercise fresh connection setup under a Spanish locale, English help/errors and paper/resource output. A separate pseudo-terminal check verified no-argument startup of the globally linked `repi`, fresh English onboarding under `es_ES.UTF-8`, offline chat and clean exit. Native smoke tests exercise the actual installed onboarding and help. Release publication runs scientific and all four native installer checks before uploading four packages, four checksums and a source-commit manifest. See [releases](releases.md).
 
 ## Terminal and prompt 1.0.0
 
@@ -74,3 +74,9 @@ The automated keyboard test runs on POSIX. Windows native installer smoke tests 
 - Bounded tools protect against unrestricted model edits. The host/user is trusted; there is no independently signed evidence store or host sandbox. See [integrity](integrity.md).
 - Pi 1.0.0's shrinkwrap retains a high-severity brace-expansion advisory pending upstream update. The esbuild override applies; no clean dependency audit is claimed.
 - Windows signing, macOS signing/notarization, Linux/Windows ARM packages and scientific Python experiments on Windows/macOS remain pending.
+
+## Manuscript policy 1.2.0
+
+The English editorial policy is bundled with the application and composed into every session's system prompt. SDK tests inspect actual simulated provider requests on Zen/Go tool follow-ups and resume, and after a Go model switch and real compaction. A second project receives the same policy. Installed-runtime smoke checks require both resources to load on each packaged platform. The empirical scaffold introduces table terms before the table and leaves unsupported novelty pending in the abstract, introduction and conclusion.
+
+These checks establish instruction delivery and deterministic scaffold behavior, not universal model compliance. No live manuscript evaluation was performed for this change. DOI resolution, bibliographic metadata matching, Google searches, journal-specific literature retrieval and rendered figure checks still need external tools or supplied source evidence. [Editorial policy](../resources/manuscript-policy.md), [integration study](research/manuscript-policy-integration.md).
