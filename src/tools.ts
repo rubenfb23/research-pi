@@ -6,10 +6,12 @@ import { getNote, reviewCausal, scientificProtocol, searchLibrary, type CausalPl
 import { projectStatus } from './storage.js';
 import { draftPaper, outlinePaper, venueProfiles } from './papers.js';
 import { ensureExperiments } from './setup.js';
+import { webTools } from './web-tools.js';
 
 const result = (data: unknown) => ({ content: [{ type: 'text' as const, text: JSON.stringify(data) }], details: {} });
 export function researchTools(project: string): ToolDefinition[] {
   return [
+    ...webTools(project),
     defineTool({ name: 'project_status', label: 'Scientific project status',
       description: 'Read persisted scientific protocol independently of conversation; not an evidence audit.', parameters: Type.Object({}),
       async execute() { return result(projectStatus(project)); } }),

@@ -85,7 +85,7 @@ Version **1.0.0** adds a colored, responsive terminal with streamed answers, a s
 
 ```text
 ────────────────────────────────────────────────────────────
-  ResearchPi  v1.2.0 · ML / AI / Computer Science
+  ResearchPi  v1.3.0 · ML / AI / Computer Science
 
   Model      opencode-go/glm-5.3-flash
   Project    /path/to/my-study
@@ -107,6 +107,19 @@ Other commands: `/help`, `/status`, `/connect`, `/compact`, `/exit`. Ctrl+C canc
 The [curated research instructions](resources/system.md) apply ten-seed experiment policy, causal identification order, source attribution, methodology and paper workflows when relevant. Greetings stay brief; research tasks receive the detail they need. See the [assistant contract](docs/assistant.md).
 
 From **1.2.0**, the [manuscript policy](resources/manuscript-policy.md) is also loaded into every session, including resumed chats and other projects. It guides writing, figures, tables and references without announcing the rules. DOI verification and print-readability checks require actual retrieved or rendered evidence; missing checks remain pending. Restart `repi` after updating to load the new instructions.
+
+## Local web research
+
+Version **1.3.0** adds direct page reading, local Chrome/Chromium/Edge browsing, recorded-link following, public search and Crossref paper discovery. No search API key or additional npm dependency is needed. Sources retain URLs, dates and content hashes across sessions. PDFs use the existing local `pdftotext` command when available.
+
+```sh
+repi web status
+repi web read https://example.com
+repi web papers "Ten simple rules for structuring papers" --limit 3
+repi web open https://scikit-learn.org/stable/modules/cross_validation.html
+```
+
+In chat, request literature research normally; the model receives the web tools and scientific sourcing workflow. Public search can encounter CAPTCHA or poor results. Use bibliographic discovery and original sources for scientific claims. See [local web research](docs/web.md) for setup, evidence recovery and verification boundaries.
 
 ## Reproduce the experiment demo
 
