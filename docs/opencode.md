@@ -1,10 +1,10 @@
-# OpenCode Zen y Go
+# OpenCode Zen and Go
 
-Revisado el **2 de octubre de 2026**. ResearchPi integra los proveedores del SDK de Pi `@earendil-works/pi-ai` y `@earendil-works/pi-coding-agent` **1.0.0**, fijados en [package-lock.json](../package-lock.json). No necesita ejecutar la aplicación OpenCode ni un servidor `opencode serve`.
+Reviewed on **October 2, 2026**. ResearchPi integrates the providers from Pi SDK packages `@earendil-works/pi-ai` and `@earendil-works/pi-coding-agent` **1.0.0**, pinned in [package-lock.json](../package-lock.json). It does not require the OpenCode application or an `opencode serve` server.
 
-## Conectar
+## Connect
 
-Zen ofrece acceso por API a modelos seleccionados y factura las peticiones. Go ofrece planes de uso con API key. Obtén la clave en la consola de OpenCode y elige el producto que corresponda a tu cuenta. [Zen](https://opencode.ai/docs/zen/), [Go](https://opencode.ai/docs/go/).
+Zen provides API access to selected models and bills requests. Go provides usage plans with an API key. Obtain your key from the OpenCode console and choose the product available in your account. [Zen](https://opencode.ai/docs/zen/), [Go](https://opencode.ai/docs/go/).
 
 ```bash
 # OpenCode Zen
@@ -16,7 +16,7 @@ repi connect opencode-go
 repi
 ```
 
-El asistente solicita la clave sin mostrarla y permite elegir el modelo. Para consultar el catálogo o seleccionar explícitamente uno:
+The wizard asks for the key without displaying it and lets you choose a model. To inspect the catalog or select a model explicitly:
 
 ```bash
 repi models opencode
@@ -26,44 +26,44 @@ repi models opencode-go
 repi connect opencode-go --model glm-5.3-flash
 ```
 
-Estos identificadores están presentes en el catálogo del SDK revisado. Que aparezcan en `models` **no certifica el acceso en tu cuenta**: la conexión guarda la selección y las credenciales; la primera respuesta real comprueba autenticación, disponibilidad y permisos. El catálogo instalado puede diferir del servicio actual. [Catálogo de Zen](https://opencode.ai/zen/v1/models), [catálogo de Go](https://opencode.ai/zen/go/v1/models), [código fijado del SDK](#fuentes-del-sdk).
+These identifiers are present in the reviewed SDK catalog. Their appearance in `models` **does not certify access in your account**: connecting saves your selection and credentials; the first real response checks authentication, availability, and permissions. The installed catalog may differ from the current service. [Zen catalog](https://opencode.ai/zen/v1/models), [Go catalog](https://opencode.ai/zen/go/v1/models), [pinned SDK sources](#sdk-sources).
 
-## Credenciales
+## Credentials
 
-Los dos proveedores del SDK reconocen exactamente **`OPENCODE_API_KEY`**. No definen `OPENCODE_GO_API_KEY` ni `OPENCODE_ZEN_API_KEY`. Si se establece aquella variable, ambos pueden usar su mismo valor. Una clave guardada para un proveedor tiene prioridad sobre la variable de entorno. [Código fijado del SDK](#fuentes-del-sdk).
+Both SDK providers recognize exactly **`OPENCODE_API_KEY`**. They do not define `OPENCODE_GO_API_KEY` or `OPENCODE_ZEN_API_KEY`. When that environment variable is set, both can use its value. A stored key for a provider takes precedence over the environment variable. [Pinned SDK sources](#sdk-sources).
 
-ResearchPi guarda las entradas de autenticación bajo los identificadores distintos `opencode` y `opencode-go`. Por tanto, conectar o desconectar uno no debe sobrescribir la credencial guardada del otro. Esta separación local no significa que OpenCode exija emitir dos claves distintas: su documentación no establece esa obligación. [Código fijado del SDK](#fuentes-del-sdk), [conexiones de ResearchPi](connections.md).
+ResearchPi stores authentication entries under the distinct identifiers `opencode` and `opencode-go`. Connecting or disconnecting one must therefore preserve the other provider's stored credential. This local separation does not mean that OpenCode requires two different keys: its documentation does not establish such a requirement. [Pinned SDK sources](#sdk-sources), [ResearchPi connections](connections.md).
 
-## Rutas y formatos
+## Routes and formats
 
-El SDK conserva el formato de API definido para cada modelo; no trata todos los modelos como si tuvieran una única API compatible con OpenAI. Las rutas de servicio documentadas son:
+The SDK preserves each model's API format; it does not treat every model as using a single OpenAI-compatible API. The documented service routes are:
 
-| Servicio | Mensajes Anthropic | Chat Completions | Responses |
+| Service | Anthropic Messages | Chat Completions | Responses |
 | --- | --- | --- | --- |
 | Zen | `https://opencode.ai/zen/v1/messages` | `https://opencode.ai/zen/v1/chat/completions` | `https://opencode.ai/zen/v1/responses` |
 | Go | `https://opencode.ai/zen/go/v1/messages` | `https://opencode.ai/zen/go/v1/chat/completions` | `https://opencode.ai/zen/go/v1/responses` |
 
-Zen también publica modelos con formato Google bajo `/zen/v1/models/<modelo>`. [Endpoints oficiales de Zen](https://opencode.ai/docs/zen/#endpoints), [endpoints oficiales de Go](https://opencode.ai/docs/go/#endpoints).
+Zen also publishes models using the Google format under `/zen/v1/models/<model>`. [Official Zen endpoints](https://opencode.ai/docs/zen/#endpoints), [official Go endpoints](https://opencode.ai/docs/go/#endpoints).
 
-En el catálogo de Pi, los modelos Anthropic tienen `baseUrl` sin `/v1` (`https://opencode.ai/zen` o `https://opencode.ai/zen/go`); su adaptador añade la ruta correspondiente. Los modelos OpenAI y Google revisados tienen la base con `/v1`. Debe conservarse esa configuración al usar el SDK. [Código fijado del SDK](#fuentes-del-sdk).
+In the Pi catalog, Anthropic models have a `baseUrl` without `/v1` (`https://opencode.ai/zen` or `https://opencode.ai/zen/go`); their adapter appends the appropriate route. The reviewed OpenAI and Google models have bases including `/v1`. Preserve this configuration when using the SDK. [Pinned SDK sources](#sdk-sources).
 
-Go pide que el cliente se identifique con un `User-Agent` propio y envíe un identificador estable por conversación en `x-opencode-session`. Está orientado a peticiones típicas de agentes de programación; esta integración no acredita que el proveedor acepte cualquier uso de investigación. ResearchPi envía `User-Agent: ResearchPi/<versión>` y `x-opencode-client: ResearchPi`; Pi añade la cabecera de sesión con el identificador de la conversación, conservado al reanudarla. [Requisitos de Go para clientes](https://opencode.ai/docs/go/#where-can-i-use-it), [código fijado del SDK](#fuentes-del-sdk).
+Go asks clients to identify themselves with their own `User-Agent` and send a stable conversation identifier in `x-opencode-session`. It is intended for typical coding-agent requests; this integration does not establish that the provider accepts every research use. ResearchPi sends `User-Agent: ResearchPi/<version>` and `x-opencode-client: ResearchPi`; Pi adds the session header using the conversation identifier, preserved when resuming. [Go client requirements](https://opencode.ai/docs/go/#where-can-i-use-it), [pinned SDK sources](#sdk-sources).
 
-## Verificación y límites
+## Verification and limitations
 
-La revisión del SDK confirmó 79 modelos de chat Zen y 29 Go en su catálogo instalado, sus formatos, sus bases y la resolución de API key. Es una comprobación local sin credenciales reales. Las pruebas con respuestas HTTP simuladas comprueban selección, rutas de siete combinaciones proveedor/formato, cabeceras, almacenamiento separado, llamadas a herramientas y sesión estable al reanudar. No acreditan una inferencia contra OpenCode.
+The SDK review confirmed 79 Zen chat models and 29 Go chat models in the installed catalog, their formats, their bases, and API-key resolution. This is a local check without real credentials. Tests using simulated HTTP responses check selection, routes for seven provider/format combinations, headers, separate storage, tool calls, and stable sessions on resume. They do not establish successful inference against OpenCode.
 
-Sin una API key válida siguen pendientes la autenticación real, las respuestas reales y el uso de herramientas con cada modelo. Los límites, saldos, disponibilidad y políticas deben comprobarse en la cuenta del proveedor. Go permite configurar el uso del saldo Zen al agotar su cuota; esa opción pertenece a la consola y ResearchPi no la activa. [Go](https://opencode.ai/docs/go/#usage-beyond-limits).
+Without a valid API key, real authentication, real responses, and tool use with each model remain unverified. Check limits, balances, availability, and policies in your provider account. Go lets you configure use of your Zen balance after reaching its quota; that option belongs to the console and ResearchPi does not enable it. [Go](https://opencode.ai/docs/go/#usage-beyond-limits).
 
-## Fuentes del SDK
+## SDK sources
 
-Fuentes primarias inspeccionadas en la instalación fijada por [package-lock.json](../package-lock.json), dentro de `node_modules` tras `npm ci`:
+Primary sources inspected in the installation pinned by [package-lock.json](../package-lock.json), inside `node_modules` after `npm ci`:
 
-- `@earendil-works/pi-ai/dist/providers/opencode.js` y `opencode-go.js`: identificadores, autenticación y adaptadores.
-- `@earendil-works/pi-ai/dist/providers/data/opencode.json` y `opencode-go.json`: catálogo, formato y base de cada modelo.
-- `@earendil-works/pi-ai/dist/auth/helpers.js`: clave guardada antes que variable de entorno; solicitud de tipo `secret`.
-- `@earendil-works/pi-ai/dist/env-api-keys.js`: ambos proveedores usan `OPENCODE_API_KEY`.
-- `@earendil-works/pi-ai/dist/providers/opencode-headers.js`: `x-opencode-session` a partir de `sessionId`.
-- `@earendil-works/pi-coding-agent/dist/core/auth-storage.js`: almacenamiento indexado por identificador de proveedor.
+- `@earendil-works/pi-ai/dist/providers/opencode.js` and `opencode-go.js`: identifiers, authentication, and adapters.
+- `@earendil-works/pi-ai/dist/providers/data/opencode.json` and `opencode-go.json`: catalog, format, and base for each model.
+- `@earendil-works/pi-ai/dist/auth/helpers.js`: stored key takes precedence over the environment variable; prompt has type `secret`.
+- `@earendil-works/pi-ai/dist/env-api-keys.js`: both providers use `OPENCODE_API_KEY`.
+- `@earendil-works/pi-ai/dist/providers/opencode-headers.js`: `x-opencode-session` from `sessionId`.
+- `@earendil-works/pi-coding-agent/dist/core/auth-storage.js`: storage indexed by provider identifier.
 
-La versión fijada hace reproducible esta revisión. Actualizar Pi requiere revisar de nuevo estos detalles y ejecutar las pruebas de integración.
+The pinned version makes this review reproducible. Updating Pi requires reviewing these details again and running the integration tests.

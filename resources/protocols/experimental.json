@@ -1,6 +1,20 @@
 {
-  "id": "experimental", "title": "Diseño experimental ML",
-  "sourceIds": ["lab-policy", "sklearn-practices", "neurips-checklist"],
-  "steps": ["Pregunta e hipótesis", "Datos, unidades de evaluación y splits sin leakage", "Métrica principal y baselines con presupuesto comparable", "Configuraciones y diez seeds predefinidas", "Congelación antes de evaluar", "Registro de todos los intentos y artefactos", "Agregación y alcance de incertidumbre", "Ablations e interpretación con límites"],
-  "reviewBoundary": "El runner comprueba campos y cobertura; pertinencia de baselines, métricas y diseño requiere revisión científica. Teoría y tareas deterministas deben justificar seeds no aplicables."
+  "id": "experimental",
+  "title": "ML experimental design",
+  "sourceIds": [
+    "lab-policy",
+    "sklearn-practices",
+    "neurips-checklist"
+  ],
+  "steps": [
+    "Question and hypothesis",
+    "Data, evaluation units and splits without leakage",
+    "Primary metric and baselines with comparable budgets",
+    "Configurations and ten predefined seeds",
+    "Freeze before evaluation",
+    "Record every attempt and artifact",
+    "Aggregate and explain uncertainty scope",
+    "Justified ablations and bounded interpretation"
+  ],
+  "reviewBoundary": "The runner checks fields and coverage; baseline adequacy, metrics and design require scientific review. Theory and deterministic tasks must justify why seeds do not apply."
 }

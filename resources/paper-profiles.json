@@ -1,7 +1,68 @@
 {
-  "empirical": ["Título", "Abstract", "Introducción", "Trabajo relacionado", "Problema y método", "Metodología", "Resultados", "Discusión", "Limitaciones", "Conclusiones", "Referencias", "Apéndice de reproducibilidad"],
-  "theory": ["Título", "Abstract", "Introducción", "Trabajo relacionado", "Definiciones y supuestos", "Teoremas", "Demostraciones", "Discusión", "Limitaciones", "Conclusiones", "Referencias", "Apéndices"],
-  "dataset": ["Título", "Abstract", "Motivación", "Trabajo relacionado", "Recogida y documentación", "Derechos y consentimiento", "Estadísticas y evaluación", "Sesgos y limitaciones", "Acceso y mantenimiento", "Referencias"],
-  "systems": ["Título", "Abstract", "Introducción", "Trabajo relacionado", "Diseño del sistema", "Implementación", "Metodología", "Resultados", "Costes y escalabilidad", "Limitaciones", "Conclusiones", "Referencias"],
-  "survey": ["Título", "Abstract", "Pregunta y alcance", "Metodología de búsqueda y selección", "Taxonomía", "Síntesis y comparación", "Vacíos de evidencia", "Limitaciones", "Conclusiones", "Referencias"]
+  "empirical": [
+    "Title",
+    "Abstract",
+    "Introduction",
+    "Related work",
+    "Problem and method",
+    "Methodology",
+    "Results",
+    "Discussion",
+    "Limitations",
+    "Conclusions",
+    "References",
+    "Reproducibility appendix"
+  ],
+  "theory": [
+    "Title",
+    "Abstract",
+    "Introduction",
+    "Related work",
+    "Definitions and assumptions",
+    "Theorems",
+    "Proofs",
+    "Discussion",
+    "Limitations",
+    "Conclusions",
+    "References",
+    "Appendices"
+  ],
+  "dataset": [
+    "Title",
+    "Abstract",
+    "Motivation",
+    "Related work",
+    "Collection and documentation",
+    "Rights and consent",
+    "Statistics and evaluation",
+    "Biases and limitations",
+    "Access and maintenance",
+    "References"
+  ],
+  "systems": [
+    "Title",
+    "Abstract",
+    "Introduction",
+    "Related work",
+    "System design",
+    "Implementation",
+    "Methodology",
+    "Results",
+    "Costs and scalability",
+    "Limitations",
+    "Conclusions",
+    "References"
+  ],
+  "survey": [
+    "Title",
+    "Abstract",
+    "Question and scope",
+    "Search and selection methodology",
+    "Taxonomy",
+    "Synthesis and comparison",
+    "Evidence gaps",
+    "Limitations",
+    "Conclusions",
+    "References"
+  ]
 }

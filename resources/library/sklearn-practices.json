@@ -1,13 +1,26 @@
 {
-  "id": "sklearn-practices", "title": "Preprocessing, leakage y aleatoriedad en scikit-learn",
-  "authors": ["scikit-learn developers"],
+  "id": "sklearn-practices",
+  "title": "Preprocessing, leakage and randomness in scikit-learn",
+  "authors": [
+    "scikit-learn developers"
+  ],
   "sourceUrl": "https://scikit-learn.org/stable/common_pitfalls.html",
   "sourceSection": "12.1–12.3: preprocessing, data leakage, controlling randomness",
-  "sourceDate": "1.9.1", "verifiedAt": "2026-10-02", "kind": "sourced_guidance",
-  "topics": ["experimental", "methodology", "metodología", "leakage", "preprocessing", "seeds", "randomness"],
-  "scope": "Evaluación de estimadores y pipelines de scikit-learn",
-  "summary": "Separar entrenamiento y evaluación antes de aprender transformaciones. Ajustar preprocessing solo con entrenamiento y reutilizarlo para test. Un Pipeline reduce errores de aplicación y leakage. Documentar cómo se controla random_state: enteros y objetos RNG tienen comportamientos distintos.",
-  "interpretation": "La demo ajusta StandardScaler dentro del pipeline SGD sobre train; la partición permanece fija y cada entrenamiento usa una seed predefinida.",
-  "limitations": "El diseño de CV requiere revisar la interacción entre estimadores, splits y RNG. La demo no representa validación cruzada ni evaluación de población.",
-  "conflicts": [], "referenceStatus": "verified"
+  "sourceDate": "1.9.1",
+  "verifiedAt": "2026-10-02",
+  "kind": "sourced_guidance",
+  "topics": [
+    "experimental",
+    "methodology",
+    "leakage",
+    "preprocessing",
+    "seeds",
+    "randomness"
+  ],
+  "scope": "Evaluation of scikit-learn estimators and pipelines",
+  "summary": "Separate training and evaluation data before learning transformations. Fit preprocessing on training data only and reuse it for testing. A Pipeline reduces application errors and leakage. Document how random_state is controlled: integers and RNG objects behave differently.",
+  "interpretation": "The demo fits StandardScaler inside the SGD training pipeline; the split remains fixed and each training run uses a predefined seed.",
+  "limitations": "Cross-validation design requires reviewing interactions between estimators, splits and RNGs. The demo does not represent cross-validation or population evaluation.",
+  "conflicts": [],
+  "referenceStatus": "verified"
 }

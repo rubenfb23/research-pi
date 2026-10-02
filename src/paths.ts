@@ -8,7 +8,7 @@ export const stateDir = (project: string) => join(resolve(project), '.research-p
 export const installedPackage = () => existsSync(join(ROOT, 'package-runtime.json'));
 export function userDataDirectory(platform: string = process.platform, env: NodeJS.ProcessEnv = process.env, home = homedir()): string {
   if (env.RESEARCH_PI_DATA_DIR) {
-    if (!isAbsolute(env.RESEARCH_PI_DATA_DIR)) throw new Error('RESEARCH_PI_DATA_DIR debe ser una ruta absoluta.');
+    if (!isAbsolute(env.RESEARCH_PI_DATA_DIR)) throw new Error('RESEARCH_PI_DATA_DIR must be an absolute path.');
     return env.RESEARCH_PI_DATA_DIR;
   }
   if (platform === 'win32') return join(env.LOCALAPPDATA || join(home, 'AppData', 'Local'), 'ResearchPi');

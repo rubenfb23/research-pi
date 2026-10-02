@@ -8,8 +8,8 @@ import { draftPaper, outlinePaper, reviewManifest, venueProfiles } from '../src/
 import { getNote } from '../src/science.js';
 
 test('H4: paper profiles vary by contribution, venue snapshots mark expiry/staleness', () => {
-  assert(outlinePaper('theory').sections.includes('Demostraciones'));
-  assert(outlinePaper('dataset').sections.includes('Derechos y consentimiento'));
+  assert(outlinePaper('theory').sections.includes('Proofs'));
+  assert(outlinePaper('dataset').sections.includes('Rights and consent'));
   assert.equal(venueProfiles(new Date('2026-10-02T12:00:00Z')).find(v => v.name === 'NeurIPS')?.submissionWindowPassed, true);
   assert(venueProfiles(new Date('2027-01-01T00:00:00Z')).every(v => v.stale));
   assert.throws(() => outlinePaper('imaginary'), /Unknown/);
@@ -21,7 +21,7 @@ test('H4: unsupported numbers/references stay pending even if declared verified 
   assert.equal(result.references[0]?.status, 'pending');
   assert.equal(result.claims[0]?.status, 'pending');
   const source = getNote('mensh-kording');
-  const valid = reviewManifest({ claims: [{ id: 'reading', text: 'Consultar recomendaciones editoriales', referenceIds: [source.id] }],
+  const valid = reviewManifest({ claims: [{ id: 'reading', text: 'Consult editorial recommendations', referenceIds: [source.id] }],
     references: [{ id: source.id, title: source.title, url: source.sourceUrl }] });
   assert.equal(valid.status, 'mechanically_linked');
   assert.equal(valid.scientificReviewPending, true);
@@ -32,8 +32,11 @@ test('H4: absent results produce planned methodology and no invented table', () 
     freezeProtocol(project, demoProtocol());
     const draft = draftPaper(project);
     const text = readFileSync(draft.path, 'utf8');
-    assert.match(text, /PLAN PENDIENTE/);
-    assert.match(text, /No hay tabla de resultados respaldada/);
+    for (const section of ['Methodology', 'Results', 'Limitations', 'References', 'Reproducibility appendix']) {
+      assert(text.includes('## ' + section), section);
+    }
+    assert.match(text, /PLAN PENDING/);
+    assert.match(text, /No supported results table is available/);
     assert.equal(draft.report.mechanicalEvidence.status, 'incomplete');
   } finally { rmSync(project, { recursive: true, force: true }); }
 });

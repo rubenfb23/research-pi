@@ -1,12 +1,28 @@
 {
-  "id": "what-if", "title": "Causal Inference: What If — recurso de lectura",
-  "authors": ["Miguel A. Hernán", "James M. Robins"],
-  "sourceUrl": "https://miguelhernan.org/whatifbook", "sourceSection": "Author landing page: book and associated materials",
-  "sourceDate": "2020 bibliographic citation; online text continuously revised", "verifiedAt": "2026-10-02",
-  "kind": "reading_reference", "topics": ["causal", "expertos", "investigadores", "longitudinal", "herman", "hernan", "robins"],
-  "scope": "Referencia a la página de autores y materiales de inferencia causal",
-  "summary": "La página de los autores ofrece el libro y materiales relacionados. Distingue partes sin modelos, con modelos y datos longitudinales.",
-  "interpretation": "Consultar y registrar versión, capítulo y pasaje antes de incorporar una recomendación concreta del libro.",
-  "limitations": "Esta entrada verifica la página y la identidad bibliográfica; no acredita haber revisado capítulos del PDF ni atribuye consejos específicos no comprobados.",
-  "conflicts": [], "referenceStatus": "verified"
+  "id": "what-if",
+  "title": "Causal Inference: What If — reading resource",
+  "authors": [
+    "Miguel A. Hernán",
+    "James M. Robins"
+  ],
+  "sourceUrl": "https://miguelhernan.org/whatifbook",
+  "sourceSection": "Author landing page: book and associated materials",
+  "sourceDate": "2020 bibliographic citation; online text continuously revised",
+  "verifiedAt": "2026-10-02",
+  "kind": "reading_reference",
+  "topics": [
+    "causal",
+    "experts",
+    "researchers",
+    "longitudinal",
+    "herman",
+    "hernan",
+    "robins"
+  ],
+  "scope": "Reference to the authors' website and causal inference materials",
+  "summary": "The authors' website provides the book and related materials. It distinguishes parts without models, with models and with longitudinal data.",
+  "interpretation": "Read and record the version, chapter and passage before incorporating a specific recommendation from the book.",
+  "limitations": "This entry verifies the website and bibliographic identity; it does not establish that PDF chapters were reviewed or attribute unchecked advice.",
+  "conflicts": [],
+  "referenceStatus": "verified"
 }

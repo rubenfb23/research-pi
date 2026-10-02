@@ -6,12 +6,12 @@ import { join } from 'node:path';
 
 const exe = process.argv[2] || 'repi';
 const app = process.argv[3];
-if (!app) throw new Error('Indica el ejecutable y la carpeta app del paquete instalado.');
+if (!app) throw new Error('Specify the executable and app directory of the installed package.');
 const project = mkdtempSync(join(tmpdir(), 'repi-installed project-'));
 const data = process.platform === 'win32' ? join(process.env.LOCALAPPDATA, 'ResearchPi')
   : process.platform === 'darwin' ? join(homedir(), 'Library/Application Support/ResearchPi')
   : join(process.env.XDG_DATA_HOME || join(homedir(), '.local/share'), 'research-pi');
-const env = { ...process.env }; delete env.RESEARCH_PI_DATA_DIR;
+const env = { ...process.env, LANG: 'es_ES.UTF-8', LC_ALL: 'es_ES.UTF-8' }; delete env.RESEARCH_PI_DATA_DIR;
 function run(args, input = '') {
   const result = spawnSync(exe, args, { cwd: project, encoding: 'utf8', input, env,
     shell: process.platform === 'win32', timeout: 30000 });
@@ -26,10 +26,14 @@ try {
   for (const provider of ['opencode', 'opencode-go']) {
     assert(JSON.parse(run(['models', provider]).stdout).some(model => model.id === 'glm-5.3'));
   }
-  run(['connect', 'offline']);
+  const onboarding = run(['connect'], 'offline\n');
+  assert.match(onboarding.stderr, /How would you like to connect ResearchPi\?/);
+  assert.match(onboarding.stderr, /OpenCode Zen · API key/);
+  assert.match(onboarding.stderr, /Option \[1\]:/);
   assert(existsSync(join(data, 'connections', 'config.json')));
-  const first = run([], 'hola\n[tool:project_status]\n/exit\n');
-  assert.match(first.stdout, /OFFLINE TEST/); assert.match(first.stderr, /Herramienta: project_status/);
+  const first = run([], 'hello\n[tool:project_status]\n/unknown\n/exit\n');
+  assert.match(first.stdout, /OFFLINE TEST/); assert.match(first.stderr, /Tool: project_status/);
+  assert.match(first.stderr, /Unknown command/);
   // macOS exposes temporary directories through /var -> /private/var.
   assert.equal(realpathSync(JSON.parse(run(['status']).stdout).project), realpathSync(project));
   const pointer = readFileSync(join(project, '.research-pi/session-pointer.json'), 'utf8');
@@ -38,5 +42,5 @@ try {
   assert(!existsSync(join(app, '.research-pi')));
   assert(!existsSync(join(app, '.venv')));
   assert(!existsSync(join(app, 'node_modules/typescript')));
-  console.log('Installed CLI verified: help, version, cwd with spaces, user data, interactive chat, tool call and resume.');
+  console.log('Installed CLI verified: English onboarding under Spanish locale, help, version, cwd with spaces, user data, interactive chat, tool call and resume.');
 } finally { rmSync(project, { recursive: true, force: true }); }

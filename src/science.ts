@@ -22,7 +22,9 @@ export function library(): Note[] {
   return notes;
 }
 export function searchLibrary(query: string, topic?: string) {
-  const tokens = normalize(query).split(/[^a-z0-9]+/).filter(t => t.length > 2 && !['como', 'para', 'the', 'and', 'que', 'una', 'con', 'how', 'should'].includes(t));
+  const aliases: Record<string, string> = { identificacion: 'identification', causalidad: 'causal', supuestos: 'assumptions', robustez: 'robustness', redactar: 'writing', metodologia: 'methodology', escritura: 'writing', expertos: 'experts', investigadores: 'researchers', reproducibilidad: 'reproducibility' };
+  const translated = normalize(query).split(/\s+/).map(word => aliases[word] ?? word).join(' ');
+  const tokens = translated.split(/[^a-z0-9]+/).filter(t => t.length > 2 && !['como', 'para', 'the', 'and', 'que', 'una', 'con', 'how', 'should'].includes(t));
   return library().filter(n => !topic || n.topics.some(t => normalize(t) === normalize(topic)))
     .map(note => {
       const tags = normalize(note.topics.join(' ') + ' ' + note.title);

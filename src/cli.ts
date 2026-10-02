@@ -15,16 +15,16 @@ import { searchLibrary, scientificProtocol, reviewCausal, type CausalPlan } from
 import { draftPaper, outlinePaper, reviewProjectManifest, venueProfiles, type ManuscriptManifest } from './papers.js';
 
 const program = new Command().name('repi').version(readJson<{ version: string }>(join(ROOT, 'package.json')).version)
-  .description('ResearchPi: investigación con Claude, OpenAI u OpenCode sobre el SDK de Pi')
-  .option('--project <directory>', 'directorio del proyecto', '.')
-  .option('--offline', 'chat de prueba sin conexión ni razonamiento científico');
+  .description('ResearchPi: research with Claude, OpenAI or OpenCode on the Pi SDK')
+  .option('--project <directory>', 'project directory', '.')
+  .option('--offline', 'offline test chat without scientific reasoning');
 const project = () => resolve(program.opts().project);
 program.command('config').requiredOption('--provider <id>').requiredOption('--model <id>').action(opts => {
   writeJson(join(stateDir(project()), 'config.json'), { provider: opts.provider, model: opts.model });
-  console.log('Modelo guardado. Usa connect para configurar credenciales.');
+  console.log('Model saved. Use connect to configure credentials.');
 });
 program.command('connect').alias('login').argument('[connection]', connectionNames)
-  .option('--model <id>', 'modelo del catálogo de Pi').action(async (name, opts) => {
+  .option('--model <id>', 'model from the Pi catalog').action(async (name, opts) => {
     const controller = new AbortController();
     const ui = terminalUI(controller.signal);
     const stop = () => { controller.abort(); ui.close(); };
@@ -32,26 +32,26 @@ program.command('connect').alias('login').argument('[connection]', connectionNam
     try { await connect(project(), name ? connectionName(name) : undefined, ui, opts.model); }
     finally { ui.close(); process.removeListener('SIGINT', stop); }
   });
-program.command('model').argument('<id>').action(async id => { await changeModel(project(), id); console.log('Modelo guardado.'); });
+program.command('model').argument('<id>').action(async id => { await changeModel(project(), id); console.log('Model saved.'); });
 program.command('models').argument('[connection]', connectionNames).action(async name => {
   const provider = name ? connections[connectionName(name)].provider : selectedConfig(project())?.provider;
-  if (!provider || provider === 'researchpi-mock') { console.log(`Selecciona una conexión: ${connectionNames}.`); return; }
+  if (!provider || provider === 'researchpi-mock') { console.log(`Select a connection: ${connectionNames}.`); return; }
   console.log(JSON.stringify((await connectionRuntime()).getModels(provider).map(m => ({ id: m.id, name: m.name })), null, 2));
 });
 program.command('connection').action(async () => {
   const config = selectedConfig(project());
   const configured = config?.provider === 'researchpi-mock' ? 'offline-test'
     : config ? Boolean(await (await connectionRuntime()).checkAuth(config.provider)) : false;
-  console.log(JSON.stringify({ selected: config ?? null, credentialsConfigured: configured, liveResponseVerified: 'Solo una respuesta real verifica acceso al modelo.' }, null, 2));
+  console.log(JSON.stringify({ selected: config ?? null, credentialsConfigured: configured, liveResponseVerified: 'Only a real response verifies model access.' }, null, 2));
 });
 program.command('disconnect').argument('<connection>', connectionNames).action(async name => {
   const provider = connections[connectionName(name)].provider;
   if (provider !== 'researchpi-mock') await (await connectionRuntime()).logout(provider);
-  console.log('Credencial local eliminada. Las variables de entorno y la autorización del proveedor se gestionan por separado.');
+  console.log('Local credential removed. Environment variables and provider authorization are managed separately.');
 });
-program.command('setup').option('--experiments', 'preparar también Python para los experimentos').action(async opts => {
+program.command('setup').option('--experiments', 'also prepare Python for experiments').action(async opts => {
   if (opts.experiments) await ensureExperiments();
-  console.log('ResearchPi está preparado. Ejecuta repi para abrir el chat.');
+  console.log('ResearchPi is ready. Run repi to open the chat.');
 });
 program.command('status').action(() => console.log(JSON.stringify(projectStatus(project()), null, 2)));
 program.command('search').argument('[query]', 'Spanish/English lexical query', '').option('--topic <topic>').action((query, opts) => {
@@ -112,8 +112,8 @@ program.command('demo').description('Freeze, execute twenty CPU fits and aggrega
     console.log(JSON.stringify({ table: aggregateProject(project()), paper: draft.path, review: draft.reportPath }, null, 2));
   }
 });
-program.command('chat').argument('[prompt]').option('--offline', 'transporte de prueba sin conexión')
-  .option('--compact', 'compactar después de la respuesta').action(async (prompt, opts) => {
+program.command('chat').argument('[prompt]').option('--offline', 'offline test transport')
+  .option('--compact', 'compact after the response').action(async (prompt, opts) => {
     await chat(project(), prompt, { ...opts, offline: opts.offline || program.opts().offline });
   });
 program.action(async () => { await chat(project(), undefined, { offline: program.opts().offline }); });

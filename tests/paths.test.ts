@@ -19,7 +19,7 @@ test('Explicit user data override controls connections and Python but rejects a 
     assert.equal(installationDataDirectory(), '/explicit-data');
     assert.equal(pythonVenvDirectory(), '/explicit-data/.venv');
     process.env.RESEARCH_PI_DATA_DIR = 'relative';
-    assert.throws(() => installationDataDirectory(), /ruta absoluta/);
+    assert.throws(() => installationDataDirectory(), /absolute path/);
   } finally {
     if (previous === undefined) delete process.env.RESEARCH_PI_DATA_DIR;
     else process.env.RESEARCH_PI_DATA_DIR = previous;

@@ -149,10 +149,10 @@ Read [CONTRIBUTING.md](CONTRIBUTING.md) for the development workflow, scientific
 - [Model connections and credentials](docs/connections.md)
 - [Verified capabilities and remaining work](docs/status.md)
 - [Integrity model and dependency advisory](docs/integrity.md)
-- [Research harness design](docs/diseno-harness-research.md)
+- [Research harness design](docs/research-harness-design.md)
 - [Third-party notices](THIRD_PARTY_NOTICES.md)
 
-Detailed scientific and operational guides are currently in Spanish. The CLI accepts both Spanish and English research queries.
+The interface, documentation, scientific notes, paper templates and default generated content are in English. Scientific search also recognizes selected Spanish query terms; user-supplied text and existing evidence are preserved.
 
 ## License
 
