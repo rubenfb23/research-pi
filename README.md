@@ -85,7 +85,7 @@ Version **1.0.0** adds a colored, responsive terminal with streamed answers, a s
 
 ```text
 ────────────────────────────────────────────────────────────
-  ResearchPi  v1.1.0 · ML / AI / Computer Science
+  ResearchPi  v1.2.0 · ML / AI / Computer Science
 
   Model      opencode-go/glm-5.3-flash
   Project    /path/to/my-study
@@ -105,6 +105,8 @@ The last 500 distinct submitted chat inputs are kept in `.research-pi/input-hist
 Other commands: `/help`, `/status`, `/connect`, `/compact`, `/exit`. Ctrl+C cancels an active response. Ctrl+D or `/exit` closes the session. Answers go to stdout; reasoning and tool activity go to stderr, so `repi chat 'question' > answer.md` captures the answer. Hide reasoning in chat first if you do not want it in terminal logs.
 
 The [curated research instructions](resources/system.md) apply ten-seed experiment policy, causal identification order, source attribution, methodology and paper workflows when relevant. Greetings stay brief; research tasks receive the detail they need. See the [assistant contract](docs/assistant.md).
+
+From **1.2.0**, the [manuscript policy](resources/manuscript-policy.md) is also loaded into every session, including resumed chats and other projects. It guides writing, figures, tables and references without announcing the rules. DOI verification and print-readability checks require actual retrieved or rendered evidence; missing checks remain pending. Restart `repi` after updating to load the new instructions.
 
 ## Reproduce the experiment demo
 

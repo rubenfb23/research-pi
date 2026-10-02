@@ -3,6 +3,7 @@ import { spawnSync } from 'node:child_process';
 import { existsSync, mkdtempSync, readFileSync, realpathSync, rmSync } from 'node:fs';
 import { tmpdir, homedir } from 'node:os';
 import { join } from 'node:path';
+import { pathToFileURL } from 'node:url';
 
 const exe = process.argv[2] || 'repi';
 const app = process.argv[3];
@@ -23,6 +24,14 @@ try {
   assert.equal(run(['--version']).stdout.trim(), JSON.parse(readFileSync(join(app, 'package.json'), 'utf8')).version);
   assert(existsSync(join(app, 'LICENSE')));
   assert(existsSync(join(app, 'docs/Pi-LICENSE.txt')));
+  const policy = readFileSync(join(app, 'resources/manuscript-policy.md'), 'utf8').trim();
+  const promptModule = pathToFileURL(join(app, 'dist/prompts.js')).href;
+  const prompt = spawnSync(join(app, '..', 'runtime', process.platform === 'win32' ? 'node.exe' : 'node'),
+    ['--input-type=module', '--eval', `import { researchSystemPrompt } from ${JSON.stringify(promptModule)}; process.stdout.write(researchSystemPrompt());`],
+    { encoding: 'utf8', timeout: 30000 });
+  assert.equal(prompt.status, 0, prompt.error?.message || prompt.stderr);
+  assert(prompt.stdout.includes(policy), 'Installed runtime must load the full bundled manuscript policy');
+  assert.match(prompt.stdout, /ten distinct/);
   for (const provider of ['opencode', 'opencode-go']) {
     assert(JSON.parse(run(['models', provider]).stdout).some(model => model.id === 'glm-5.3'));
   }

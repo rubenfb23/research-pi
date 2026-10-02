@@ -1,4 +1,4 @@
-import { existsSync, mkdirSync, readFileSync } from 'node:fs';
+import { existsSync, mkdirSync } from 'node:fs';
 import { join, resolve } from 'node:path';
 import { Type, type AssistantMessage, type TranscriptContext } from '@earendil-works/pi-ai';
 import { createAssistantMessageEventStream } from '@earendil-works/pi-ai/utils/event-stream';
@@ -10,6 +10,7 @@ import { resource, stateDir } from './paths.js';
 import { projectStatus, readJson, writeJson } from './storage.js';
 import { connectionAuth, connectionRuntime, mockConfig, selectedConfig, type AgentConfig } from './connections.js';
 import { preferences } from './preferences.js';
+import { researchSystemPrompt } from './prompts.js';
 
 export { mockConfig, type AgentConfig } from './connections.js';
 export const toolResult = (data: unknown) => ({
@@ -78,7 +79,7 @@ export async function openResearchSession(project: string, config?: AgentConfig,
     getPrompts: () => ({ prompts: [], diagnostics: [] }),
     getThemes: () => ({ themes: [], diagnostics: [] }),
     getAgentsFiles: () => ({ agentsFiles: [] }),
-    getSystemPrompt: () => readFileSync(promptFile, 'utf8'),
+    getSystemPrompt: researchSystemPrompt,
     getSystemPromptSource: () => ({ path: promptFile }),
     getAppendSystemPrompt: () => [], getAppendSystemPromptSources: () => [],
     extendResources: () => {}, reload: async () => {},
