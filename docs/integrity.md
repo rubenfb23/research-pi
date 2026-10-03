@@ -1,8 +1,8 @@
 # Research and host execution integrity
 
-ResearchPi 1.4.0 activates native Pi file/shell tools, codemode, resources and configured extensions/MCP alongside scientific tools. These execute with the local user account permissions. General scripts can modify project files and scientific artifacts; the system policy requires preserving evidence, but it is not an operating-system sandbox. No universal ten-seed enforcement or audit certification is claimed for arbitrary code.
+ResearchPi 1.5.0 retains native Pi file/shell tools, codemode, resources and configured extensions/MCP alongside scientific tools. These execute with the local user account permissions. General scripts can modify project files and scientific artifacts; the system policy requires preserving evidence, but it is not an operating-system sandbox. No universal ten-seed enforcement or audit certification is claimed for arbitrary code.
 
-The frozen scientific runner remains bounded to approved estimators, validated parameters and its prespecified budget. Its specific tools reject supplied fabricated metrics and receipts, and its worker environment excludes inherited API credentials. General shell commands use the normal host environment and are a separate execution path.
+The scientific runner validates classification protocols and budgets. Built-in estimators remain allowlisted. Version 1.5 adds real/CSV data and explicit custom Python adapters; the custom path executes arbitrary adapter code with host-user permissions and is not a bounded estimator or operating-system sandbox. Its source snapshot, predictions, metrics and ten-seed receipt coverage are checked, but the code can inspect or modify accessible host files. Its supported execution path recalculates metrics from predictions and cross-checks receipts, and its worker environment excludes inherited API credentials. General shell commands use the normal host environment and are a separate execution path.
 
 The runner maintains a hash-linked journal, attempt states and receipts. Auditing cross-checks journal, receipts and artifacts and recalculates metrics from predictions. Completed seeds are not repeated during resume; failures and cancellation require explicit `run --retry`. Historical failures remain visible even after coverage is complete. A local lock prevents cooperating concurrent freezes/runners.
 
@@ -12,7 +12,7 @@ Compaction affects only the Pi conversation. The scientific authority is the fro
 
 ## Trust assumptions
 
-The bounded scientific worker is a supported execution path, not the whole agent authority. The agent, host and operating-system user can access files and execute commands with the user account permissions. That user can edit files, rebuild all hashes or modify application code and resources. There is no third-party signature, host sandbox or WORM storage. The chain detects inconsistencies; it does not prove execution against an adversary controlling the host.
+The bounded scientific worker is a supported execution path, not the whole agent authority. The agent, host and operating-system user can access files and execute commands with the user account permissions. That user can edit files, rebuild all hashes or modify application code and resources. There is no third-party signature, host sandbox or WORM storage. The chain detects inconsistencies; it does not prove execution against an adversary controlling the host or a malicious custom adapter.
 
 Version 1.4.0 intentionally grants terminal and file tools, so the earlier restricted agent boundary no longer applies. Stronger protection requires a runner and evidence store with separate identities/permissions, process isolation and receipts signed outside the agent's reach.
 

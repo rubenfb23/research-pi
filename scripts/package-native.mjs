@@ -25,11 +25,11 @@ rmSync(stage, { recursive: true, force: true }); mkdirSync(stage, { recursive: t
 const payload = join(stage, 'payload');
 const app = join(payload, 'app');
 mkdirSync(app, { recursive: true });
-for (const name of ['dist', 'src', 'python', 'resources', 'docs', 'package.json', 'package-lock.json', 'requirements.lock', 'repi', 'research-pi', 'LICENSE', 'README.md', 'THIRD_PARTY_NOTICES.md']) {
-  cpSync(join(root, name), join(app, name), { recursive: true });
+for (const name of ['dist', 'src', 'python', 'resources', 'docs', 'assets', 'examples', 'package.json', 'package-lock.json', 'requirements.lock', 'repi', 'research-pi', 'LICENSE', 'README.md', 'CONTRIBUTING.md', 'CODE_OF_CONDUCT.md', 'SECURITY.md', 'CITATION.cff', 'CHANGELOG.md', 'ROADMAP.md', 'THIRD_PARTY_NOTICES.md']) {
+  cpSync(join(root, name), join(app, name), { recursive: true, filter: source => !source.split(/[\\/]/).some(part => ['.research-pi','.venv','__pycache__','.env'].includes(part) || part.startsWith('.env.')) });
 }
 writeFileSync(join(app, 'package-runtime.json'), JSON.stringify({ version, platform: process.platform,
-  arch: process.arch, node: process.versions.node, nodeSha256: sha(process.execPath) }, null, 2) + '\n');
+  arch: process.arch, sourceRevision: spawnSync('git',['rev-parse','HEAD'],{cwd:root,encoding:'utf8'}).stdout?.trim() || null, node: process.versions.node, nodeSha256: sha(process.execPath) }, null, 2) + '\n');
 // Production dependencies retain their distributed license files and lockfile integrity.
 run(process.platform === 'win32' ? 'npm.cmd' : 'npm', ['ci', '--omit=dev', '--ignore-scripts', '--no-audit', '--no-fund'], app);
 const runtime = join(payload, 'runtime'); mkdirSync(runtime, { recursive: true });

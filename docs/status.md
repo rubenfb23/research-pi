@@ -7,8 +7,8 @@ Updated 2026-10-03. ResearchPi uses Pi SDK 1.0.0 without modifying its core. Ori
 | Area | Implemented and tested behavior | Verification boundary |
 | --- | --- | --- |
 | Pi integration | Native Pi UI, file/shell and scientific tools, resources, MCP, persistent sessions, queues, retries and compaction | Simulated transports plus a live OpenCode Go text/reasoning check; broader provider and scientific judgment coverage remains unverified |
-| Experiments | Twenty real CPU fits, ten distinct seeds per configuration, frozen protocols, receipts, predictions, journal, retries and recalculated metrics | Synthetic binary classification with logistic SGD and random forest |
-| Scientific library | Six attributed notes, topic/lexical retrieval, experimental/methodology/causal protocols | Small curated library; no semantic search or universal citation checking |
+| Experiments | Synthetic/real/CSV classification, frozen custom Python adapters, ten seeds per configuration, receipts, predictions and recalculated metrics | Fixed binary classification splits; custom code executes with host-user permissions and requires scientific review |
+| Scientific library | Six attributed notes, topic/lexical retrieval, experimental/methodology/causal protocols | Small curated library; no semantic search; DOI metadata verification is separate from source-to-claim support |
 | Causal planning | Missing-field and non-identifiability states | Fields do not prove assumptions, identification or causality; no causal estimators |
 | Papers | Five editorial profiles, evidence-derived methodology/results, numerical provenance manifest and missing-items report | Human scientific/editorial review remains required |
 | Venues | Officially checked NeurIPS 2026 and TMLR snapshots | Partial profiles; recheck before submission; NeurIPS 2026's submission window has passed |
@@ -49,7 +49,7 @@ Native package tests verified help/version, chat, SDK tool calls, resume, invoca
 
 OpenCode uses native Pi providers rather than an OpenCode local server. Tests simulate seven provider/API routes, verify key/client/session headers, independent credential storage, cancellation, actual bounded tool execution and stable session IDs after resume. CLI checks cover both catalogs, environment-key setup, model switching and rejection of piped keys. Native smoke tests check both catalogs. See [OpenCode](opencode.md).
 
-Version 1.4.1 passes 66 local tests, including twenty actual CPU fits. English-interface checks exercise fresh connection setup under a Spanish locale, English help/errors and paper/resource output. A separate pseudo-terminal check verified no-argument startup of the globally linked `repi`, fresh English onboarding under `es_ES.UTF-8`, offline chat and clean exit. Native smoke tests exercise the actual installed onboarding and help. Release publication runs scientific and all four native installer checks before uploading four packages, four checksums and a source-commit manifest. See [releases](releases.md).
+Version 1.5.0 passes 76 local tests, including fifty actual CPU fits. English-interface checks exercise fresh connection setup under a Spanish locale, English help/errors and paper/resource output. A separate pseudo-terminal check verified no-argument startup of the globally linked `repi`, fresh English onboarding under `es_ES.UTF-8`, offline chat and clean exit. Native smoke tests exercise the actual installed onboarding and help. Release publication runs scientific and all four native installer checks before uploading four packages, four checksums and a source-commit manifest. See [releases](releases.md).
 
 ## Terminal and prompt 1.0.0
 
@@ -66,7 +66,7 @@ The automated keyboard test runs on POSIX. Windows native installer smoke tests 
 ## Pending capabilities and limitations
 
 - Real-account ChatGPT login, Anthropic/OpenAI/Zen access and other Go models remain unverified. Live Go glm-5.3-flash text and provider-exposed reasoning were checked on October 2, 2026; this does not establish research judgment or real tool execution.
-- Causal estimation/automatic identification, real datasets, RL, LLM evaluation, theory and deterministic runners remain future extensions.
+- Causal estimation/automatic identification, RL, full LLM research evaluation, theory, regression, grouped/temporal sampling and deterministic applicability protocols remain future extensions.
 - The model cannot reduce ten seeds. An explicit human-exception mechanism would require separate implementation.
 - Hernán/Robins chapter-level recommendations still need specific curation; the current note verifies the website and bibliographic identity.
 - Venue coverage is partial and current official instructions must be rechecked before submission.
@@ -79,7 +79,7 @@ The automated keyboard test runs on POSIX. Windows native installer smoke tests 
 
 The English editorial policy is bundled with the application and composed into every session's system prompt. SDK tests inspect actual simulated provider requests on Zen/Go tool follow-ups and resume, and after a Go model switch and real compaction. A second project receives the same policy. Installed-runtime smoke checks require both resources to load on each packaged platform. The empirical scaffold introduces table terms before the table and leaves unsupported novelty pending in the abstract, introduction and conclusion.
 
-These checks establish instruction delivery and deterministic scaffold behavior, not universal model compliance. No live manuscript evaluation was performed for this change. DOI resolution, bibliographic metadata matching, Google searches, journal-specific literature retrieval and rendered figure checks still need external tools or supplied source evidence. [Editorial policy](../resources/manuscript-policy.md), [integration study](research/manuscript-policy-integration.md).
+These checks establish instruction delivery and deterministic scaffold behavior, not universal model compliance. No live manuscript evaluation was performed for this change. At this historical stage, DOI resolution and bibliographic metadata matching were pending. Version 1.5.0 adds deposited-metadata checks; non-DOI identity, semantic citation support, exhaustive searches and rendered figure checks remain pending. [Editorial policy](../resources/manuscript-policy.md), [integration study](research/manuscript-policy-integration.md).
 
 ## Local web research 1.3.0
 
@@ -87,7 +87,7 @@ Seven SDK tools provide direct public-source reading, installed Chrome/Chromium/
 
 Eleven web tests exercise real HTTP and local Chrome, JavaScript, link following, native PDF extraction, blocked-search fallback, query filters, text/link pagination, cancellation, size limits, tampering and actual SDK dispatch/resume. Live Linux retrieval checked the official scikit-learn page, an original Crossref DOI record and an exact-title paper query. Public search delivered CAPTCHA and poorly related results on this network; relevance remains a model/human review task. Installed-runtime smoke checks exercise direct reading on every platform and browser rendering when an installed browser is detected.
 
-Automatic full bibliographic certification, OCR, screenshots/image interpretation, authenticated browsing and arbitrary form/script actions remain pending. Historical 1.2.0 verification boundaries above describe that earlier version. [Local web details](web.md).
+Semantic bibliographic/claim certification, OCR, screenshots/image interpretation, authenticated browsing and arbitrary form/script actions remain pending. Historical 1.2.0 verification boundaries above describe that earlier version. [Local web details](web.md).
 
 ## Native Pi capabilities and conversations 1.4.0
 
@@ -98,3 +98,15 @@ Twelve new integration tests exercise actual file/shell actions, codemode, a loc
 ## Clipboard correction 1.4.1
 
 Desktop clipboard copying requires Wayland/X11 utilities on Linux. `repi setup --clipboard` prepares per-user helpers through apt without sudo, and `repi clipboard` inspects prerequisites without reading clipboard data. Linux packages now declare `wl-clipboard` and `xclip` dependencies. Native `/copy`, Ctrl+X and mouse selection, exact Unicode/multiline transfer and simple-mode `/copy` have regression coverage. Local real Wayland copy/readback passed and the previous text clipboard was restored. Installed checks verify Linux helper availability; these checks do not certify real desktop clipboard access on Windows/macOS or every terminal. [Clipboard details](clipboard.md).
+
+## Research workflows and presentation 1.5.0
+
+The release adds a visual README, SVG identity/social preview, actual native offline capture, an actual twenty-fit study recording, concise quickstart/workflows, comparison criteria, roadmap and community files. A static documentation site replays retained study output without executing commands in the browser. Captures distinguish illustration, offline interface and actual scientific measurements.
+
+Local tests executed twenty fits on the pinned real Wisconsin dataset and thirty on a numeric CSV plus a frozen custom Python method. They check successful resume without duplicate seeds, recalculated metrics, paper provenance, invalid CSV/seed policies and edited input snapshots. CSV/custom input copies retain SHA-256 hashes; source revision/dirty state accompanies the frozen protocol. No arbitrary custom environment, host sandbox, clinical validation or causal estimator is claimed.
+
+DOI resolution and Crossref/DataCite deposited metadata comparison are exposed through CLI and SDK tools. Tests exercise real HTTP fixtures, field conflicts, initial-name compatibility, ambiguous surnames, missing records, tampered sources and forged manuscript statuses. Live retrieval verified the example Mensh/Kording DOI and all supplied bibliographic fields. Matching metadata does not establish scientific claim support, novelty, corrections or author identity beyond name compatibility.
+
+The evaluator defines twenty synthetic microtasks, defaults to ten independent repetitions, retains protocol/trace/receipt hashes, and independently audits stored grades. Two hundred reference-fixture trials check infrastructure only and are explicitly excluded from model-performance claims. Live exploratory checks and account restrictions are recorded separately in [pilot results](research/benchmark-pilot.md). General research superiority, a controlled same-model harness experiment, blinded scientific evaluation and the full three-product suite remain unmeasured.
+
+`repi doctor` checks connection/experiment/browser/PDF/clipboard prerequisites without model inference or clipboard access. Native installer smoke checks exercise doctor, a fixture trial/audit and real/custom protocol preparation; scientific execution on Windows/macOS remains pending. Pi's latest published SDK version checked during this work is still 1.0.0, so the documented upstream advisory remains unresolved without a vendor patch.

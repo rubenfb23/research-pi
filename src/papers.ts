@@ -2,6 +2,7 @@ import { existsSync, readdirSync, writeFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { resource, stateDir } from './paths.js';
 import { aggregateProject, analyzeReceipts, auditProject, readReceipts } from './experiments.js';
+import {ReferenceVerifier,type BibliographicReference} from './references.js';
 import { loadFrozen } from './protocol.js';
 import { library } from './science.js';
 import { readJson, writeJson } from './storage.js';
@@ -31,20 +32,22 @@ export function outlinePaper(type = 'empirical', venueId?: string) {
   return { type, sections, venue, editorialReviewPending: true };
 }
 type Aggregate = ReturnType<typeof aggregateProject>;
-export interface Reference { id: string; title: string; url: string; status?: string; }
+export interface Reference extends BibliographicReference { url:string;status?:string; }
 export interface Claim {
   id: string; text: string; numericValue?: number;
   evidence?: { methodId: string; metric: string; statistic: 'mean' | 'sampleSd' | 'n' };
   referenceIds?: string[];
 }
 export interface ManuscriptManifest { claims: Claim[]; references: Reference[]; }
-export function reviewManifest(manifest: ManuscriptManifest, table?: Aggregate) {
+export function reviewManifest(manifest: ManuscriptManifest, table?: Aggregate, project?:string) {
   if (!Array.isArray(manifest.claims) || !Array.isArray(manifest.references)) throw new Error('Manifest requires claims and references arrays');
   const known = library().filter(n => n.referenceStatus === 'verified');
   const references = manifest.references.map(ref => {
     const note = known.find(n => n.id === ref.id && n.sourceUrl === ref.url);
-    return { ...ref, status: note ? 'verified_curated_source' : 'pending',
-      verifiedAt: note?.verifiedAt ?? null, scope: note?.scope ?? 'Unverified reference; user status is not accepted as verification' };
+    const checked=project ? new ReferenceVerifier(project).verified(ref) : undefined;
+    return { ...ref, status: checked?.status==='metadata_matched' ? 'verified_metadata' : note ? 'verified_curated_source' : 'pending',
+      verifiedAt: checked?.checkedAt ?? note?.verifiedAt ?? null, verificationHash:checked?.verificationHash ?? null,
+      scope: checked?.scope ?? note?.scope ?? 'Unverified reference; user status is not accepted as verification' };
   });
   const claims = manifest.claims.map(claim => {
     const pending: string[] = [];
@@ -60,7 +63,7 @@ export function reviewManifest(manifest: ManuscriptManifest, table?: Aggregate) 
       if (numericTokens.some(token => Math.abs(Number(token)-claim.numericValue!) > 1e-10)) pending.push('Additional prose numbers require separate evidence');
     }
     const ids = claim.referenceIds ?? [];
-    if (ids.some(id => !references.some(r => r.id === id && r.status === 'verified_curated_source'))) pending.push('Reference missing or unverified');
+    if (ids.some(id => !references.some(r => r.id === id && ['verified_curated_source','verified_metadata'].includes(r.status)))) pending.push('Reference missing or unverified');
     if (!numeric && ids.length === 0) pending.push('No evidence or verified reference attached');
     return { ...claim, status: pending.length ? 'pending' : 'mechanically_linked', pending,
       evidenceValue: evidenceValue ?? null, scientificReviewPending: true };
@@ -82,7 +85,7 @@ export function draftPaper(project: string, options: { type?: string; venueId?: 
   }))) : [];
   const manifest = { claims: [...generated, ...(options.manifest?.claims ?? [])],
     references: [...notes.map(n => ({ id: n.id, title: n.title, url: n.sourceUrl })), ...(options.manifest?.references ?? [])] };
-  const review = reviewManifest(manifest, table);
+  const review = reviewManifest(manifest, table, project);
   const missing = [
     'Novel scientific contribution, external validity and baseline adequacy require expert review.',
     'Introduction, related work, abstract and discussion require evidence-based editorial completion.',
@@ -93,9 +96,15 @@ export function draftPaper(project: string, options: { type?: string; venueId?: 
   ];
   const complete = table !== undefined;
   const first = selected[0]?.measurement;
-  const methods = p.methods.map(m => `${m.algorithm === 'sgd_logistic' ? 'Logistic classification fitted with stochastic gradient descent (SGD)' : 'Random forest classification, combining decision trees'} (${m.id}), parameters ${JSON.stringify(m.hyperparameters)}`).join('; ');
+  const methods = p.methods.map(m => `${m.algorithm === 'sgd_logistic' ? 'Logistic classification fitted with stochastic gradient descent (SGD)' : m.algorithm === 'random_forest' ? 'Random forest classification, combining decision trees' : `Custom Python classification: ${md(m.implementation!.description)}`} (${m.id}), parameters ${JSON.stringify(m.hyperparameters)}`).join('; ');
+  const datasetDescription = p.dataset.kind === 'synthetic_classification'
+    ? `The synthetic dataset contains ${p.dataset.nSamples} samples and ${p.dataset.nFeatures} features (${p.dataset.nInformative} informative; two redundant), with data seed ${p.dataset.dataSeed}.`
+    : p.dataset.kind === 'breast_cancer' ? `The Wisconsin Diagnostic Breast Cancer dataset contains 569 samples and 30 features, loaded from the pinned scikit-learn distribution. Source: ${p.dataset.sourceUrl}; license: ${p.dataset.license}. This study is not clinical validation.`
+    : `The CSV dataset contains ${p.dataset.nSamples} samples and ${p.dataset.nFeatures} features. Target: ${md(p.dataset.target)}; feature columns: ${p.dataset.features.map(md).join(', ')}. Dataset SHA-256: ${p.dataset.sha256}. Source: ${md(p.dataset.sourceUrl)}; declared permission/license: ${md(p.dataset.license)}.`;
+  const customDescription = p.methods.filter(m=>m.algorithm==='custom_python').map(m=>`Custom source SHA-256: ${m.implementation!.sha256}; copied source: ${m.implementation!.path}. Custom code executes with host-user permissions and requires leakage/implementation review.`).join(' ');
+  const implementationDescription=[p.methods.some(m=>m.algorithm==='sgd_logistic') ? 'Feature standardization using training-set means and standard deviations (StandardScaler) was fitted exclusively on training data inside the SGD pipeline. SGD uses log_loss, tol=None and shuffle=True.' : '',p.methods.some(m=>m.algorithm==='random_forest') ? 'The forest uses no scaling, bootstrap=True and n_jobs=1.' : ''].filter(Boolean).join(' ');
   const methodology = complete
-    ? `${selected.length} central processing unit (CPU) training runs were completed: ${methods}. The synthetic dataset contains ${p.dataset.nSamples} samples and ${p.dataset.nFeatures} features (${p.dataset.nInformative} informative; two redundant), with data seed ${p.dataset.dataSeed}. The fixed stratified split uses testFraction=${p.split.testFraction} and splitSeed=${p.split.splitSeed}: ${first!.trainSamples} training samples and ${first!.testSamples} evaluation samples. Feature standardization using training-set means and standard deviations (StandardScaler) was fitted exclusively on training data inside the SGD pipeline; the forest uses no scaling. SGD uses log_loss, tol=None and shuffle=True; the forest uses bootstrap and n_jobs=1.\n\n`
+    ? `${selected.length} central processing unit (CPU) training runs were completed: ${methods}. ${datasetDescription} ${customDescription} The fixed stratified split uses testFraction=${p.split.testFraction} and splitSeed=${p.split.splitSeed}: ${first!.trainSamples} training samples and ${first!.testSamples} evaluation samples. ${implementationDescription}\n\n`
       + `Each configuration was trained with predefined seeds ${p.trainingSeeds.join(', ')}. No hyperparameters or best seed were selected on test data. ${md(p.selection)} Binary accuracy and log_loss were measured; log_loss probabilities were clipped to [1e-15, 1-1e-15]. Means and sample standard deviations (ddof=1) are recalculated from predictions. ${md(p.uncertainty.assumptions)}\n\n`
       + `Measured environment: ${JSON.stringify(first!.environment)}. Budget: up to ${p.budget.maxAttempts} attempts and ${p.budget.secondsPerAttempt} seconds per attempt. Each receipt retains measured durations and warnings. Historical incomplete attempts/retries: ${audit.groups.reduce((sum,g) => sum+g.historicalFailures,0)}.\n\n`
       + `Provenance: [protocol](protocol.json), [table](aggregate.json), [CSV](results.csv), [recalculated audit](audit.json) and [journal](journal.jsonl). Protocol hash: ${frozen.protocolHash}. Code hash: ${frozen.codeHash}. Table hash: ${table!.tableHash}.`
@@ -106,15 +115,15 @@ export function draftPaper(project: string, options: { type?: string; venueId?: 
     + '\n\nTable 1. Classification metrics across the predefined training seeds.\n\nEach row links through receiptIds in aggregate.json to its ten original runs. This describes training variability on a single split; it makes no claim of statistical significance or population generalization.'
     : 'PENDING: insufficient coverage/evidence. No supported results table is available.';
   const sections = outline.sections.map(section => {
-    if (section === 'Title') return '# Reproducible classification demo with ResearchPi\n\nDemonstration draft; scientific and editorial review pending.';
+    if (section === 'Title') return '# Reproducible classification study with ResearchPi\n\nEvidence-linked draft; scientific and editorial review pending.';
     if (section === 'Methodology' || section === 'Materials and Methods') return '## ' + section + '\n\n' + methodology;
     if (section === 'Results') return '## Results\n\n' + results;
-    if (section === 'Limitations') return '## Limitations\n\nSynthetic data and a single split. Budgets were not optimized as a benchmark, and the demo establishes no general superiority, novel contribution or causal effect. Ten seeds implement a user policy. Scientific review is required.';
+    if (section === 'Limitations') return '## Limitations\n\nA single fixed dataset and split. Budgets were not optimized as a benchmark, and the demo establishes no general superiority, novel contribution or causal effect. Ten seeds implement a user policy. Scientific review is required.';
     if (section === 'References') return '## References\n\n' + review.references.map(ref => `- [${md(ref.title)}](${ref.url}); ${ref.status}, reviewed ${ref.verifiedAt ?? 'pending'}`).join('\n');
     if (section === 'Abstract' || section === 'Conclusion' || section === 'Conclusions') return '## ' + section + '\n\nPENDING: state the evidence-supported contribution consistently with the abstract, introduction and conclusion. This execution alone does not establish novelty.';
     if (section === 'Introduction') return '## Introduction\n\nPENDING: explain the research difficulty, related-work gap and evidence-supported contribution.\n\n'
       + 'The article presents related work, the study design and methods, the results, and their interpretation, followed by limitations, conclusions and reproducibility details. Adapt this roadmap after completing the contribution statement and final section structure.';
-    if (section === 'Reproducibility appendix') return '## Reproducibility appendix\n\nRun `repi demo` in a new project with pinned versions.\n\n' + selected.map(r => `- ${r.methodId}, seed ${r.seed}: [receipt](runs/${r.id}.json), [predictions](artifacts/${r.id}.json)`).join('\n');
+    if (section === 'Reproducibility appendix') return '## Reproducibility appendix\n\nFreeze the retained protocol in a new project and run `repi run` with pinned versions; retain CSV/custom source snapshots where applicable.\n\n' + selected.map(r => `- ${r.methodId}, seed ${r.seed}: [receipt](runs/${r.id}.json), [predictions](artifacts/${r.id}.json)`).join('\n');
     return '## ' + section + '\n\nPENDING: write and review against evidence. This demo does not establish a scientific contribution.';
   });
   const report = { mechanicalEvidence: audit, manuscript: review, outline, missing, submissionReady: false };
@@ -127,5 +136,5 @@ export function draftPaper(project: string, options: { type?: string; venueId?: 
 export function reviewProjectManifest(project: string, manifest: ManuscriptManifest) {
   const frozenPath = join(stateDir(project), 'protocol.json');
   const table = existsSync(frozenPath) && auditProject(project).status === 'complete' ? aggregateProject(project) : undefined;
-  return reviewManifest(manifest, table);
+  return reviewManifest(manifest, table, project);
 }

@@ -8,7 +8,7 @@ import { ensureExperiments } from './setup.js';
 import { ROOT, stateDir } from './paths.js';
 import { projectStatus, writeJson } from './storage.js';
 import { readJson } from './storage.js';
-import { demoProtocol, freezeProtocol } from './protocol.js';
+import { demoProtocol, realDataProtocol, csvProtocol, attachCustomMethod, freezeProtocol } from './protocol.js';
 import { aggregateProject, auditProject, runExperiment, withProjectLock } from './experiments.js';
 import type { Protocol } from './protocol.js';
 import { searchLibrary, scientificProtocol, reviewCausal, type CausalPlan } from './science.js';
@@ -16,6 +16,9 @@ import { draftPaper, outlinePaper, reviewProjectManifest, venueProfiles, type Ma
 import { WebResearch } from './web.js';
 import { Conversations, conversationDirectory, piDirectory } from './conversations.js';
 import { SessionManager, runRpcMode } from '@earendil-works/pi-coding-agent';
+import {benchTasks,runBenchmark,auditBenchmark,type BenchOptions} from './benchmark.js';
+import {ReferenceVerifier,type BibliographicReference} from './references.js';
+import {doctor} from './doctor.js';
 import { configureClipboard, clipboardStatus, ensureClipboardTools } from './clipboard.js';
 
 configureClipboard();
@@ -128,6 +131,24 @@ program.command('disconnect').argument('<connection>', connectionNames).action(a
   if (provider !== 'researchpi-mock') await (await connectionRuntime()).logout(provider);
   console.log('Local credential removed. Environment variables and provider authorization are managed separately.');
 });
+const bench=program.command('bench').description('Run a frozen research microtask evaluation with real agent CLIs');
+bench.command('tasks').action(()=>console.log(JSON.stringify(benchTasks().map(({expected,...task})=>task),null,2)));
+bench.command('audit').argument('<id>').action(id=>{const report=auditBenchmark(project(),id);console.log(JSON.stringify(report,null,2));if(report.status!=='complete')process.exitCode=1;});
+bench.command('run').requiredOption('--agent <id>','repi, claude, codex or fixture').option('--trials <n>','independent trials per task','10').option('--tasks <ids>','comma-separated task IDs')
+ .option('--model <id>').option('--provider <id>','ResearchPi provider').option('--timeout <seconds>','per-trial wall-clock budget','60').option('--budget-usd <amount>','Claude per-trial API cap; other agents do not enforce this cap','0.25')
+ .option('--mode <id>','product or same-model','product').option('--condition <label>','record research configuration label').option('--continue-on-error','attempt later trials after infrastructure failure')
+ .action(async opts=>{if(!['product','same-model'].includes(opts.mode)) throw new Error('Mode must be product or same-model');const controller=new AbortController(),stop=()=>controller.abort();process.once('SIGINT',stop);
+ try {const result=await runBenchmark(project(),{agent:opts.agent,trials:Number(opts.trials),tasks:opts.tasks?.split(','),model:opts.model,provider:opts.provider,timeoutSeconds:Number(opts.timeout),budgetUsd:Number(opts.budgetUsd),mode:opts.mode,condition:opts.condition,continueOnError:Boolean(opts.continueOnError)} as BenchOptions,controller.signal);console.log(JSON.stringify(result,null,2));if(result.status!=='complete')process.exitCode=controller.signal.aborted?130:1;}finally{process.removeListener('SIGINT',stop);}});
+program.command('doctor').description('Inspect prerequisites without making a model request').action(async()=>console.log(JSON.stringify(await doctor(project()),null,2)));
+const refs=program.command('references').description('Resolve DOIs and compare bibliographic metadata with retained evidence');
+refs.command('verify').requiredOption('--file <json>','reference or reference array').action(async opts=> {
+ const input=readJson<BibliographicReference|BibliographicReference[]>(resolve(opts.file)),controller=new AbortController(),stop=()=>controller.abort();
+ process.once('SIGINT',stop);
+ try {const reports=[];for(const ref of Array.isArray(input)?input:[input]) {controller.signal.throwIfAborted();reports.push(await new ReferenceVerifier(project()).verify(ref,controller.signal));}
+ console.log(JSON.stringify(reports,null,2));if(reports.some(report=>report.status!=='metadata_matched')) process.exitCode=1;
+ } finally {process.removeListener('SIGINT',stop);}
+});
+refs.command('list').action(()=>console.log(JSON.stringify(new ReferenceVerifier(project()).list(),null,2)));
 program.command('clipboard').description('Check clipboard prerequisites without reading its contents')
   .action(() => console.log(JSON.stringify(clipboardStatus(),null,2)));
 program.command('setup').option('--experiments', 'also prepare Python for experiments')
@@ -162,6 +183,21 @@ program.command('review-manifest').requiredOption('--file <json>').action(opts =
   console.log(JSON.stringify(result, null, 2));
   if (result.status === 'pending') process.exitCode = 1;
 });
+program.command('init').description('Freeze a real-data or CSV binary classification study')
+  .option('--dataset <name>', 'breast-cancer', 'breast-cancer').option('--csv <file>').option('--target <column>')
+  .option('--features <columns>', 'comma-separated numeric feature columns').option('--source-url <url>').option('--license <text>')
+  .option('--custom-method <file>', 'Python module implementing fit_predict').option('--method-description <text>')
+  .action(opts => {
+    if (opts.dataset !== 'breast-cancer') throw new Error('Use --dataset breast-cancer or --csv.');
+    if (opts.csv && (!opts.target || !opts.features || !opts.sourceUrl || !opts.license)) throw new Error('CSV requires --target, --features, --source-url and --license.');
+    if (opts.customMethod && !opts.methodDescription) throw new Error('Describe custom code with --method-description.');
+    const frozen=withProjectLock(project(),()=> {
+      let p=opts.csv ? csvProtocol(project(),{path:resolve(opts.csv),target:opts.target,features:opts.features.split(',').map((x:string)=>x.trim()),sourceUrl:opts.sourceUrl,license:opts.license}) : realDataProtocol();
+      if(opts.customMethod) p=attachCustomMethod(project(),p,resolve(opts.customMethod),opts.methodDescription);
+      return freezeProtocol(project(),p);
+    });
+    console.log(JSON.stringify(frozen,null,2));
+  });
 program.command('freeze').option('--file <json>', 'protocol file; otherwise use the prespecified demo')
   .option('--replace', 'explicitly freeze a new version; old evidence becomes incompatible').action(opts => {
     const frozen = withProjectLock(project(), () => freezeProtocol(project(), opts.file ? readJson<Protocol>(resolve(opts.file)) : demoProtocol(), opts.replace));
@@ -187,8 +223,10 @@ program.command('audit').action(() => {
   if (audit.status !== 'complete') process.exitCode = 1;
 });
 program.command('aggregate').action(() => console.log(JSON.stringify(aggregateProject(project()), null, 2)));
-program.command('demo').description('Freeze, execute twenty CPU fits and aggregate actual results').action(async () => {
-  withProjectLock(project(), () => freezeProtocol(project(), demoProtocol()));
+program.command('demo').description('Freeze, execute twenty CPU fits and aggregate actual results')
+  .option('--dataset <name>', 'synthetic or breast-cancer', 'synthetic').action(async opts => {
+  if(!['synthetic','breast-cancer'].includes(opts.dataset)) throw new Error('Dataset must be synthetic or breast-cancer');
+  withProjectLock(project(), () => freezeProtocol(project(), opts.dataset==='breast-cancer' ? realDataProtocol() : demoProtocol()));
   const audit = await run();
   if (audit.status === 'complete') {
     const draft = withProjectLock(project(), () => draftPaper(project()));

@@ -1,0 +1,29 @@
+name: Bug report
+description: Report a reproducible problem in ResearchPi.
+title: "[Bug]: "
+body:
+  - type: textarea
+    id: problem
+    attributes:
+      label: What happened?
+      description: Include expected and actual behavior. Remove API keys, tokens and private research data.
+    validations:
+      required: true
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps to reproduce
+    validations:
+      required: true
+  - type: input
+    id: version
+    attributes:
+      label: ResearchPi version and installation method
+      placeholder: "1.5.0, Linux .deb"
+    validations:
+      required: true
+  - type: textarea
+    id: environment
+    attributes:
+      label: Operating system, terminal and diagnostic output
+      description: Attach redacted repi doctor output when relevant.

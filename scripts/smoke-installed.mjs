@@ -24,6 +24,12 @@ try {
   assert.match(run(['--help']).stdout, /Usage: repi/);
   assert.equal(run(['--version']).stdout.trim(), JSON.parse(readFileSync(join(app, 'package.json'), 'utf8')).version);
   assert(existsSync(join(app, 'LICENSE')));
+  assert(existsSync(join(app,'assets/banner.svg')));assert(existsSync(join(app,'examples/custom-classifier.py')));
+  const diagnostic=JSON.parse(run(['doctor']).stdout);assert.equal(diagnostic.connection.modelAccessVerified,false);
+  const bench=JSON.parse(run(['bench','run','--agent','fixture','--tasks','metrics-2','--trials','1']).stdout);assert.equal(bench.fixtureOnly,true);assert.equal(bench.completedTrials,1);
+  assert.equal(JSON.parse(run(['bench','audit',bench.id]).stdout).status,'complete');
+  const initialized=JSON.parse(run(['--project',join(project,'real-study'),'init','--custom-method',join(app,'examples/custom-classifier.py'),'--method-description','Installed adapter fixture']).stdout);
+  assert.equal(initialized.protocol.dataset.kind,'breast_cancer');assert.equal(initialized.protocol.trainingSeeds.length,10);assert.equal(initialized.protocol.methods.length,3);
   assert(existsSync(join(app, 'docs/Pi-LICENSE.txt')));
   const policy = readFileSync(join(app, 'resources/manuscript-policy.md'), 'utf8').trim();
   const promptModule = pathToFileURL(join(app, 'dist/prompts.js')).href;
