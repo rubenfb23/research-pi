@@ -4,6 +4,7 @@ import json
 import os
 from pathlib import Path
 import pty
+import re
 import select
 import shutil
 import struct
@@ -27,7 +28,7 @@ helper.write_text("#!" + sys.argv[1] + "\n"
 helper.chmod(0o755)
 env = dict(os.environ, TERM="xterm-256color", PI_OFFLINE="1",
     DISPLAY="", WAYLAND_DISPLAY="repi-fixture", RESEARCH_PI_DATA_DIR=str(data),
-    REPI_COPY_RECORD=str(record), PATH="/usr/bin:/bin")
+    REPI_COPY_RECORD=str(record), PATH=str(project / "empty-path"))
 master, slave = pty.openpty()
 fcntl.ioctl(slave, termios.TIOCSWINSZ, struct.pack("HHHH", 30, 110, 0, 0))
 process = subprocess.Popen([sys.argv[1], str(root / "dist/cli.js"), "--project",
@@ -65,9 +66,15 @@ try:
     assert copies()[0] == copies()[1]
     assert "ResearchPi OFFLINE TEST" in copies()[0]
     time.sleep(.2)
-    os.write(master, b"\x1b[<0;2;8M")
-    os.write(master, b"\x1b[<32;24;8M")
-    os.write(master, b"\x1b[<0;24;8m")
+    # Startup diagnostics can shift the transcript. Locate the actual rendered row.
+    cursor_parts = re.split(r"\x1b\[(\d+);(\d+)H", output)
+    rows = [int(cursor_parts[index]) for index in range(1, len(cursor_parts), 3)
+        if "ResearchPi OFFLINE TEST" in cursor_parts[index + 2]]
+    assert rows, "Could not locate rendered answer for selection"
+    row = rows[-1]
+    os.write(master, f"\x1b[<0;2;{row}M".encode())
+    os.write(master, f"\x1b[<32;24;{row}M".encode())
+    os.write(master, f"\x1b[<0;24;{row}m".encode())
     wait_for(lambda: len(copies()) == 3, "Mouse selection did not reach the desktop clipboard backend")
     assert "ResearchPi OFFLINE" in copies()[2], copies()[2]
     os.write(master, b"/exit\r")
