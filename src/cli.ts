@@ -16,6 +16,9 @@ import { draftPaper, outlinePaper, reviewProjectManifest, venueProfiles, type Ma
 import { WebResearch } from './web.js';
 import { Conversations, conversationDirectory, piDirectory } from './conversations.js';
 import { SessionManager, runRpcMode } from '@earendil-works/pi-coding-agent';
+import { configureClipboard, clipboardStatus, ensureClipboardTools } from './clipboard.js';
+
+configureClipboard();
 
 const program = new Command().name('repi').version(readJson<{ version: string }>(join(ROOT, 'package.json')).version)
   .description('ResearchPi: research with Claude, OpenAI or OpenCode on the Pi SDK')
@@ -125,8 +128,12 @@ program.command('disconnect').argument('<connection>', connectionNames).action(a
   if (provider !== 'researchpi-mock') await (await connectionRuntime()).logout(provider);
   console.log('Local credential removed. Environment variables and provider authorization are managed separately.');
 });
-program.command('setup').option('--experiments', 'also prepare Python for experiments').action(async opts => {
+program.command('clipboard').description('Check clipboard prerequisites without reading its contents')
+  .action(() => console.log(JSON.stringify(clipboardStatus(),null,2)));
+program.command('setup').option('--experiments', 'also prepare Python for experiments')
+  .option('--clipboard','prepare per-user Linux desktop clipboard helpers without sudo').action(async opts => {
   if (opts.experiments) await ensureExperiments();
+  if (opts.clipboard) console.log(JSON.stringify(await ensureClipboardTools(),null,2));
   console.log('ResearchPi is ready. Run repi to open the chat.');
 });
 program.command('status').action(() => console.log(JSON.stringify(projectStatus(project()), null, 2)));

@@ -48,7 +48,7 @@ jobs:
         run: choco install nsis --yes --no-progress
       - run: npm run package:native -- ${{ matrix.target }}
       - if: runner.os == 'Linux'
-        run: sudo dpkg -i release/*.deb
+        run: sudo apt-get install --yes ./release/*.deb
       - if: runner.os == 'Linux'
         run: node scripts/smoke-installed.mjs /usr/bin/repi /opt/research-pi/app
       - if: runner.os == 'Linux'

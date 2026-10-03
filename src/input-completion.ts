@@ -1,6 +1,6 @@
 export type Completion = [string[], string];
 export type Completer = (line: string) => Completion | Promise<Completion>;
-export const chatCommands = ['/help', '/status', '/connect', '/model', '/models', '/thinking', '/reasoning', '/compact', '/new', '/chats', '/resume', '/name', '/fork', '/tree', '/export', '/reload', '/exit', '/quit'];
+export const chatCommands = ['/help', '/status', '/connect', '/model', '/models', '/thinking', '/reasoning', '/compact', '/new', '/chats', '/resume', '/name', '/fork', '/tree', '/export', '/reload', '/copy', '/exit', '/quit'];
 
 export function completeChat(line: string, context: { providers: string[]; models?: string[]; thinking: string[] }): Completion {
   if (!line || /^\/\S*$/.test(line)) return [chatCommands.filter(command => command.startsWith(line)), line];

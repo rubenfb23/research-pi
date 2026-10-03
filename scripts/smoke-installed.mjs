@@ -43,6 +43,12 @@ try {
   const piSmoke=spawnSync(join(app,'..','runtime',process.platform === 'win32' ? 'node.exe' : 'node'),
     [fileURLToPath(new URL('./smoke-pi-features.mjs',import.meta.url)),app],{encoding:'utf8',timeout:30000});
   assert.equal(piSmoke.status,0,piSmoke.error?.message || piSmoke.stderr);console.log(piSmoke.stdout.trim());
+  const clipboard=JSON.parse(run(['clipboard']).stdout);
+  assert.equal(clipboard.platform,process.platform);assert.equal(clipboard.verified,false);
+  if(process.platform==='linux') {
+    assert.equal(clipboard.tools.waylandCopy,true);assert.equal(clipboard.tools.waylandPaste,true);assert.equal(clipboard.tools.x11,true);
+    console.log('Installed clipboard prerequisites verified: Wayland and X11 tools available. Desktop access requires a graphical session.');
+  }
   for (const provider of ['opencode', 'opencode-go']) {
     assert(JSON.parse(run(['models', provider]).stdout).some(model => model.id === 'glm-5.3'));
   }

@@ -85,7 +85,7 @@ The simple interface (`repi --plain`) retains the colored, responsive terminal i
 
 ```text
 ────────────────────────────────────────────────────────────
-  ResearchPi  v1.4.0 · ML / AI / Computer Science
+  ResearchPi  v1.4.1 · ML / AI / Computer Science
 
   Model      opencode-go/glm-5.3-flash
   Project    /path/to/my-study
@@ -120,6 +120,10 @@ repi resources
 ```
 
 Inside the chat: `/new`, `/chats`, `/resume`, `/name`, `/fork`, `/tree`, `/settings`, `/reload` and `/mcp`. Enter while responding steers the run; Alt+Enter queues a follow-up. Use `repi --plain` for the previous scrolling interface, `repi chat --json "request"` for JSONL events and `repi rpc` for programmatic control. [Capabilities, configuration and migration](docs/pi-features.md).
+
+## Clipboard
+
+Use `/copy` to copy the latest answer, or Ctrl+X in the native interface. Linux source installations can prepare desktop helpers with `repi setup --clipboard`; `repi clipboard` checks prerequisites without reading clipboard contents. The 1.4.1 `.deb` installs Wayland/X11 helpers as dependencies. Restart `repi` after setup. [Clipboard setup and verification](docs/clipboard.md).
 
 ## Local web research
 
