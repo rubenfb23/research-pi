@@ -1,0 +1,458 @@
+{
+  "schemaVersion": 1,
+  "scope": "Twenty synthetic microtasks. Measures constrained research checks, not end-to-end research quality, full experiments or manuscript merit.",
+  "tasks": [
+    {
+      "id": "coverage-1",
+      "category": "seed_coverage",
+      "input": {
+        "plannedSeeds": [
+          11,
+          23,
+          37,
+          41,
+          53,
+          67,
+          79,
+          83,
+          97,
+          101
+        ],
+        "completedSeeds": [
+          11,
+          23,
+          37,
+          41,
+          53,
+          67,
+          79,
+          83,
+          97
+        ],
+        "policy": "Exactly one completed run per planned seed; no unplanned seeds."
+      },
+      "instruction": "Assess seed coverage. Return complete, missing, duplicates and unplanned.",
+      "expected": {
+        "complete": false,
+        "missing": [
+          101
+        ],
+        "duplicates": [],
+        "unplanned": []
+      }
+    },
+    {
+      "id": "coverage-2",
+      "category": "seed_coverage",
+      "input": {
+        "plannedSeeds": [
+          11,
+          23,
+          37,
+          41,
+          53,
+          67,
+          79,
+          83,
+          97,
+          101
+        ],
+        "completedSeeds": [
+          11,
+          23,
+          37,
+          41,
+          53,
+          67,
+          79,
+          83,
+          97,
+          11
+        ],
+        "policy": "Exactly one completed run per planned seed; no unplanned seeds."
+      },
+      "instruction": "Assess seed coverage. Return complete, missing, duplicates and unplanned.",
+      "expected": {
+        "complete": false,
+        "missing": [
+          101
+        ],
+        "duplicates": [
+          11
+        ],
+        "unplanned": []
+      }
+    },
+    {
+      "id": "coverage-3",
+      "category": "seed_coverage",
+      "input": {
+        "plannedSeeds": [
+          11,
+          23,
+          37,
+          41,
+          53,
+          67,
+          79,
+          83,
+          97,
+          101
+        ],
+        "completedSeeds": [
+          11,
+          23,
+          37,
+          41,
+          53,
+          67,
+          79,
+          83,
+          97,
+          101,
+          103
+        ],
+        "policy": "Exactly one completed run per planned seed; no unplanned seeds."
+      },
+      "instruction": "Assess seed coverage. Return complete, missing, duplicates and unplanned.",
+      "expected": {
+        "complete": false,
+        "missing": [],
+        "duplicates": [],
+        "unplanned": [
+          103
+        ]
+      }
+    },
+    {
+      "id": "coverage-4",
+      "category": "seed_coverage",
+      "input": {
+        "plannedSeeds": [
+          11,
+          23,
+          37,
+          41,
+          53,
+          67,
+          79,
+          83,
+          97,
+          101
+        ],
+        "completedSeeds": [
+          11,
+          23,
+          37,
+          41,
+          53,
+          67,
+          79,
+          83,
+          97,
+          101
+        ],
+        "policy": "Exactly one completed run per planned seed; no unplanned seeds."
+      },
+      "instruction": "Assess seed coverage. Return complete, missing, duplicates and unplanned.",
+      "expected": {
+        "complete": true,
+        "missing": [],
+        "duplicates": [],
+        "unplanned": []
+      }
+    },
+    {
+      "id": "metrics-1",
+      "category": "numerical_correctness",
+      "input": {
+        "labels": [
+          0,
+          1,
+          1,
+          0
+        ],
+        "predictions": [
+          0,
+          1,
+          1,
+          0
+        ],
+        "reportedAccuracy": 1
+      },
+      "instruction": "Recalculate accuracy from predictions and determine whether reportedAccuracy is correct. Return accuracy and reportMatches.",
+      "expected": {
+        "accuracy": 1.0,
+        "reportMatches": true
+      }
+    },
+    {
+      "id": "metrics-2",
+      "category": "numerical_correctness",
+      "input": {
+        "labels": [
+          0,
+          1,
+          1,
+          0
+        ],
+        "predictions": [
+          1,
+          1,
+          0,
+          0
+        ],
+        "reportedAccuracy": 0.9
+      },
+      "instruction": "Recalculate accuracy from predictions and determine whether reportedAccuracy is correct. Return accuracy and reportMatches.",
+      "expected": {
+        "accuracy": 0.5,
+        "reportMatches": false
+      }
+    },
+    {
+      "id": "metrics-3",
+      "category": "numerical_correctness",
+      "input": {
+        "labels": [
+          0,
+          1,
+          1,
+          0
+        ],
+        "predictions": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "reportedAccuracy": 0.5
+      },
+      "instruction": "Recalculate accuracy from predictions and determine whether reportedAccuracy is correct. Return accuracy and reportMatches.",
+      "expected": {
+        "accuracy": 0.5,
+        "reportMatches": true
+      }
+    },
+    {
+      "id": "metrics-4",
+      "category": "numerical_correctness",
+      "input": {
+        "labels": [
+          0,
+          1,
+          1,
+          0
+        ],
+        "predictions": [
+          1,
+          1,
+          1,
+          1
+        ],
+        "reportedAccuracy": 0.7
+      },
+      "instruction": "Recalculate accuracy from predictions and determine whether reportedAccuracy is correct. Return accuracy and reportMatches.",
+      "expected": {
+        "accuracy": 0.5,
+        "reportMatches": false
+      }
+    },
+    {
+      "id": "leakage-1",
+      "category": "leakage",
+      "input": {
+        "design": "Scaling is fitted on the complete dataset before splitting."
+      },
+      "instruction": "Classify the stated leakage. Return leakage as preprocessing_leakage, test_selection_leakage, group_leakage or none.",
+      "expected": {
+        "leakage": "preprocessing_leakage"
+      }
+    },
+    {
+      "id": "leakage-2",
+      "category": "leakage",
+      "input": {
+        "design": "Hyperparameters are chosen using final test-set accuracy."
+      },
+      "instruction": "Classify the stated leakage. Return leakage as preprocessing_leakage, test_selection_leakage, group_leakage or none.",
+      "expected": {
+        "leakage": "test_selection_leakage"
+      }
+    },
+    {
+      "id": "leakage-3",
+      "category": "leakage",
+      "input": {
+        "design": "Random row splitting places the same patients in training and test data."
+      },
+      "instruction": "Classify the stated leakage. Return leakage as preprocessing_leakage, test_selection_leakage, group_leakage or none.",
+      "expected": {
+        "leakage": "group_leakage"
+      }
+    },
+    {
+      "id": "leakage-4",
+      "category": "leakage",
+      "input": {
+        "design": "Patients are separated first; scaling and hyperparameter selection use training data only. The held-out test is used once."
+      },
+      "instruction": "Classify the stated leakage. Return leakage as preprocessing_leakage, test_selection_leakage, group_leakage or none.",
+      "expected": {
+        "leakage": "none"
+      }
+    },
+    {
+      "id": "causal-1",
+      "category": "claim_scope",
+      "input": {
+        "evidence": "An observational correlation is reported. No confounding assumptions or identification argument is supplied."
+      },
+      "instruction": "Does the supplied evidence establish an identified causal effect? Return causalClaimSupported as a boolean.",
+      "expected": {
+        "causalClaimSupported": false
+      }
+    },
+    {
+      "id": "causal-2",
+      "category": "claim_scope",
+      "input": {
+        "evidence": "All causal-plan fields are filled, including a self-declared identified status. No argument or scientific review is supplied."
+      },
+      "instruction": "Does the supplied evidence establish an identified causal effect? Return causalClaimSupported as a boolean.",
+      "expected": {
+        "causalClaimSupported": false
+      }
+    },
+    {
+      "id": "causal-3",
+      "category": "claim_scope",
+      "input": {
+        "evidence": "Treatment and outcome are observed, but positivity fails in the target population. No narrower estimand is specified."
+      },
+      "instruction": "Does the supplied evidence establish an identified causal effect? Return causalClaimSupported as a boolean.",
+      "expected": {
+        "causalClaimSupported": false
+      }
+    },
+    {
+      "id": "causal-4",
+      "category": "claim_scope",
+      "input": {
+        "evidence": "This task asks whether checking required causal-plan fields alone proves identification."
+      },
+      "instruction": "Does the supplied evidence establish an identified causal effect? Return causalClaimSupported as a boolean.",
+      "expected": {
+        "causalClaimSupported": false
+      }
+    },
+    {
+      "id": "references-1",
+      "category": "citation_metadata",
+      "input": {
+        "candidate": {
+          "title": "A real source",
+          "authors": [
+            "L. Otero"
+          ],
+          "volume": "2",
+          "pages": "11-20"
+        },
+        "registry": {
+          "title": "A real source",
+          "authors": [
+            "Lorena Otero"
+          ],
+          "volume": "2",
+          "pages": "11-20"
+        },
+        "policy": "Full titles, volumes and pages must match. Given-name initials may match a full name; surname initials remain ambiguous. Matching metadata does not prove claim support."
+      },
+      "instruction": "Compare the supplied citation metadata, without internet. Return status as metadata_compatible, conflict or pending.",
+      "expected": {
+        "status": "metadata_compatible"
+      }
+    },
+    {
+      "id": "references-2",
+      "category": "citation_metadata",
+      "input": {
+        "candidate": {
+          "title": "A different title",
+          "authors": [
+            "Lorena Otero"
+          ],
+          "volume": "2",
+          "pages": "11-20"
+        },
+        "registry": {
+          "title": "A real source",
+          "authors": [
+            "Lorena Otero"
+          ],
+          "volume": "2",
+          "pages": "11-20"
+        },
+        "policy": "Full titles, volumes and pages must match. Given-name initials may match a full name; surname initials remain ambiguous. Matching metadata does not prove claim support."
+      },
+      "instruction": "Compare the supplied citation metadata, without internet. Return status as metadata_compatible, conflict or pending.",
+      "expected": {
+        "status": "conflict"
+      }
+    },
+    {
+      "id": "references-3",
+      "category": "citation_metadata",
+      "input": {
+        "candidate": {
+          "title": "A real source",
+          "authors": [
+            "Lorena Otero"
+          ],
+          "volume": "7",
+          "pages": "11-20"
+        },
+        "registry": {
+          "title": "A real source",
+          "authors": [
+            "Lorena Otero"
+          ],
+          "volume": "2",
+          "pages": "11-20"
+        },
+        "policy": "Full titles, volumes and pages must match. Given-name initials may match a full name; surname initials remain ambiguous. Matching metadata does not prove claim support."
+      },
+      "instruction": "Compare the supplied citation metadata, without internet. Return status as metadata_compatible, conflict or pending.",
+      "expected": {
+        "status": "conflict"
+      }
+    },
+    {
+      "id": "references-4",
+      "category": "citation_metadata",
+      "input": {
+        "candidate": {
+          "title": "A real source",
+          "authors": [
+            "Lorena O."
+          ],
+          "volume": "2",
+          "pages": "11-20"
+        },
+        "registry": {
+          "title": "A real source",
+          "authors": [
+            "Lorena Otero"
+          ],
+          "volume": "2",
+          "pages": "11-20"
+        },
+        "policy": "Full titles, volumes and pages must match. Given-name initials may match a full name; surname initials remain ambiguous. Matching metadata does not prove claim support."
+      },
+      "instruction": "Compare the supplied citation metadata, without internet. Return status as metadata_compatible, conflict or pending.",
+      "expected": {
+        "status": "pending"
+      }
+    }
+  ]
+}

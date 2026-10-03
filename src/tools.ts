@@ -1,17 +1,22 @@
 import { Type } from '@earendil-works/pi-ai';
 import { defineTool, type ToolDefinition } from '@earendil-works/pi-coding-agent';
 import { aggregateProject, auditProject, runExperiment, withProjectLock } from './experiments.js';
-import { demoProtocol, freezeProtocol, type Protocol } from './protocol.js';
+import { demoProtocol, realDataProtocol, csvProtocol, attachCustomMethod, freezeProtocol, type Protocol } from './protocol.js';
 import { getNote, reviewCausal, scientificProtocol, searchLibrary, type CausalPlan } from './science.js';
 import { projectStatus } from './storage.js';
 import { draftPaper, outlinePaper, venueProfiles } from './papers.js';
 import { ensureExperiments } from './setup.js';
+import {ReferenceVerifier} from './references.js';
 import { webTools } from './web-tools.js';
 
 const result = (data: unknown) => ({ content: [{ type: 'text' as const, text: JSON.stringify(data) }], details: {} });
 export function researchTools(project: string): ToolDefinition[] {
   return [
     ...webTools(project),
+    defineTool({name:'verify_reference',label:'Verify bibliographic metadata',description:'Resolve a DOI and compare title, complete authors, venue, volume, pages and year against Crossref/DataCite. Retain sources and per-field conflicts/pending checks. Metadata compatibility does not establish claim support.',parameters:Type.Object({referenceJson:Type.String({maxLength:12000})}),
+      async execute(_id,params,signal) {return result(await new ReferenceVerifier(project).verify(JSON.parse(params.referenceJson),signal));}}),
+    defineTool({name:'init_research_study',label:'Freeze real-data research study',description:'Create a ten-seed classification protocol from the built-in real Wisconsin dataset or an explicit numeric binary CSV. Copies CSV/custom source snapshots, freezes provenance and never replaces existing evidence. Custom Python executes with host-user permissions, not in a sandbox.',parameters:Type.Object({csvPath:Type.Optional(Type.String()),target:Type.Optional(Type.String()),features:Type.Optional(Type.Array(Type.String())),sourceUrl:Type.Optional(Type.String()),license:Type.Optional(Type.String()),customMethodPath:Type.Optional(Type.String()),methodDescription:Type.Optional(Type.String())}),executionMode:'sequential',
+      async execute(_id,params) {return result(withProjectLock(project,()=>{let p=params.csvPath ? csvProtocol(project,{path:params.csvPath,target:params.target??'',features:params.features??[],sourceUrl:params.sourceUrl??'',license:params.license??''}) : realDataProtocol();if(params.customMethodPath) p=attachCustomMethod(project,p,params.customMethodPath,params.methodDescription??'');return freezeProtocol(project,p);}));}}),
     defineTool({ name: 'project_status', label: 'Scientific project status',
       description: 'Read persisted scientific protocol independently of conversation; not an evidence audit.', parameters: Type.Object({}),
       async execute() { return result(projectStatus(project)); } }),
@@ -36,10 +41,10 @@ export function researchTools(project: string): ToolDefinition[] {
       parameters: Type.Object({}), executionMode: 'sequential',
       async execute() { return result(withProjectLock(project, () => freezeProtocol(project, demoProtocol()))); } }),
     defineTool({ name: 'get_experiment_template', label: 'Structured experiment template',
-      description: 'Read the complete supported protocol schema example: question, hypothesis, fixed synthetic dataset/split, metrics, allowlisted configurations, ten training seeds, budget and uncertainty.',
-      parameters: Type.Object({}), async execute() { return result(demoProtocol()); } }),
+      description: 'Read the complete supported protocol schema example: question, hypothesis, synthetic or real dataset with a fixed split, metrics, allowlisted configurations, ten training seeds, budget and uncertainty.',
+      parameters: Type.Object({dataset:Type.Optional(Type.Union([Type.Literal('synthetic'),Type.Literal('breast-cancer')]))}), async execute(_id,params) { return result(params.dataset==='breast-cancer' ? realDataProtocol() : demoProtocol()); } }),
     defineTool({ name: 'freeze_experiment_protocol', label: 'Validate and freeze scientific protocol',
-      description: 'Freeze a proposed JSON protocol after host validation. Requires ten distinct seeds, bounded CPU budget and allowlisted algorithms; cannot replace an existing protocol or bypass seed policy.',
+      description: 'Freeze a proposed JSON protocol after host validation. Requires ten distinct seeds, a CPU budget, supported datasets and validated methods/source hashes; cannot replace an existing protocol or bypass seed policy.',
       parameters: Type.Object({ protocolJson: Type.String({ maxLength: 100000 }) }), executionMode: 'sequential',
       async execute(_id, params) { return result(withProjectLock(project, () => freezeProtocol(project, JSON.parse(params.protocolJson) as Protocol))); } }),
     defineTool({ name: 'run_frozen_experiment', label: 'Execute frozen CPU experiment',

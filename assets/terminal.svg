@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="414" viewBox="0 0 1280 414" role="img" aria-labelledby="title desc">
+<title id="title">ResearchPi native terminal interface</title>
+<desc id="desc">Actual native SDK interface capture with deterministic offline transport. Empty screen rows compacted. No live model response is shown.</desc>
+<rect width="1280" height="414" rx="20" fill="#102338"/>
+<circle cx="32" cy="30" r="6" fill="#ff9e9e"/><circle cx="53" cy="30" r="6" fill="#f0cf81"/><circle cx="74" cy="30" r="6" fill="#9bedd8"/>
+<text x="106" y="36" fill="#9eb6ce" font-size="16" font-family="Arial">ResearchPi · native interface · offline capture</text>
+<g fill="#e1ebf5" font-size="16" font-family="DejaVu Sans Mono,monospace" xml:space="preserve">
+<text x="28" y="75">ResearchPi v1.5.0</text>
+<text x="28" y="98">/tmp/research-study</text>
+<text x="28" y="121">/new · /chats · /resume · /tree · /settings · /help</text>
+<text x="28" y="144"></text>
+<text x="28" y="167"> Help me start a reproducible study</text>
+<text x="28" y="190"></text>
+<text x="28" y="213"> ResearchPi OFFLINE TEST: SDK session, scientific resource and tools loaded. No live scientific reasoning.</text>
+<text x="28" y="236"></text>
+<text x="28" y="259">──────────────────────────────────────────────────────────────────────────────────────────────────────────────</text>
+<text x="28" y="282"></text>
+<text x="28" y="305">──────────────────────────────────────────────────────────────────────────────────────────────────────────────</text>
+<text x="28" y="328">/tmp/research-study • Research workflow</text>
+<text x="28" y="351">↑50 ↓20 0.2%/33k (auto)                                                                           offline-test</text>
+</g><text x="28" y="735" fill="#9bedd8" font-size="14" font-family="Arial">Actual interface recording. Empty screen rows compacted; disposable path normalized. Offline transport, not model inference.</text></svg>

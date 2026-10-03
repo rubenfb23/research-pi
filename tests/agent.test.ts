@@ -70,3 +70,19 @@ test('H3: research tools and native Pi execution coexist while the frozen runner
     assert.equal(loadFrozen(project).protocol.question, proposed.question);
   } finally { opened.session.dispose(); rmSync(project, { recursive: true, force: true }); }
 });
+
+
+test('Real Pi SDK dispatch freezes a real-data study with the mandatory seed policy', async () => {
+  const project = mkdtempSync(join(tmpdir(), 'researchpi-real-tool-'));
+  const opened = await openResearchSession(project, mockConfig, researchTools(project));
+  try {
+    assert(opened.session.getActiveToolNames().includes('verify_reference'));
+    await opened.session.prompt('[tool:init_research_study] {}');
+    const result = opened.session.messages.find(m => m.role === 'toolResult' && m.toolName === 'init_research_study');
+    assert(result && result.role === 'toolResult' && !result.isError);
+    const frozen = loadFrozen(project);
+    assert.equal(frozen.protocol.dataset.kind, 'breast_cancer');
+    assert.equal(new Set(frozen.protocol.trainingSeeds).size, 10);
+    assert.equal(frozen.protocol.methods.length, 2);
+  } finally { opened.session.dispose(); rmSync(project, { recursive: true, force: true }); }
+});

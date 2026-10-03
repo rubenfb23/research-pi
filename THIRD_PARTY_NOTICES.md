@@ -24,3 +24,7 @@ attributed with DOI and authors; other resources have their own rights and terms
 Original ResearchPi code is licensed under MIT; see [LICENSE](LICENSE).
 This license does not replace the licenses of Pi, Node, npm dependencies, Python
 packages, or referenced scientific publications. Preserve each applicable notice.
+
+## Wisconsin Diagnostic Breast Cancer dataset
+
+The optional real-data study uses the version distributed with pinned scikit-learn. Original dataset: Wolberg, W., Mangasarian, O., Street, N., and Street, W. (1993), *Breast Cancer Wisconsin (Diagnostic)*, UCI Machine Learning Repository, DOI [10.24432/C5DW2B](https://doi.org/10.24432/C5DW2B). The [UCI record](https://archive.ics.uci.edu/dataset/17/breast+cancer+wisconsin+diagnostic) identifies the dataset as CC BY 4.0; [license terms](https://creativecommons.org/licenses/by/4.0/). ResearchPi loads the scikit-learn feature/target arrays, makes a fixed stratified split and records the measured content/split fingerprint. CSV datasets retain the researcher's declared source and permissions; ResearchPi's MIT license does not override those rights.

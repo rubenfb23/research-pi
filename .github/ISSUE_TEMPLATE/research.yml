@@ -1,0 +1,18 @@
+name: Research workflow proposal
+description: Propose a scientific workflow, adapter or curated source.
+title: "[Research]: "
+body:
+  - type: textarea
+    id: need
+    attributes:
+      label: Research problem and expected artifact
+      description: Give a concrete study or workflow and explain its scientific value.
+    validations:
+      required: true
+  - type: textarea
+    id: evidence
+    attributes:
+      label: Sources, assumptions and verification
+      description: Link primary sources, identify supported scope, and explain how results could be checked.
+    validations:
+      required: true

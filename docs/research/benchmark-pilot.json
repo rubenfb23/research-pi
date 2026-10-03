@@ -1,0 +1,1081 @@
+{
+  "date": "2026-10-03",
+  "scope": "Exploratory single numerical JSON microtask, not a research-quality ranking. Every completed pilot is retained; unauditable pre-fix runs are excluded from verified results.",
+  "rawTracePolicy": "Private traces retained locally; reasoning, account information, local paths and credentials are omitted from this public export. Original trace digests permit local consistency checks, not reconstruction or adversarial proof.",
+  "runs": [
+    {
+      "id": "92c321f3-7566-4b24-9760-cac7c76349c2",
+      "stage": "earlier-exploration",
+      "createdAt": "2026-10-03T11:16:40.861Z",
+      "agent": "repi",
+      "agentVersion": "1.5.0",
+      "requestedModel": "glm-5.3-flash",
+      "requestedProvider": "opencode-go",
+      "protocolHash": "00783f8e82508a372d4b22db417890e091b845da9ba6f3508d1a547962f7d9d7",
+      "codeHash": "89f7134634ef8e27f984a0aa58c8fb105af91fab43e5ad22079a3f4dd243d410",
+      "host": {
+        "platform": "linux",
+        "architecture": "x64",
+        "node": "22.22.0"
+      },
+      "condition": null,
+      "task": {
+        "id": "metrics-2",
+        "category": "numerical_correctness",
+        "input": {
+          "labels": [
+            0,
+            1,
+            1,
+            0
+          ],
+          "predictions": [
+            1,
+            1,
+            0,
+            0
+          ],
+          "reportedAccuracy": 0.9
+        },
+        "instruction": "Recalculate accuracy from predictions and determine whether reportedAccuracy is correct. Return accuracy and reportMatches.",
+        "expected": {
+          "accuracy": 0.5,
+          "reportMatches": false
+        }
+      },
+      "expectedTrials": 1,
+      "completedTrials": 1,
+      "passedTrials": 0,
+      "audit": {
+        "status": "invalid",
+        "error": "Benchmark protocol hash changed"
+      },
+      "trials": [
+        {
+          "trial": 1,
+          "status": "completed",
+          "errorCategory": null,
+          "actualModel": "glm-5.3-flash",
+          "durationSeconds": 7.029,
+          "answer": "```json\n{\n  \"accuracy\": 0.5,\n  \"reportMatches\": false\n}\n```\n\nExplanation: recomputing from the supplied arrays, predictions agree with labels at 2 of 4 positions (2/4 = 0.5), so the reported accuracy of 0.9 is incorrect; reportMatches is false.",
+          "grade": {
+            "passed": false,
+            "errors": [
+              "Answer is not a single valid JSON object"
+            ]
+          },
+          "receiptHash": "f28f7e2be83087010d1359f4838c4831678475ffd0f87d76600f9ecd35462bb5",
+          "traceHash": "5fc136a27af6bd38046b66cd16daa82612726738811ee7cb42cc7f66c5b420ef"
+        }
+      ]
+    },
+    {
+      "id": "00e83667-5f8c-45ae-a93e-46917c0cbc9f",
+      "stage": "earlier-exploration",
+      "createdAt": "2026-10-03T11:18:19.050Z",
+      "agent": "claude",
+      "agentVersion": "2.1.280 (Claude Code)",
+      "requestedModel": "agent-default",
+      "requestedProvider": null,
+      "protocolHash": "7cf7de6ace1c4610097802ab3f6208eae7a569ed5dfcf8d24eb6e729c15fb695",
+      "codeHash": "89f7134634ef8e27f984a0aa58c8fb105af91fab43e5ad22079a3f4dd243d410",
+      "host": {
+        "platform": "linux",
+        "architecture": "x64",
+        "node": "22.22.0"
+      },
+      "condition": null,
+      "task": {
+        "id": "metrics-2",
+        "category": "numerical_correctness",
+        "input": {
+          "labels": [
+            0,
+            1,
+            1,
+            0
+          ],
+          "predictions": [
+            1,
+            1,
+            0,
+            0
+          ],
+          "reportedAccuracy": 0.9
+        },
+        "instruction": "Recalculate accuracy from predictions and determine whether reportedAccuracy is correct. Return accuracy and reportMatches.",
+        "expected": {
+          "accuracy": 0.5,
+          "reportMatches": false
+        }
+      },
+      "expectedTrials": 1,
+      "completedTrials": 0,
+      "passedTrials": 0,
+      "audit": {
+        "status": "invalid",
+        "error": "Benchmark protocol hash changed"
+      },
+      "trials": [
+        {
+          "trial": 1,
+          "status": "failed",
+          "errorCategory": null,
+          "actualModel": null,
+          "durationSeconds": 0.895,
+          "answer": "",
+          "grade": {
+            "passed": false,
+            "errors": [
+              "No completed answer"
+            ]
+          },
+          "receiptHash": "8605612ba45a2e9b5bd863f4dcf7670aeba9e2979951dffe49afb5bbb95be25a",
+          "traceHash": "405f222ba28fa228bfca913a50a651fed0b7ffc4e99316b22744c7b19cb16a5d"
+        }
+      ]
+    },
+    {
+      "id": "8b74053a-e875-4d51-862b-9826ced7a4ba",
+      "stage": "earlier-exploration",
+      "createdAt": "2026-10-03T11:18:20.212Z",
+      "agent": "codex",
+      "agentVersion": "codex-cli 0.156.1",
+      "requestedModel": "agent-default",
+      "requestedProvider": null,
+      "protocolHash": "57915cbf59e90a243608ef46eed2c54d263fbb27fe42237153500cbaa9569f27",
+      "codeHash": "89f7134634ef8e27f984a0aa58c8fb105af91fab43e5ad22079a3f4dd243d410",
+      "host": {
+        "platform": "linux",
+        "architecture": "x64",
+        "node": "22.22.0"
+      },
+      "condition": null,
+      "task": {
+        "id": "metrics-2",
+        "category": "numerical_correctness",
+        "input": {
+          "labels": [
+            0,
+            1,
+            1,
+            0
+          ],
+          "predictions": [
+            1,
+            1,
+            0,
+            0
+          ],
+          "reportedAccuracy": 0.9
+        },
+        "instruction": "Recalculate accuracy from predictions and determine whether reportedAccuracy is correct. Return accuracy and reportMatches.",
+        "expected": {
+          "accuracy": 0.5,
+          "reportMatches": false
+        }
+      },
+      "expectedTrials": 1,
+      "completedTrials": 0,
+      "passedTrials": 0,
+      "audit": {
+        "status": "invalid",
+        "error": "Benchmark protocol hash changed"
+      },
+      "trials": [
+        {
+          "trial": 1,
+          "status": "failed",
+          "errorCategory": null,
+          "actualModel": null,
+          "durationSeconds": 3.553,
+          "answer": "",
+          "grade": {
+            "passed": false,
+            "errors": [
+              "No completed answer"
+            ]
+          },
+          "receiptHash": "ff684b88aa85c261d720ac0395c3ac6ff44c23d911d4c569f06485801ef0fc24",
+          "traceHash": "d43fc79652e74f932d42aa6aae687f1a3001e94f71a3c03c59b961b2f2305356"
+        }
+      ]
+    },
+    {
+      "id": "2ddfa303-dc47-4f16-8d56-e14e240f6104",
+      "stage": "earlier-exploration",
+      "createdAt": "2026-10-03T11:25:27.189Z",
+      "agent": "codex",
+      "agentVersion": "codex-cli 0.156.1",
+      "requestedModel": "gpt-5.5",
+      "requestedProvider": null,
+      "protocolHash": "387850ada1e24421332a7cfa7c10611f5be57216243cfd28360feb9718e8aeb2",
+      "codeHash": "0057c282ce6fb6ebbdd619444daf9b9e3a3e6b21220d8478f70c8112395a133f",
+      "host": {
+        "platform": "linux",
+        "architecture": "x64",
+        "node": "22.22.0"
+      },
+      "condition": null,
+      "task": {
+        "id": "metrics-2",
+        "category": "numerical_correctness",
+        "input": {
+          "labels": [
+            0,
+            1,
+            1,
+            0
+          ],
+          "predictions": [
+            1,
+            1,
+            0,
+            0
+          ],
+          "reportedAccuracy": 0.9
+        },
+        "instruction": "Recalculate accuracy from predictions and determine whether reportedAccuracy is correct. Return accuracy and reportMatches.",
+        "expected": {
+          "accuracy": 0.5,
+          "reportMatches": false
+        }
+      },
+      "expectedTrials": 1,
+      "completedTrials": 1,
+      "passedTrials": 1,
+      "audit": {
+        "status": "invalid",
+        "error": "Benchmark protocol hash changed"
+      },
+      "trials": [
+        {
+          "trial": 1,
+          "status": "completed",
+          "errorCategory": null,
+          "actualModel": null,
+          "durationSeconds": 8.923,
+          "answer": "{\"accuracy\":0.5,\"reportMatches\":false}",
+          "grade": {
+            "passed": true,
+            "errors": []
+          },
+          "receiptHash": "49a5232717e363c4bd04f7cff9dbcf055d976efdd47b0b3dc624f0b5d0e040bb",
+          "traceHash": "fbd74aa210e4da0c8eb29433c0fb636c3486d00f7ec31022e484ef6d1c7cfa2b",
+          "legacyReportedModel": "gpt-5.5",
+          "modelFieldNote": "Earlier runner echoed the requested ID; it is not an observed model."
+        }
+      ]
+    },
+    {
+      "id": "b0be1814-25ee-40e8-b4c3-1bc797cbfde8",
+      "stage": "earlier-exploration",
+      "createdAt": "2026-10-03T11:38:36.716Z",
+      "agent": "repi",
+      "agentVersion": "1.5.0",
+      "requestedModel": "glm-5.3-flash",
+      "requestedProvider": "opencode-go",
+      "protocolHash": "ccf49d2761c2ac0f205428191b4f01c72b371bab201890c143f3af0035f2aa61",
+      "codeHash": "4afaf69bbcdcc75de764896469b3c92f06ca3f01281c1f7d4592caba244c81db",
+      "instructionHashes": {
+        "system.md": "b35622fdb32d89e67473d94f66c5596951919a24e5124f197343ea173dda7458",
+        "manuscript-policy.md": "1abe50f727dad887ab50026fec2c8eeddd3c834fdbcc1567a08c84f62899ac96",
+        "web-policy.md": "b62da20db4cc9408a4ed63e295f3c2002c1c186b2c0ff904b4f5c7b2f9ed6237"
+      },
+      "host": {
+        "platform": "linux",
+        "architecture": "x64",
+        "node": "22.22.0"
+      },
+      "condition": "Exploratory post-format-instruction pilot; one numerical microtask",
+      "task": {
+        "id": "metrics-2",
+        "category": "numerical_correctness",
+        "input": {
+          "labels": [
+            0,
+            1,
+            1,
+            0
+          ],
+          "predictions": [
+            1,
+            1,
+            0,
+            0
+          ],
+          "reportedAccuracy": 0.9
+        },
+        "instruction": "Recalculate accuracy from predictions and determine whether reportedAccuracy is correct. Return accuracy and reportMatches.",
+        "expected": {
+          "accuracy": 0.5,
+          "reportMatches": false
+        }
+      },
+      "expectedTrials": 10,
+      "completedTrials": 10,
+      "passedTrials": 6,
+      "audit": {
+        "id": "b0be1814-25ee-40e8-b4c3-1bc797cbfde8",
+        "status": "complete",
+        "errors": [],
+        "expectedTrials": 10,
+        "completedTrials": 10,
+        "passedTrials": 6,
+        "fixtureOnly": false,
+        "scope": "Local consistency and grader recalculation only; no general research quality or adversarial-proof claim."
+      },
+      "trials": [
+        {
+          "trial": 1,
+          "status": "completed",
+          "errorCategory": null,
+          "actualModel": "glm-5.3-flash",
+          "durationSeconds": 7.172,
+          "answer": "{\"accuracy\": 0.5, \"reportMatches\": false}",
+          "grade": {
+            "passed": true,
+            "errors": []
+          },
+          "receiptHash": "0c12a2e6945e745cd5c6dc71006b05adb2f0477bfed3c01e43fd24e16e3dbf72",
+          "traceHash": "38a0a203806dc2773b682949075dec8339010c5e0398f486a863ab45cd36b2b6"
+        },
+        {
+          "trial": 2,
+          "status": "completed",
+          "errorCategory": null,
+          "actualModel": "glm-5.3-flash",
+          "durationSeconds": 7.093,
+          "answer": "{\"accuracy\":0.5,\"reportMatches\":false}",
+          "grade": {
+            "passed": true,
+            "errors": []
+          },
+          "receiptHash": "e97b3675c96039a43fd3942c92f7080aae69af48eb418cb71ec06c79ad9f3ab2",
+          "traceHash": "91950629147427ac9485aa6b7077a297e2221c42602a3e1e6f457c8f773b772c"
+        },
+        {
+          "trial": 3,
+          "status": "completed",
+          "errorCategory": null,
+          "actualModel": "glm-5.3-flash",
+          "durationSeconds": 6.008,
+          "answer": "{\"accuracy\": 0.75, \"reportMatches\": false}",
+          "grade": {
+            "passed": false,
+            "errors": [
+              "Incorrect or missing field: accuracy"
+            ]
+          },
+          "receiptHash": "9e0e4b13b09663759049a5b2ab7e467647c331718091d3d3f5746a33928b3344",
+          "traceHash": "a6031654829862cff7cacb08aabe1c3ada39bdc356bba3fdd2d4736ac250574a"
+        },
+        {
+          "trial": 4,
+          "status": "completed",
+          "errorCategory": null,
+          "actualModel": "glm-5.3-flash",
+          "durationSeconds": 6.931,
+          "answer": "```json\n{\"accuracy\": 0.75, \"reportMatches\": false}\n```",
+          "grade": {
+            "passed": false,
+            "errors": [
+              "Incorrect or missing field: accuracy"
+            ]
+          },
+          "receiptHash": "564e7a5e156a94acc643c549d50a051eb637f4e8550b51d29033b734d2a360eb",
+          "traceHash": "c953fe84808648b72adf0d48a4c28086df43100629a437b164427bdd395c0f48"
+        },
+        {
+          "trial": 5,
+          "status": "completed",
+          "errorCategory": null,
+          "actualModel": "glm-5.3-flash",
+          "durationSeconds": 8.352,
+          "answer": "{\"accuracy\": 0.5, \"reportMatches\": false}\n\nExplanation: predictions `[1,1,0,0]` match labels `[0,1,1,0]` at the second and fourth positions (2 of 4 correct), so the recalculated accuracy is 2/4 = 0.5, not the reported 0.9.",
+          "grade": {
+            "passed": false,
+            "errors": [
+              "Answer is not a single valid JSON object"
+            ]
+          },
+          "receiptHash": "c4ee03c47d262e44e79439651e85fa8fb9fe6eceed9193301ec4ca1b15c0ce46",
+          "traceHash": "5c97e27adc44a93557a75ee6830e86b4386743ec944cf6992b0cbdafc5de6b6c"
+        },
+        {
+          "trial": 6,
+          "status": "completed",
+          "errorCategory": null,
+          "actualModel": "glm-5.3-flash",
+          "durationSeconds": 6.975,
+          "answer": "{\"accuracy\":0.5,\"reportMatches\":false}",
+          "grade": {
+            "passed": true,
+            "errors": []
+          },
+          "receiptHash": "ac1ce4237a5229eb32a218fa5ce4a70bb8313b39b7bc9ee46e93435565352865",
+          "traceHash": "bd3d8e87090aeaee148acde1de94192b9c93d7f395eccf2fdcfde32709dd1f14"
+        },
+        {
+          "trial": 7,
+          "status": "completed",
+          "errorCategory": null,
+          "actualModel": "glm-5.3-flash",
+          "durationSeconds": 9.356,
+          "answer": "```json\n{\"accuracy\": 0.5, \"reportMatches\": false}\n```",
+          "grade": {
+            "passed": true,
+            "errors": []
+          },
+          "receiptHash": "94ec02f9ecc11b8a4b4b5119857da24c92299e59e8166e2351dba0f3e135a931",
+          "traceHash": "091a621b438f60f9b0b3458f81377e2e725a9d75ebeae12c54f36c75e52777f7"
+        },
+        {
+          "trial": 8,
+          "status": "completed",
+          "errorCategory": null,
+          "actualModel": "glm-5.3-flash",
+          "durationSeconds": 19.957,
+          "answer": "{\"accuracy\":0.5,\"reportMatches\":false}",
+          "grade": {
+            "passed": true,
+            "errors": []
+          },
+          "receiptHash": "ea50add6022e7e6067f73d638f7b89de20ccb911058f50a106a7c32be400cd22",
+          "traceHash": "25838c8977f4fa936c02537bb2805bc168d23e1ca511a52df20556cc0b9da729"
+        },
+        {
+          "trial": 9,
+          "status": "completed",
+          "errorCategory": null,
+          "actualModel": "glm-5.3-flash",
+          "durationSeconds": 6.614,
+          "answer": "{\"accuracy\":0.5,\"reportMatches\":false}",
+          "grade": {
+            "passed": true,
+            "errors": []
+          },
+          "receiptHash": "3c0e343c7a73b163cc35ccba588fe220d8b13814c92620c512d68e9fab1d4c97",
+          "traceHash": "5507b81ab703e87ba4dd4f6943dd5caa9dff0b4399d7ef999fd4b4c01b65f55c"
+        },
+        {
+          "trial": 10,
+          "status": "completed",
+          "errorCategory": null,
+          "actualModel": "glm-5.3-flash",
+          "durationSeconds": 4.677,
+          "answer": "{\"accuracy\":0.25,\"reportMatches\":false}",
+          "grade": {
+            "passed": false,
+            "errors": [
+              "Incorrect or missing field: accuracy"
+            ]
+          },
+          "receiptHash": "f2d247187159f1774e35f9a1c3dc59c4ca6858e6a55fc16a82fb4f38b5ded2c4",
+          "traceHash": "6a7dc4754234a4b9f4f021fd200ca8b34c7cae2ac3026dd4cc6155e090406650"
+        }
+      ]
+    },
+    {
+      "id": "854aea47-c40e-4cc4-85ea-18d1b19b380b",
+      "stage": "earlier-exploration",
+      "createdAt": "2026-10-03T11:38:36.180Z",
+      "agent": "codex",
+      "agentVersion": "codex-cli 0.156.1",
+      "requestedModel": "gpt-5.5",
+      "requestedProvider": null,
+      "protocolHash": "2dd3d091918c7864a9aa991aaa8f9837f46e4a2e6e567927310edee860ea3a5a",
+      "codeHash": "4afaf69bbcdcc75de764896469b3c92f06ca3f01281c1f7d4592caba244c81db",
+      "instructionHashes": {
+        "system.md": "b35622fdb32d89e67473d94f66c5596951919a24e5124f197343ea173dda7458",
+        "manuscript-policy.md": "1abe50f727dad887ab50026fec2c8eeddd3c834fdbcc1567a08c84f62899ac96",
+        "web-policy.md": "b62da20db4cc9408a4ed63e295f3c2002c1c186b2c0ff904b4f5c7b2f9ed6237"
+      },
+      "host": {
+        "platform": "linux",
+        "architecture": "x64",
+        "node": "22.22.0"
+      },
+      "condition": "Exploratory supported-model pilot; one numerical microtask",
+      "task": {
+        "id": "metrics-2",
+        "category": "numerical_correctness",
+        "input": {
+          "labels": [
+            0,
+            1,
+            1,
+            0
+          ],
+          "predictions": [
+            1,
+            1,
+            0,
+            0
+          ],
+          "reportedAccuracy": 0.9
+        },
+        "instruction": "Recalculate accuracy from predictions and determine whether reportedAccuracy is correct. Return accuracy and reportMatches.",
+        "expected": {
+          "accuracy": 0.5,
+          "reportMatches": false
+        }
+      },
+      "expectedTrials": 10,
+      "completedTrials": 10,
+      "passedTrials": 10,
+      "audit": {
+        "status": "invalid",
+        "error": "Benchmark protocol hash changed"
+      },
+      "trials": [
+        {
+          "trial": 1,
+          "status": "completed",
+          "errorCategory": null,
+          "actualModel": null,
+          "durationSeconds": 12.523,
+          "answer": "{\"accuracy\":0.5,\"reportMatches\":false}",
+          "grade": {
+            "passed": true,
+            "errors": []
+          },
+          "receiptHash": "f760ed9bd3d8735c701b825ba448dbc2312f7a1c7cf360eaa7c5301fc77e7cc6",
+          "traceHash": "1430716ce21f11deee8789d682d317755ab6f394f40f2f08de5975fe17bf51cf"
+        },
+        {
+          "trial": 2,
+          "status": "completed",
+          "errorCategory": null,
+          "actualModel": null,
+          "durationSeconds": 7.627,
+          "answer": "{\"accuracy\":0.5,\"reportMatches\":false}",
+          "grade": {
+            "passed": true,
+            "errors": []
+          },
+          "receiptHash": "10acc296318b82a0cd590eeed34d0a2f396f850f599b3fb6b22aa28852234484",
+          "traceHash": "a3c4c0754f38ebda975c50f8547d27fcd3341fafa8bac0102dc235defaedb234"
+        },
+        {
+          "trial": 3,
+          "status": "completed",
+          "errorCategory": null,
+          "actualModel": null,
+          "durationSeconds": 7.499,
+          "answer": "{\"accuracy\":0.5,\"reportMatches\":false}",
+          "grade": {
+            "passed": true,
+            "errors": []
+          },
+          "receiptHash": "262068460758b20a247155c91788925d743ce86ab9d958581f7ef7da85ffb18f",
+          "traceHash": "b0df0a9a83df543121910f1a00582268a07ecaf666f465022b432b9357405677"
+        },
+        {
+          "trial": 4,
+          "status": "completed",
+          "errorCategory": null,
+          "actualModel": null,
+          "durationSeconds": 8.957,
+          "answer": "{\"accuracy\":0.5,\"reportMatches\":false}",
+          "grade": {
+            "passed": true,
+            "errors": []
+          },
+          "receiptHash": "ef34164058967299654a64185e480963ecea719c33bf1ee813b5b467531194e3",
+          "traceHash": "80ba3acaabad153edd824ceb64f7cb429ff5fa0f43941f68e06344883c11a88a"
+        },
+        {
+          "trial": 5,
+          "status": "completed",
+          "errorCategory": null,
+          "actualModel": null,
+          "durationSeconds": 8.508,
+          "answer": "{\"accuracy\":0.5,\"reportMatches\":false}",
+          "grade": {
+            "passed": true,
+            "errors": []
+          },
+          "receiptHash": "bcb8fab4d79a30805a9275223d85c0da78c74294031a9f084785e6039f388b55",
+          "traceHash": "15517fb04a96e5332077956ecd3bcbae894619627a1e57038a173b4c59d580fd"
+        },
+        {
+          "trial": 6,
+          "status": "completed",
+          "errorCategory": null,
+          "actualModel": null,
+          "durationSeconds": 7.672,
+          "answer": "{\"accuracy\":0.5,\"reportMatches\":false}",
+          "grade": {
+            "passed": true,
+            "errors": []
+          },
+          "receiptHash": "c5d8902ccb2ee505b7d5d384780e4e5176d61db36652ff23beb72aff6dcf69b3",
+          "traceHash": "c61273725192f8305b148f310f2a26ad2a93986221a6dee8651a0e09a9cdac8f"
+        },
+        {
+          "trial": 7,
+          "status": "completed",
+          "errorCategory": null,
+          "actualModel": null,
+          "durationSeconds": 7.776,
+          "answer": "{\"accuracy\":0.5,\"reportMatches\":false}",
+          "grade": {
+            "passed": true,
+            "errors": []
+          },
+          "receiptHash": "82058959ded368ed7c74ec50f9abe63682577e366dbd39aa05159a2149478f83",
+          "traceHash": "67c962a1712f332f1af0655e4bf4b6eca4eda40cf90070f81c9fa0a8da52b0f9"
+        },
+        {
+          "trial": 8,
+          "status": "completed",
+          "errorCategory": null,
+          "actualModel": null,
+          "durationSeconds": 5.837,
+          "answer": "{\"accuracy\":0.5,\"reportMatches\":false}",
+          "grade": {
+            "passed": true,
+            "errors": []
+          },
+          "receiptHash": "0849f2a705e6b6b13a04fdc30a3322565a8b327ecdb08be0639e45460a6deb83",
+          "traceHash": "b1bb3d31f73d08fa4e9ea2abc06a54ce39e3cd7e9576c7da86c7a95dc08a3cd6"
+        },
+        {
+          "trial": 9,
+          "status": "completed",
+          "errorCategory": null,
+          "actualModel": null,
+          "durationSeconds": 7.22,
+          "answer": "{\"accuracy\":0.5,\"reportMatches\":false}",
+          "grade": {
+            "passed": true,
+            "errors": []
+          },
+          "receiptHash": "852f7eb91e71dae561a7422943ed592d5bd00206290b6556afc6b751191c9914",
+          "traceHash": "13fa6bbf5fae7290694221b7e12a96e46f7fbed5b82ca0e84311d925b453a41d"
+        },
+        {
+          "trial": 10,
+          "status": "completed",
+          "errorCategory": null,
+          "actualModel": null,
+          "durationSeconds": 7.98,
+          "answer": "{\"accuracy\":0.5,\"reportMatches\":false}",
+          "grade": {
+            "passed": true,
+            "errors": []
+          },
+          "receiptHash": "0fd144ba8b7fcb6bc3258ff0876ee522f39b26997cb29f6efbae15e66c8c207f",
+          "traceHash": "5f28c358c83249d6847e4bc5359cc470df45132699b99cc4fbff522c874519d0"
+        }
+      ]
+    },
+    {
+      "id": "75701971-05c0-4832-addb-932013cee570",
+      "stage": "corrected-serialization-pilot",
+      "createdAt": "2026-10-03T11:42:16.699Z",
+      "agent": "repi",
+      "agentVersion": "1.5.0",
+      "requestedModel": "glm-5.3-flash",
+      "requestedProvider": "opencode-go",
+      "protocolHash": "9532b392306b2d2e25b862825e9de3e7631e56fac823692ee6ea3a4acf293f56",
+      "codeHash": "58d0ee0df51dfd699d650beaf61e0bfab653d7e8b76497b0aa9735f0119e463c",
+      "instructionHashes": {
+        "system.md": "b35622fdb32d89e67473d94f66c5596951919a24e5124f197343ea173dda7458",
+        "manuscript-policy.md": "1abe50f727dad887ab50026fec2c8eeddd3c834fdbcc1567a08c84f62899ac96",
+        "web-policy.md": "b62da20db4cc9408a4ed63e295f3c2002c1c186b2c0ff904b4f5c7b2f9ed6237"
+      },
+      "host": {
+        "platform": "linux",
+        "architecture": "x64",
+        "node": "22.22.0"
+      },
+      "condition": "Exploratory numerical microtask; corrected protocol serialization",
+      "task": {
+        "id": "metrics-2",
+        "category": "numerical_correctness",
+        "input": {
+          "labels": [
+            0,
+            1,
+            1,
+            0
+          ],
+          "predictions": [
+            1,
+            1,
+            0,
+            0
+          ],
+          "reportedAccuracy": 0.9
+        },
+        "instruction": "Recalculate accuracy from predictions and determine whether reportedAccuracy is correct. Return accuracy and reportMatches.",
+        "expected": {
+          "accuracy": 0.5,
+          "reportMatches": false
+        }
+      },
+      "expectedTrials": 10,
+      "completedTrials": 10,
+      "passedTrials": 8,
+      "audit": {
+        "id": "75701971-05c0-4832-addb-932013cee570",
+        "status": "complete",
+        "errors": [],
+        "expectedTrials": 10,
+        "completedTrials": 10,
+        "passedTrials": 8,
+        "fixtureOnly": false,
+        "scope": "Local consistency and grader recalculation only; no general research quality or adversarial-proof claim."
+      },
+      "trials": [
+        {
+          "trial": 1,
+          "status": "completed",
+          "errorCategory": null,
+          "actualModel": "glm-5.3-flash",
+          "durationSeconds": 11.089,
+          "answer": "```json\n{\"accuracy\": 0.5, \"reportMatches\": false}\n```",
+          "grade": {
+            "passed": true,
+            "errors": []
+          },
+          "receiptHash": "abf70e4d1b53b6e40c297f7ad31b379ae2aee532046032f24b78a3ed4b684742",
+          "traceHash": "00848ab0bf327c046ea4b5839fdbfa9a125d2b2039362ec20884efd2c0cbca01"
+        },
+        {
+          "trial": 2,
+          "status": "completed",
+          "errorCategory": null,
+          "actualModel": "glm-5.3-flash",
+          "durationSeconds": 15.374,
+          "answer": "{\"accuracy\": 0.5, \"reportMatches\": false}",
+          "grade": {
+            "passed": true,
+            "errors": []
+          },
+          "receiptHash": "9448c74040d0a0fd3338932021883f1736161975f0a43f5006139abdf2fe3af6",
+          "traceHash": "05b7084c3d2e641e4bdec85f05ff0fada8525221f94acd2aa23d2edd3d94abad"
+        },
+        {
+          "trial": 3,
+          "status": "completed",
+          "errorCategory": null,
+          "actualModel": "glm-5.3-flash",
+          "durationSeconds": 14.423,
+          "answer": "{\"accuracy\": 0.5, \"reportMatches\": false}",
+          "grade": {
+            "passed": true,
+            "errors": []
+          },
+          "receiptHash": "208531013b2063800ed245f9c7936641671dc6a8c937778fb52fce1d86a6a638",
+          "traceHash": "7bec74e7daa2008400fc507ff0c9c122e94b836e207228daad5bf0b0a7992a1b"
+        },
+        {
+          "trial": 4,
+          "status": "completed",
+          "errorCategory": null,
+          "actualModel": "glm-5.3-flash",
+          "durationSeconds": 9.934,
+          "answer": "```json\n{\"accuracy\": 0.5, \"reportMatches\": false}\n```",
+          "grade": {
+            "passed": true,
+            "errors": []
+          },
+          "receiptHash": "6da077707632850fbe47ee743f89986013e09aabeca764a6a38083bc7ab32dc3",
+          "traceHash": "53143e0204b7761a7f0694bea68951fb0d5b7226105550618907036676f60f23"
+        },
+        {
+          "trial": 5,
+          "status": "completed",
+          "errorCategory": null,
+          "actualModel": "glm-5.3-flash",
+          "durationSeconds": 9.135,
+          "answer": "```json\n{\"accuracy\": 0.5, \"reportMatches\": false, \"correctMatches\": 2, \"totalSamples\": 4, \"reportedAccuracy\": 0.9}\n```",
+          "grade": {
+            "passed": true,
+            "errors": []
+          },
+          "receiptHash": "10c888863313b0b47aeb6bf0b9cb99adc9f066095877f5592ad24e89ad3ae596",
+          "traceHash": "f434acc37b5001d16a0fa915b4336369381dcd68b0ca161ccf1837dd0cb23012"
+        },
+        {
+          "trial": 6,
+          "status": "completed",
+          "errorCategory": null,
+          "actualModel": "glm-5.3-flash",
+          "durationSeconds": 9.34,
+          "answer": "{\"accuracy\":0.5,\"reportMatches\":false}",
+          "grade": {
+            "passed": true,
+            "errors": []
+          },
+          "receiptHash": "92c99560cb8524391435f4a6ed79fb22280c164a0a109372b721b733d197c613",
+          "traceHash": "ec4132e689ab8e036e252dcffb3629e98cf530ec3b5abe0db5165810e1b8d8d1"
+        },
+        {
+          "trial": 7,
+          "status": "completed",
+          "errorCategory": null,
+          "actualModel": "glm-5.3-flash",
+          "durationSeconds": 7.09,
+          "answer": "{\"accuracy\":0.5,\"reportMatches\":false}",
+          "grade": {
+            "passed": true,
+            "errors": []
+          },
+          "receiptHash": "c81cb7ac90e245bdb14a34ab9bf44fcaffb3681ae898cacf065e98a862596658",
+          "traceHash": "abfcb851aae951504a9784bb24ab615f0a356542faa1fe6b7cfeede399548023"
+        },
+        {
+          "trial": 8,
+          "status": "completed",
+          "errorCategory": null,
+          "actualModel": "glm-5.3-flash",
+          "durationSeconds": 8.973,
+          "answer": "{\"accuracy\":0.75,\"reportMatches\":false}",
+          "grade": {
+            "passed": false,
+            "errors": [
+              "Incorrect or missing field: accuracy"
+            ]
+          },
+          "receiptHash": "268fd6055a8d46bd7ffdb837d7b6694597f2caa0159ea92b537ea75c906c443c",
+          "traceHash": "bffce2f7ddad3092d4d800bef0ce9410392bead5e4739d1ffecc16dbbe3438de"
+        },
+        {
+          "trial": 9,
+          "status": "completed",
+          "errorCategory": null,
+          "actualModel": "glm-5.3-flash",
+          "durationSeconds": 9.027,
+          "answer": "```json\n{\"accuracy\": 0.5, \"matches\": 0.5, \"reportMatches\": false}\n{\"accuracy\": 0.5, \"reportMatches\": false}\n```",
+          "grade": {
+            "passed": false,
+            "errors": [
+              "Answer is not a single valid JSON object"
+            ]
+          },
+          "receiptHash": "c8376af8d3e27aff499d61a0879992458ebc9ceebe7abed27b54df95f8ce2bb1",
+          "traceHash": "fc94819c2e188e7b9b5a0905a442087d514fd1b5b1ba4cff6ec3cb8852e1fb85"
+        },
+        {
+          "trial": 10,
+          "status": "completed",
+          "errorCategory": null,
+          "actualModel": "glm-5.3-flash",
+          "durationSeconds": 7.493,
+          "answer": "{\"accuracy\":0.5,\"reportMatches\":false}",
+          "grade": {
+            "passed": true,
+            "errors": []
+          },
+          "receiptHash": "f2ce7a6f2a4a60ada18a0914266af3ccfeca42254f32adc6bd0d8c2efd5fd879",
+          "traceHash": "09de75dc034e907fceac18c79c94b2e76c752841c1ae06f61f6571f70f6f182e"
+        }
+      ]
+    },
+    {
+      "id": "af7c8553-eeb1-4de7-a155-896fd5de8ece",
+      "stage": "corrected-serialization-pilot",
+      "createdAt": "2026-10-03T11:42:17.583Z",
+      "agent": "codex",
+      "agentVersion": "codex-cli 0.156.1",
+      "requestedModel": "gpt-5.5",
+      "requestedProvider": null,
+      "protocolHash": "e842ce7f3919344d41810cb20106dee2ef8033d126bffc780bcd2d9910558512",
+      "codeHash": "58d0ee0df51dfd699d650beaf61e0bfab653d7e8b76497b0aa9735f0119e463c",
+      "instructionHashes": {
+        "system.md": "b35622fdb32d89e67473d94f66c5596951919a24e5124f197343ea173dda7458",
+        "manuscript-policy.md": "1abe50f727dad887ab50026fec2c8eeddd3c834fdbcc1567a08c84f62899ac96",
+        "web-policy.md": "b62da20db4cc9408a4ed63e295f3c2002c1c186b2c0ff904b4f5c7b2f9ed6237"
+      },
+      "host": {
+        "platform": "linux",
+        "architecture": "x64",
+        "node": "22.22.0"
+      },
+      "condition": "Exploratory numerical microtask; corrected protocol serialization",
+      "task": {
+        "id": "metrics-2",
+        "category": "numerical_correctness",
+        "input": {
+          "labels": [
+            0,
+            1,
+            1,
+            0
+          ],
+          "predictions": [
+            1,
+            1,
+            0,
+            0
+          ],
+          "reportedAccuracy": 0.9
+        },
+        "instruction": "Recalculate accuracy from predictions and determine whether reportedAccuracy is correct. Return accuracy and reportMatches.",
+        "expected": {
+          "accuracy": 0.5,
+          "reportMatches": false
+        }
+      },
+      "expectedTrials": 10,
+      "completedTrials": 10,
+      "passedTrials": 10,
+      "audit": {
+        "id": "af7c8553-eeb1-4de7-a155-896fd5de8ece",
+        "status": "complete",
+        "errors": [],
+        "expectedTrials": 10,
+        "completedTrials": 10,
+        "passedTrials": 10,
+        "fixtureOnly": false,
+        "scope": "Local consistency and grader recalculation only; no general research quality or adversarial-proof claim."
+      },
+      "trials": [
+        {
+          "trial": 1,
+          "status": "completed",
+          "errorCategory": null,
+          "actualModel": null,
+          "durationSeconds": 11.614,
+          "answer": "{\"accuracy\":0.5,\"reportMatches\":false}",
+          "grade": {
+            "passed": true,
+            "errors": []
+          },
+          "receiptHash": "2705e290f4dfbb6505a42ac92910ed005d198ef9d0ee4b1b0a1521926981b21e",
+          "traceHash": "9111818d5482821ba720ae9802c53202eb938917eb30db53d8d2567c32fa33dd"
+        },
+        {
+          "trial": 2,
+          "status": "completed",
+          "errorCategory": null,
+          "actualModel": null,
+          "durationSeconds": 9.908,
+          "answer": "{\"accuracy\":0.5,\"reportMatches\":false}",
+          "grade": {
+            "passed": true,
+            "errors": []
+          },
+          "receiptHash": "5fc3b581950891c03829c03870668c03e1773ba9a3bc62265887bdce0973f7d2",
+          "traceHash": "9073186f41222165c5bd74feed266fdcdfdebc9d88a9f56a0a13185878fee954"
+        },
+        {
+          "trial": 3,
+          "status": "completed",
+          "errorCategory": null,
+          "actualModel": null,
+          "durationSeconds": 14.411,
+          "answer": "{\"accuracy\":0.5,\"reportMatches\":false}",
+          "grade": {
+            "passed": true,
+            "errors": []
+          },
+          "receiptHash": "f9ea64cb467ba2c24bcd30b70c2ed4cc7e7b854da76c83375e20aa7d857f0dd4",
+          "traceHash": "f4a34b628c7419ac9001a046668084c87cf7620406feafa85e546ea3a393c90d"
+        },
+        {
+          "trial": 4,
+          "status": "completed",
+          "errorCategory": null,
+          "actualModel": null,
+          "durationSeconds": 12.432,
+          "answer": "{\"accuracy\":0.5,\"reportMatches\":false}",
+          "grade": {
+            "passed": true,
+            "errors": []
+          },
+          "receiptHash": "0495ef6a0f7aeb87a605b3d8e2984726a790c9109d457e9c0c57f4ecadff5605",
+          "traceHash": "64260af211d98d7d1f1079a9fd8e3c576e43be40294e40b4456d37a20daf48f3"
+        },
+        {
+          "trial": 5,
+          "status": "completed",
+          "errorCategory": null,
+          "actualModel": null,
+          "durationSeconds": 11.197,
+          "answer": "{\"accuracy\":0.5,\"reportMatches\":false}",
+          "grade": {
+            "passed": true,
+            "errors": []
+          },
+          "receiptHash": "864540961ae16ea099e58c70ba72bd02f72a64181929025ab0c961d2ed67e996",
+          "traceHash": "6e0f9337ce834a23c4e861e54fb974945e7bad825ca27f5fcca1b43c2c7319d5"
+        },
+        {
+          "trial": 6,
+          "status": "completed",
+          "errorCategory": null,
+          "actualModel": null,
+          "durationSeconds": 10.676,
+          "answer": "{\"accuracy\":0.5,\"reportMatches\":false}",
+          "grade": {
+            "passed": true,
+            "errors": []
+          },
+          "receiptHash": "14887225017ad640cfb30632ee766662f8015885f372c2e2f3b3090977ae6d30",
+          "traceHash": "290197b6a2ec07ce923afcca6e3ffc334f80e0e64bdf32245b6a189571750355"
+        },
+        {
+          "trial": 7,
+          "status": "completed",
+          "errorCategory": null,
+          "actualModel": null,
+          "durationSeconds": 9.643,
+          "answer": "{\"accuracy\":0.5,\"reportMatches\":false}",
+          "grade": {
+            "passed": true,
+            "errors": []
+          },
+          "receiptHash": "97e862186e7ea0f21595c67ee97808c5100d5a12a568fc89add2e0784ce16de0",
+          "traceHash": "655858ef72448ea8af88356252780f20490de629105a8fb7e10bb5968652f5cf"
+        },
+        {
+          "trial": 8,
+          "status": "completed",
+          "errorCategory": null,
+          "actualModel": null,
+          "durationSeconds": 10.185,
+          "answer": "{\"accuracy\":0.5,\"reportMatches\":false}",
+          "grade": {
+            "passed": true,
+            "errors": []
+          },
+          "receiptHash": "96cb90b52e3d13351c81fd91c7af60d747325f39b3ca9a1ae4a34ef873ad8df3",
+          "traceHash": "9381b2d2530eb053da85f03bd8d0bf0cec767608831f8587965c3475ee6bbde9"
+        },
+        {
+          "trial": 9,
+          "status": "completed",
+          "errorCategory": null,
+          "actualModel": null,
+          "durationSeconds": 9.098,
+          "answer": "{\"accuracy\":0.5,\"reportMatches\":false}",
+          "grade": {
+            "passed": true,
+            "errors": []
+          },
+          "receiptHash": "c269dc0dc11d0f3052fd54cfb22465afe1a6a59e195f0d4ebce8ae50fc004bda",
+          "traceHash": "25e8c0e10577817b38054e3e2dc608d8d3b45ff27fac1359e706171ca6df2c82"
+        },
+        {
+          "trial": 10,
+          "status": "completed",
+          "errorCategory": null,
+          "actualModel": null,
+          "durationSeconds": 7.672,
+          "answer": "{\"accuracy\":0.5,\"reportMatches\":false}",
+          "grade": {
+            "passed": true,
+            "errors": []
+          },
+          "receiptHash": "7782b998930a230e7658242a65cf065b8275ee4c23cfd8a889012c6fa244c964",
+          "traceHash": "b22edf5aa798e6db8ec3a461090f09500934ac8e2c37a6eb2007fc98d9e30f8c"
+        }
+      ]
+    }
+  ]
+}

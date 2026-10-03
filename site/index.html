@@ -1,0 +1,26 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>ResearchPi · From question to evidence</title>
+<meta name="description" content="An open-source research harness for ML, AI and computer science. Run reproducible studies and keep the evidence.">
+<meta property="og:title" content="ResearchPi"><meta property="og:description" content="Reproducible research, from question to evidence.">
+<meta property="og:image" content="https://rubenfb23.github.io/research-pi/assets/social-preview.png">
+<link rel="icon" href="assets/logo.svg" type="image/svg+xml"><link rel="stylesheet" href="style.css"><script src="app.js" defer></script>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+<header><a class="brand" href="./"><img src="assets/logo.svg" width="34" height="34" alt="">ResearchPi</a><nav aria-label="Main"><a href="#workflow">Workflow</a><a href="#start">Get started</a><a href="https://github.com/rubenfb23/research-pi">GitHub ↗</a></nav></header>
+<main id="main">
+<section class="hero"><div class="eyebrow">OPEN SOURCE · BUILT ON THE PI SDK</div><h1>From question<br>to <span>evidence.</span></h1><p class="lead">A research harness for machine learning, AI and computer science. Develop the study, run the experiment and keep a reproducible record.</p><div class="actions"><a class="button primary" href="https://github.com/rubenfb23/research-pi/releases">Install ResearchPi ↗</a><a class="button secondary" href="https://github.com/rubenfb23/research-pi/blob/main/docs/quickstart.md">Read the quickstart</a></div><div class="tags"><span>CLI: repi</span><span>10 seeds / configuration</span><span>MIT licensed</span></div></section>
+<section class="preview" aria-labelledby="preview-title"><div class="section-label"><h2 id="preview-title">One study. A complete record.</h2><span>Actual measurements</span></div><img src="assets/study.svg" width="1280" height="600" alt="Actual Wisconsin dataset study: two configurations, twenty measured runs with ten seeds each. Means and sample standard deviations on one fixed split."><div class="mobile-results"><!-- MEASURED_MOBILE_RESULTS --></div><p class="note">A small classification example with real data. It demonstrates reproducibility; it is not clinical validation or evidence of superiority over other agents. <a href="assets/capture-manifest.json">View capture provenance →</a></p></section>
+<section id="workflow"><div class="eyebrow">A SCIENTIFIC WORKFLOW</div><h2>Keep the reasoning connected<br>to the work.</h2><div class="cards"><article><span class="number">01</span><h3>Specify the study</h3><p>Define the question, assumptions, data, configurations, seeds and evaluation before confirmatory execution.</p></article><article><span class="number">02</span><h3>Execute and retain</h3><p>Run supported classification studies or a frozen Python adapter. Preserve attempts, predictions, metrics and source fingerprints.</p></article><article><span class="number">03</span><h3>Inspect the evidence</h3><p>Recalculate metrics, compare bibliographic metadata and connect manuscript numbers to their originating artifacts.</p></article></div></section>
+<section class="recording"><div class="section-label"><h2>Watch an actual run</h2><button id="play" type="button">Play study recording</button></div><pre id="terminal" tabindex="0" aria-label="Recorded scientific CLI output">$ repi --project ./wisconsin-study demo --dataset breast-cancer
+
+Play the recording to watch an actual twenty-fit study.
+No model account is used for this scientific execution path.</pre><p id="replay-status" class="note" role="status">Recorded CLI output. No commands are executed in your browser.</p></section>
+<section id="start" class="start"><div><div class="eyebrow">START IN YOUR TERMINAL</div><h2>Install. Open. Research.</h2><p>Native packages for Ubuntu/Debian, Windows and macOS. Node.js is included; Python 3.14 is required separately for experiments.</p><p class="note">Installers are unsigned; macOS packages are not notarized. Model connections use your provider account and its terms.</p></div><div class="commands"><code>repi</code><code>repi doctor</code><code>repi --project ./study demo --dataset breast-cancer</code><a href="https://github.com/rubenfb23/research-pi/blob/main/docs/workflows.md">Follow three reproducible workflows →</a></div></section>
+<section class="links"><a href="https://github.com/rubenfb23/research-pi/blob/main/docs/comparison.md"><strong>Compare the tools</strong><span>ResearchPi, Claude Code and Codex</span></a><a href="https://github.com/rubenfb23/research-pi/blob/main/docs/status.md"><strong>Inspect verification</strong><span>Implemented, tested and pending</span></a><a href="https://github.com/rubenfb23/research-pi/blob/main/ROADMAP.md"><strong>Build with us</strong><span>Scientific adapters and roadmap</span></a></section>
+</main>
+<footer><span>ResearchPi · Open-source research tooling</span><a href="https://github.com/rubenfb23/research-pi/blob/main/LICENSE">MIT license</a><a href="https://github.com/rubenfb23/research-pi/blob/main/THIRD_PARTY_NOTICES.md">Pi and third-party notices</a></footer>
+</body></html>

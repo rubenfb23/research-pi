@@ -79,7 +79,7 @@ function validateMeasurement(m: Measurement, frozen: FrozenProtocol, method: Met
   }
   const expectedTest = Math.ceil(frozen.protocol.dataset.nSamples*frozen.protocol.split.testFraction);
   if (m.testSamples !== expectedTest || m.predictions.labels.length !== expectedTest
-    || m.trainSamples + m.testSamples !== frozen.protocol.dataset.nSamples) throw new Error('Dataset size mismatch');
+    || m.trainSamples + m.testSamples !== frozen.protocol.dataset.nSamples || m.predictions.testIndices.some(i=>i>=frozen.protocol.dataset.nSamples)) throw new Error('Dataset size mismatch');
   if (m.environment.device !== 'cpu' || m.environment.threads !== 1 || !Number.isFinite(m.durationSeconds) || m.durationSeconds < 0) throw new Error('Invalid runtime environment');
   const pinned = readFileSync(join(ROOT, 'requirements.lock'), 'utf8');
   for (const [pkg, key] of [['numpy', 'numpy'], ['scikit-learn', 'scikitLearn'], ['scipy', 'scipy']] as const) {

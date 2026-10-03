@@ -15,7 +15,9 @@ const data = process.platform === 'win32' ? join(process.env.LOCALAPPDATA, 'Rese
   : join(process.env.XDG_DATA_HOME || join(homedir(), '.local/share'), 'research-pi');
 const env = { ...process.env, LANG: 'es_ES.UTF-8', LC_ALL: 'es_ES.UTF-8' }; delete env.RESEARCH_PI_DATA_DIR;
 function run(args, input = '') {
-  const result = spawnSync(exe, args, { cwd: project, encoding: 'utf8', input, env,
+  // cmd.exe otherwise splits paths and descriptions containing spaces.
+  const invocationArgs = process.platform === 'win32' ? args.map(arg => '"' + String(arg).replace(/"/g, '""') + '"') : args;
+  const result = spawnSync(exe, invocationArgs, { cwd: project, encoding: 'utf8', input, env,
     shell: process.platform === 'win32', timeout: 30000 });
   assert.equal(result.status, 0, result.error?.message || result.stderr);
   return result;
@@ -24,6 +26,12 @@ try {
   assert.match(run(['--help']).stdout, /Usage: repi/);
   assert.equal(run(['--version']).stdout.trim(), JSON.parse(readFileSync(join(app, 'package.json'), 'utf8')).version);
   assert(existsSync(join(app, 'LICENSE')));
+  assert(existsSync(join(app,'assets/banner.svg')));assert(existsSync(join(app,'examples/custom-classifier.py')));
+  const diagnostic=JSON.parse(run(['doctor']).stdout);assert.equal(diagnostic.connection.modelAccessVerified,false);
+  const bench=JSON.parse(run(['bench','run','--agent','fixture','--tasks','metrics-2','--trials','1']).stdout);assert.equal(bench.fixtureOnly,true);assert.equal(bench.completedTrials,1);
+  assert.equal(JSON.parse(run(['bench','audit',bench.id]).stdout).status,'complete');
+  const initialized=JSON.parse(run(['--project',join(project,'real-study'),'init','--custom-method',join(app,'examples/custom-classifier.py'),'--method-description','Installed adapter fixture']).stdout);
+  assert.equal(initialized.protocol.dataset.kind,'breast_cancer');assert.equal(initialized.protocol.trainingSeeds.length,10);assert.equal(initialized.protocol.methods.length,3);
   assert(existsSync(join(app, 'docs/Pi-LICENSE.txt')));
   const policy = readFileSync(join(app, 'resources/manuscript-policy.md'), 'utf8').trim();
   const promptModule = pathToFileURL(join(app, 'dist/prompts.js')).href;

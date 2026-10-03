@@ -1,0 +1,81 @@
+{
+  "capturedAt": "2026-10-03T11:43:49.095Z",
+  "version": "1.5.0",
+  "command": "repi --project ./wisconsin-study demo --dataset breast-cancer",
+  "dataset": {
+    "kind": "breast_cancer",
+    "nSamples": 569,
+    "nFeatures": 30,
+    "sourceUrl": "https://archive.ics.uci.edu/dataset/17/breast+cancer+wisconsin+diagnostic",
+    "license": "CC BY 4.0"
+  },
+  "source": {
+    "revision": "0035a3e757d9007dc1b3e58e17059107cba54256",
+    "dirty": true
+  },
+  "protocolHash": "46d3d9402f5fb299064a446e7082e98f176a696ae0ec62690ca280f14fbd55fa",
+  "codeHash": "58d0ee0df51dfd699d650beaf61e0bfab653d7e8b76497b0aa9735f0119e463c",
+  "tableHash": "40e7a66e47744d0470b01b847a326dbf822ae49210fae52fea1573f32fd9ac5e",
+  "evidenceHash": "4bd9c2281067b466424c910c315a2a16ed18e3129ec5d1a3368da598de9b33cb",
+  "rows": [
+    {
+      "methodId": "sgd-logistic",
+      "configHash": "f5531d3a0b139b301ed5cb023d650d1c2aac9409e56fab5c96c2e0367a58f86d",
+      "metrics": {
+        "accuracy": {
+          "n": 10,
+          "mean": 0.9692307692307691,
+          "sampleSd": 0.009998886055723659
+        },
+        "log_loss": {
+          "n": 10,
+          "mean": 0.09890323670373122,
+          "sampleSd": 0.015482751798289417
+        }
+      },
+      "receiptIds": [
+        "5f63412f-8342-42a9-8fc0-308643022d1a",
+        "9ae9d3e1-9366-4be4-95e0-fbf0df9d6fd5",
+        "bcf9aed1-b074-4365-8c19-0d850318993c",
+        "4451eb5e-3223-4966-9a9a-17d91473a599",
+        "e5c3bd70-4519-4681-98b5-0be9f58ee49c",
+        "87eb4744-18d0-43c7-b62a-607b24c1b914",
+        "4dcb83f4-543e-4aef-8ec9-d5b1ab8bb2cd",
+        "395fda5c-c379-4963-a10e-e31e52504be7",
+        "e1c83648-9d61-4ad2-ad0f-8cb1451ab1dd",
+        "04e4226d-61f8-46d7-a6a8-d3e309cb33c8"
+      ]
+    },
+    {
+      "methodId": "random-forest",
+      "configHash": "5aa0270ac1237ec9183191c149c92cee83fb54a6c80406e187e1e571980b9253",
+      "metrics": {
+        "accuracy": {
+          "n": 10,
+          "mean": 0.9482517482517482,
+          "sampleSd": 0.009998886055723624
+        },
+        "log_loss": {
+          "n": 10,
+          "mean": 0.10813817028233204,
+          "sampleSd": 0.005314486968761062
+        }
+      },
+      "receiptIds": [
+        "3b9b4539-e46c-4254-8247-95d4e6140e3c",
+        "0301e1ce-6a5b-42cc-959f-f873214894ec",
+        "d2de314d-565b-4517-9b5b-9539f3603b85",
+        "9ccd417c-a329-4c01-b58a-cbcb5a6fda4c",
+        "82a4150b-95fc-4e00-aa57-d66ff9bea0e7",
+        "bc2c2468-5a71-4847-bae9-87e026b52a22",
+        "e0be8197-bf28-4e82-9a75-6400a03932fd",
+        "d3e38179-2b27-4b95-a21e-01ce91776696",
+        "ebb93e30-1b72-4e24-80dc-6669aef53f70",
+        "6e90ac66-d8c2-460d-a403-41d73a398d04"
+      ]
+    }
+  ],
+  "totalRuns": 20,
+  "auditStatus": "complete",
+  "scope": "Actual local measurements; training variability on one fixed dataset/split. Full receipts retained locally and recreated in CI. No clinical or agent-comparison claim."
+}
