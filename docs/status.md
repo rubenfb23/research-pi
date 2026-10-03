@@ -1,6 +1,6 @@
 # Implementation and verification status
 
-Updated 2026-10-02. ResearchPi uses Pi SDK 1.0.0 without modifying its core. Original code is MIT licensed; Pi and dependency notices are retained separately. The repository is public at [rubenfb23/research-pi](https://github.com/rubenfb23/research-pi).
+Updated 2026-10-03. ResearchPi uses Pi SDK 1.0.0 without modifying its core. Original code is MIT licensed; Pi and dependency notices are retained separately. The repository is public at [rubenfb23/research-pi](https://github.com/rubenfb23/research-pi).
 
 ## Current capabilities
 
@@ -49,7 +49,7 @@ Native package tests verified help/version, chat, SDK tool calls, resume, invoca
 
 OpenCode uses native Pi providers rather than an OpenCode local server. Tests simulate seven provider/API routes, verify key/client/session headers, independent credential storage, cancellation, actual bounded tool execution and stable session IDs after resume. CLI checks cover both catalogs, environment-key setup, model switching and rejection of piped keys. Native smoke tests check both catalogs. See [OpenCode](opencode.md).
 
-Version 1.4.0 passes 64 local tests, including twenty actual CPU fits. English-interface checks exercise fresh connection setup under a Spanish locale, English help/errors and paper/resource output. A separate pseudo-terminal check verified no-argument startup of the globally linked `repi`, fresh English onboarding under `es_ES.UTF-8`, offline chat and clean exit. Native smoke tests exercise the actual installed onboarding and help. Release publication runs scientific and all four native installer checks before uploading four packages, four checksums and a source-commit manifest. See [releases](releases.md).
+Version 1.4.1 passes 66 local tests, including twenty actual CPU fits. English-interface checks exercise fresh connection setup under a Spanish locale, English help/errors and paper/resource output. A separate pseudo-terminal check verified no-argument startup of the globally linked `repi`, fresh English onboarding under `es_ES.UTF-8`, offline chat and clean exit. Native smoke tests exercise the actual installed onboarding and help. Release publication runs scientific and all four native installer checks before uploading four packages, four checksums and a source-commit manifest. See [releases](releases.md).
 
 ## Terminal and prompt 1.0.0
 
@@ -94,3 +94,7 @@ Automatic full bibliographic certification, OCR, screenshots/image interpretatio
 The SDK default resource loader, session runtime and native interactive interface replace the restricted host loader. Read/write/edit/search/list, shell tools, codemode, tool_search, configured MCP, skills/extensions/templates/themes/context, automatic compaction, model retries and steering/follow-up queues are activated. JSONL events and RPC are exposed. Native `/new`, `/resume`, `/chats`, `/name`, `/fork`, `/clone` and `/tree` accompany CLI conversation creation, listing/search, opening, naming, inspection and forks. Project histories are imported without deleting originals; cross-project switches rebind scientific tools and mandatory policy.
 
 Twelve new integration tests exercise actual file/shell actions, codemode, a local MCP server, deferred discovery, resource reloads, legacy import, CLI/native conversation controls, SDK project switches, automatic compaction/retries/queues, JSON and RPC. Native POSIX and simple keyboard tests use real pseudo-terminals. Installed-runtime smoke checks require native file tools, codemode, new/resume and mandatory policy on each package platform. These checks do not establish real-account model research judgment, every third-party extension, remote MCP compatibility or native Windows keyboard behavior. [Pi capabilities](pi-features.md).
+
+## Clipboard correction 1.4.1
+
+Desktop clipboard copying requires Wayland/X11 utilities on Linux. `repi setup --clipboard` prepares per-user helpers through apt without sudo, and `repi clipboard` inspects prerequisites without reading clipboard data. Linux packages now declare `wl-clipboard` and `xclip` dependencies. Native `/copy`, Ctrl+X and mouse selection, exact Unicode/multiline transfer and simple-mode `/copy` have regression coverage. Local real Wayland copy/readback passed and the previous text clipboard was restored. Installed checks verify Linux helper availability; these checks do not certify real desktop clipboard access on Windows/macOS or every terminal. [Clipboard details](clipboard.md).

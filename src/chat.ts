@@ -9,7 +9,7 @@ import { ROOT } from './paths.js';
 import { readJson } from './storage.js';
 import { join } from 'node:path';
 import { completeChat } from './input-completion.js';
-import { InteractiveMode, runPrintMode } from '@earendil-works/pi-coding-agent';
+import { InteractiveMode, runPrintMode, copyToClipboard } from '@earendil-works/pi-coding-agent';
 import { Conversations, piDirectory } from './conversations.js';
 
 const help = [
@@ -29,6 +29,7 @@ const help = [
   '/tree                    Show the conversation tree',
   '/export <path>           Export HTML or JSONL',
   '/reload                  Reload skills, extensions and project instructions',
+  '/copy                    Copy the last assistant answer to the system clipboard',
   '/exit                    Close the session',
   'Tab completes; double Tab lists matches. Up/Down browse project history.',
   'Start a line with a space to omit it from input history.',
@@ -125,6 +126,11 @@ export async function chat(project: string, prompt?: string, options: { offline?
       if (text === '/exit' || text === '/quit') break;
       try {
         if (text === '/help') { ui.message(help); continue; }
+        if (text === '/copy') {
+          const answer=opened.session.getLastAssistantText();
+          if (!answer) throw new Error('No assistant answer to copy yet.');
+          await copyToClipboard(answer); ui.message('Copied last assistant answer to clipboard.'); continue;
+        }
         if (text === '/new' || text.startsWith('/new ')) {
           opened.savePointer(); await opened.runtime.newSession();
           if (text.slice(4).trim()) opened.session.setSessionName(text.slice(4).trim());

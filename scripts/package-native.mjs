@@ -49,7 +49,7 @@ if (target === 'deb') {
   writeFileSync(join(packageRoot, 'usr', 'bin', 'repi'), unixCommand(install), { mode: 0o755 });
   mkdirSync(join(packageRoot, 'DEBIAN'), { recursive: true });
   const arch = process.arch === 'x64' ? 'amd64' : 'arm64';
-  writeFileSync(join(packageRoot, 'DEBIAN', 'control'), `Package: research-pi\nVersion: ${version}\nSection: science\nPriority: optional\nArchitecture: ${arch}\nMaintainer: ResearchPi <research-pi@users.noreply.github.com>\nDepends: libc6 (>= 2.28), libstdc++6, ca-certificates\nRecommends: python3 (>= 3.14), python3-venv\nHomepage: https://github.com/rubenfb23/research-pi\nDescription: ResearchPi scientific command line harness on the Pi SDK\n Includes Node and production dependencies. Start with repi.\n Python 3.14 is optional for the experiment runner.\n`);
+  writeFileSync(join(packageRoot, 'DEBIAN', 'control'), `Package: research-pi\nVersion: ${version}\nSection: science\nPriority: optional\nArchitecture: ${arch}\nMaintainer: ResearchPi <research-pi@users.noreply.github.com>\nDepends: libc6 (>= 2.28), libstdc++6, ca-certificates, wl-clipboard, xclip\nRecommends: python3 (>= 3.14), python3-venv\nHomepage: https://github.com/rubenfb23/research-pi\nDescription: ResearchPi scientific command line harness on the Pi SDK\n Includes Node and production dependencies. Start with repi.\n Python 3.14 is optional for the experiment runner.\n`);
   output = join(release, `research-pi_${version}_${arch}.deb`);
   run('dpkg-deb', ['--root-owner-group', '--build', packageRoot, output]);
 } else if (target === 'macos') {
