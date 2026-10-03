@@ -15,7 +15,9 @@ const data = process.platform === 'win32' ? join(process.env.LOCALAPPDATA, 'Rese
   : join(process.env.XDG_DATA_HOME || join(homedir(), '.local/share'), 'research-pi');
 const env = { ...process.env, LANG: 'es_ES.UTF-8', LC_ALL: 'es_ES.UTF-8' }; delete env.RESEARCH_PI_DATA_DIR;
 function run(args, input = '') {
-  const result = spawnSync(exe, args, { cwd: project, encoding: 'utf8', input, env,
+  // cmd.exe otherwise splits paths and descriptions containing spaces.
+  const invocationArgs = process.platform === 'win32' ? args.map(arg => '"' + String(arg).replace(/"/g, '""') + '"') : args;
+  const result = spawnSync(exe, invocationArgs, { cwd: project, encoding: 'utf8', input, env,
     shell: process.platform === 'win32', timeout: 30000 });
   assert.equal(result.status, 0, result.error?.message || result.stderr);
   return result;
