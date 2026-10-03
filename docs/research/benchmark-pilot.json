@@ -253,7 +253,7 @@
           "trial": 1,
           "status": "completed",
           "errorCategory": null,
-          "actualModel": "gpt-5.5",
+          "actualModel": null,
           "durationSeconds": 8.923,
           "answer": "{\"accuracy\":0.5,\"reportMatches\":false}",
           "grade": {
@@ -261,7 +261,9 @@
             "errors": []
           },
           "receiptHash": "49a5232717e363c4bd04f7cff9dbcf055d976efdd47b0b3dc624f0b5d0e040bb",
-          "traceHash": "fbd74aa210e4da0c8eb29433c0fb636c3486d00f7ec31022e484ef6d1c7cfa2b"
+          "traceHash": "fbd74aa210e4da0c8eb29433c0fb636c3486d00f7ec31022e484ef6d1c7cfa2b",
+          "legacyReportedModel": "gpt-5.5",
+          "modelFieldNote": "Earlier runner echoed the requested ID; it is not an observed model."
         }
       ]
     },
