@@ -18,6 +18,8 @@ These are **controlled SDK profiles**, not untouched product CLIs. Native shell,
 
 Use the paired conditions to distinguish research instructions from the additional research tools. A separate product comparison with Claude Code/Codex remains in the original microtask adapter. Their adapters do not support a controlled DeepSeek comparison; passing a model label would not make it one.
 
+`pi-research` and `repi` are ablations of ResearchPi, not independent products: **ResearchPi without** and **with additional scientific tools**. Names are retained in stored protocols. The [seven-task DeepSeek pilot](research/research-benchmark-deepseek-full-pilot.md) documents near-ceiling performance and output-contract defects that must be corrected before confirmatory evaluation.
+
 ## Tasks and scoring
 
 Seven generated synthetic tasks cover:

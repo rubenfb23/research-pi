@@ -1,0 +1,255 @@
+{
+  "id": "bb5e60a2-2af8-40a3-99f9-a403a582f39b",
+  "protocolHash": "aa1836b055c5878385ee03831f0e828301545a4afc0762ffe66c4f8e4d514aca",
+  "status": "complete",
+  "split": "dev",
+  "fixtureOnly": false,
+  "conditions": [
+    {
+      "harness": "pi",
+      "model": "deepseek-v4.1-flash",
+      "provider": "opencode-go",
+      "planned": 7,
+      "attempted": 7,
+      "completed": 7,
+      "passed": 6,
+      "score": 0.9523809523809523,
+      "categories": {
+        "numerical_evidence": {
+          "planned": 1,
+          "completed": 1,
+          "passed": 1,
+          "score": 1
+        },
+        "failure_recovery": {
+          "planned": 1,
+          "completed": 1,
+          "passed": 0,
+          "score": 0.6666666666666666
+        },
+        "experimental_design": {
+          "planned": 1,
+          "completed": 1,
+          "passed": 1,
+          "score": 1
+        },
+        "statistical_interpretation": {
+          "planned": 1,
+          "completed": 1,
+          "passed": 1,
+          "score": 1
+        },
+        "causal_reasoning": {
+          "planned": 1,
+          "completed": 1,
+          "passed": 1,
+          "score": 1
+        },
+        "literature_support": {
+          "planned": 1,
+          "completed": 1,
+          "passed": 1,
+          "score": 1
+        },
+        "executed_replication": {
+          "planned": 1,
+          "completed": 1,
+          "passed": 1,
+          "score": 1
+        }
+      },
+      "medianSeconds": 10.413,
+      "reportedTokens": 63682,
+      "requests": 29,
+      "medianFirstDeltaMs": 1636.699087,
+      "medianFirstTextMs": 1608.0744839999988,
+      "estimatedMedianOutputTokensPerSecond": 254.23276966995283,
+      "catalogCostUsd": 0.006664116000000001,
+      "meanCatalogCostPerSuccessUsd": 0.0011106860000000003
+    },
+    {
+      "harness": "pi-research",
+      "model": "deepseek-v4.1-flash",
+      "provider": "opencode-go",
+      "planned": 7,
+      "attempted": 7,
+      "completed": 7,
+      "passed": 5,
+      "score": 0.9166666666666666,
+      "categories": {
+        "numerical_evidence": {
+          "planned": 1,
+          "completed": 1,
+          "passed": 1,
+          "score": 1
+        },
+        "failure_recovery": {
+          "planned": 1,
+          "completed": 1,
+          "passed": 0,
+          "score": 0.6666666666666666
+        },
+        "experimental_design": {
+          "planned": 1,
+          "completed": 1,
+          "passed": 1,
+          "score": 1
+        },
+        "statistical_interpretation": {
+          "planned": 1,
+          "completed": 1,
+          "passed": 0,
+          "score": 0.75
+        },
+        "causal_reasoning": {
+          "planned": 1,
+          "completed": 1,
+          "passed": 1,
+          "score": 1
+        },
+        "literature_support": {
+          "planned": 1,
+          "completed": 1,
+          "passed": 1,
+          "score": 1
+        },
+        "executed_replication": {
+          "planned": 1,
+          "completed": 1,
+          "passed": 1,
+          "score": 1
+        }
+      },
+      "medianSeconds": 11.547,
+      "reportedTokens": 187084,
+      "requests": 32,
+      "medianFirstDeltaMs": 1620.1028750000007,
+      "medianFirstTextMs": 1644.4223665000006,
+      "estimatedMedianOutputTokensPerSecond": 247.5244677351283,
+      "catalogCostUsd": 0.00930177,
+      "meanCatalogCostPerSuccessUsd": 0.0018603539999999998
+    },
+    {
+      "harness": "repi",
+      "model": "deepseek-v4.1-flash",
+      "provider": "opencode-go",
+      "planned": 7,
+      "attempted": 7,
+      "completed": 7,
+      "passed": 6,
+      "score": 0.9523809523809523,
+      "categories": {
+        "numerical_evidence": {
+          "planned": 1,
+          "completed": 1,
+          "passed": 1,
+          "score": 1
+        },
+        "failure_recovery": {
+          "planned": 1,
+          "completed": 1,
+          "passed": 0,
+          "score": 0.6666666666666666
+        },
+        "experimental_design": {
+          "planned": 1,
+          "completed": 1,
+          "passed": 1,
+          "score": 1
+        },
+        "statistical_interpretation": {
+          "planned": 1,
+          "completed": 1,
+          "passed": 1,
+          "score": 1
+        },
+        "causal_reasoning": {
+          "planned": 1,
+          "completed": 1,
+          "passed": 1,
+          "score": 1
+        },
+        "literature_support": {
+          "planned": 1,
+          "completed": 1,
+          "passed": 1,
+          "score": 1
+        },
+        "executed_replication": {
+          "planned": 1,
+          "completed": 1,
+          "passed": 1,
+          "score": 1
+        }
+      },
+      "medianSeconds": 12.359,
+      "reportedTokens": 185693,
+      "requests": 30,
+      "medianFirstDeltaMs": 1904.8221055,
+      "medianFirstTextMs": 1726.6610120000005,
+      "estimatedMedianOutputTokensPerSecond": 261.59161028313446,
+      "catalogCostUsd": 0.008266062000000001,
+      "meanCatalogCostPerSuccessUsd": 0.0013776770000000001
+    }
+  ],
+  "comparisons": [
+    {
+      "model": "deepseek-v4.1-flash",
+      "baseline": "pi",
+      "harness": "pi-research",
+      "deltaPercentagePoints": -3.57142857142857,
+      "descriptiveTaskClusterBootstrap95": null,
+      "uncertaintyScope": "Task-cluster percentile bootstrap on this fixed generated suite, conditional on settings; not population/general scientific superiority. Fewer than three tasks, fewer than two repeats, or incomplete conditions return null."
+    },
+    {
+      "model": "deepseek-v4.1-flash",
+      "baseline": "pi",
+      "harness": "repi",
+      "deltaPercentagePoints": 0,
+      "descriptiveTaskClusterBootstrap95": null,
+      "uncertaintyScope": "Task-cluster percentile bootstrap on this fixed generated suite, conditional on settings; not population/general scientific superiority. Fewer than three tasks, fewer than two repeats, or incomplete conditions return null."
+    }
+  ],
+  "settings": {
+    "provider": "opencode-go",
+    "thinking": "off",
+    "temperature": 0.2,
+    "timeoutSeconds": 150,
+    "maxRequests": 10,
+    "maxOutputTokens": 4096,
+    "maxReportedTokens": 120000
+  },
+  "expectedTrials": 21,
+  "attemptedTrials": 21,
+  "receiptHashes": [
+    "7a92b47f3ab741c2de9b1cfdc28ac9a3e9795589851060ae8dd11d05cb89a578",
+    "17d43664b2e713f11864e42cbba82ca08f23bbaa4c4aa2d741729979612c34e7",
+    "b084fe409e231561c6e691e2da77da38cf87fb900c51ffc9b146c4f3d135b81d",
+    "835900f207686b35584ffa1e981bb905ccf98fc2e88ad562bf39a0da2d6bde3a",
+    "f91119764659f5ede476f7aba709ace34dfe61175e9221d3e49be5407e866307",
+    "3592e17ea793905523fc9c6319197e179ff6a630eeed81f1b5d2aea14bd5a598",
+    "43f7d9c0f35f675194d4ae1554ccb46967c0015473bab0d053017382b5e5c811",
+    "bc99c401a8dd572c8d75033348a4187ab5b2236269715fa0ccf0bda7721b1c0e",
+    "8d0eb181f65e83616543afe60e35b835c790c767e6fdf8e968b3df228e22a404",
+    "d8501be2dbc714423e29feebd7c200af32f574da0b3187ec92f19af550717818",
+    "3aa998041c9f32e1ad04024ce66e6136203aa0e5f918675c191972fa3ea00bca",
+    "a6a638aa84324d27ff4b8bec792fbc5fdd995405d7b037cabc5f2c0b4e8c5b46",
+    "ff7ca9cef855d744401fa96ba9b44f24b4cadac4b6838664227506b8f74155d6",
+    "643633930e951dc112d7486844bf5f2d294daac512e7360e27f05de4292d7f4d",
+    "c62e268477a1dc174eccce35f6d199aade66b3277a252aae70b567a46ea60352",
+    "7d675117c7284e41411ae4c526b6e9f4a6939f23fe862aaad9907bc1aace1a8d",
+    "3525955f22c261d69406f077a9a0100647458b096c4a6907be88e309822aeaf6",
+    "055ae14ed5a1b5d5571c6bd55fa510eb822a100bc57536130eda745fe3bdb4e7",
+    "a681e441fb4c15cf49eb72a26d5046fbd3f07764baf5ac2af717f060ec593160",
+    "ddc0522957bb204c49fd6cb022d1837dcd33a22c2937dbdc255e642dbdb538f7",
+    "6fb3ef8835681a289392d6d72f44bba61dbca8bbaa6f16eefb1c62abb95b7dce"
+  ],
+  "scope": "Seven synthetic research workflow tasks, including a tiny independently reexecuted study. Does not establish real-paper replication, originality, scientific expertise or PhD equivalence.",
+  "interpretation": "Observed results on this generated synthetic suite. No superiority, discovery or PhD-equivalence claim. Cost is catalog-priced, never independently verified billing. Missing telemetry remains null.",
+  "publicationScope": "Aggregate results only; private traces, reasoning, credentials and workspace paths are not published. All 21 attempts completed and local consistency audit passed. Aggregate exports do not enable independent evidence auditing.",
+  "knownEvaluationLimitations": [
+    "seed-recovery expects boolean complete but task instructions omit its type; all profiles submitted arrays while correctly identifying missing and duplicate seeds.",
+    "paired-uncertainty rejects six-decimal rounding under absolute tolerance 1e-8; requested numerical precision was not disclosed in the task.",
+    "One repeat per task/profile; no repeat-based uncertainty interval or scientific superiority claim."
+  ]
+}
