@@ -35,6 +35,7 @@ jobs:
       - run: node repi --project examples/ci-real-study demo --dataset breast-cancer
       - run: node repi --project examples/ci-real-study audit
       - run: node repi --project examples/ci-bench bench run --agent fixture
+      - run: node repi --project examples/ci-research-bench bench research run --fixture
       - run: node scripts/build-site.mjs
       - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
         if: always()
@@ -44,5 +45,6 @@ jobs:
             examples/ci-demo/.research-pi/
             examples/ci-real-study/.research-pi/
             examples/ci-bench/.research-pi/
+            examples/ci-research-bench/.research-pi/
           include-hidden-files: true
           retention-days: 7

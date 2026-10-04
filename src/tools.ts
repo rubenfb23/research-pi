@@ -7,11 +7,12 @@ import { projectStatus } from './storage.js';
 import { draftPaper, outlinePaper, venueProfiles } from './papers.js';
 import { ensureExperiments } from './setup.js';
 import {ReferenceVerifier} from './references.js';
+import {researchMetricTools} from './research-metrics.js';
 import { webTools } from './web-tools.js';
 
 const result = (data: unknown) => ({ content: [{ type: 'text' as const, text: JSON.stringify(data) }], details: {} });
 export function researchTools(project: string): ToolDefinition[] {
-  return [
+  return [...researchMetricTools(),
     ...webTools(project),
     defineTool({name:'verify_reference',label:'Verify bibliographic metadata',description:'Resolve a DOI and compare title, complete authors, venue, volume, pages and year against Crossref/DataCite. Retain sources and per-field conflicts/pending checks. Metadata compatibility does not establish claim support.',parameters:Type.Object({referenceJson:Type.String({maxLength:12000})}),
       async execute(_id,params,signal) {return result(await new ReferenceVerifier(project).verify(JSON.parse(params.referenceJson),signal));}}),

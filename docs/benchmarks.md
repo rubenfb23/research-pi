@@ -1,5 +1,7 @@
 # Research microtask benchmark
 
+For controlled Pi/Pi-with-research-instructions/ResearchPi comparisons, submitted artifacts and independently reexecuted study code, use the new [research workflow track](research-benchmark.md): `repi bench research run`. It supports the configured OpenCode Go DeepSeek model and explicit multi-model matrices, with separate development/generated-validation conditions and an offline visual report.
+
 The initial suite contains **twenty synthetic, closed-input tasks** across seed coverage, numerical correctness, leakage, causal claim scope and bibliographic compatibility. It is a constrained microtask evaluation, not a benchmark of complete papers, experiments or research expertise. Each condition defaults to ten independent trials per task. Trial IDs are repetitions, not controllable model RNG seeds.
 
 ## Verify the evaluator

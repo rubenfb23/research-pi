@@ -20,6 +20,10 @@ import { SessionManager, runRpcMode } from '@earendil-works/pi-coding-agent';
 import {benchTasks,runBenchmark,auditBenchmark,type BenchOptions} from './benchmark.js';
 import {ReferenceVerifier,type BibliographicReference} from './references.js';
 import {doctor} from './doctor.js';
+import {runResearchBenchmark,auditResearchBenchmark} from './research-benchmark.js';
+import {researchTasks} from './research-bench-tasks.js';
+import type {ResearchHarness} from './research-bench-worker.js';
+import type {ThinkingLevel} from './preferences.js';
 import { configureClipboard, clipboardStatus, ensureClipboardTools } from './clipboard.js';
 
 configureClipboard();
@@ -139,6 +143,20 @@ program.command('disconnect').argument('<connection>', connectionNames).action(a
   console.log('Local credential removed. Environment variables and provider authorization are managed separately.');
 });
 const bench=program.command('bench').description('Run a frozen research microtask evaluation with real agent CLIs');
+const researchBench=bench.command('research').description('Controlled same-model research workflows with submitted artifacts');
+researchBench.command('tasks').option('--split <id>','dev or generated validation','dev').option('--seed <n>','task generation seed','20261004').action(opts=>{
+ if(!['dev','validation'].includes(opts.split))throw new Error('Choose dev or validation.');
+ console.log(JSON.stringify(researchTasks(opts.split,Number(opts.seed)).map(({expected,files,...task})=>({...task,inputFiles:Object.keys(files)})),null,2));
+});
+researchBench.command('audit').argument('<id>').action(id=>{const result=auditResearchBenchmark(project(),id);console.log(JSON.stringify(result,null,2));if(result.status!=='complete')process.exitCode=1;});
+researchBench.command('run').option('--harnesses <ids>','pi,pi-research,repi','pi,pi-research,repi').option('--models <ids>','comma-separated models; defaults to the active model').option('--provider <id>','defaults to the active provider')
+ .option('--split <id>','dev for tuning; validation for separate generated cases','dev').option('--seed <n>','task generator seed','20261004').option('--trials <n>','independent attempts per task and condition','10').option('--tasks <ids>','comma-separated task IDs')
+ .option('--timeout <seconds>','per-attempt deadline','120').option('--max-requests <n>','provider requests per attempt','6').option('--max-output-tokens <n>','requested output limit per response','4096').option('--max-reported-tokens <n>','SDK token threshold checked between requests','60000')
+ .option('--thinking <level>','common requested effort','off').option('--temperature <n>','common requested temperature','0.2').option('--fixture','stored-reference smoke, no model calls')
+ .action(async opts=>{const controller=new AbortController(),stop=()=>controller.abort();process.once('SIGINT',stop);try{
+  const result=await runResearchBenchmark(project(),{harnesses:opts.harnesses.split(',') as ResearchHarness[],models:opts.models?.split(','),provider:opts.provider,split:opts.split,seed:Number(opts.seed),trials:Number(opts.trials),tasks:opts.tasks?.split(','),timeoutSeconds:Number(opts.timeout),maxRequests:Number(opts.maxRequests),maxOutputTokens:Number(opts.maxOutputTokens),maxReportedTokens:Number(opts.maxReportedTokens),thinking:opts.thinking as ThinkingLevel,temperature:Number(opts.temperature),fixture:!!opts.fixture},controller.signal);
+  console.log(JSON.stringify(result,null,2));if(result.status!=='complete')process.exitCode=controller.signal.aborted?130:1;
+ }finally{process.removeListener('SIGINT',stop);}});
 bench.command('tasks').action(()=>console.log(JSON.stringify(benchTasks().map(({expected,...task})=>task),null,2)));
 bench.command('audit').argument('<id>').action(id=>{const report=auditBenchmark(project(),id);console.log(JSON.stringify(report,null,2));if(report.status!=='complete')process.exitCode=1;});
 bench.command('run').requiredOption('--agent <id>','repi, claude, codex or fixture').option('--trials <n>','independent trials per task','10').option('--tasks <ids>','comma-separated task IDs')

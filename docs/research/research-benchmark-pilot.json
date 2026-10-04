@@ -1,0 +1,166 @@
+{
+  "id": "b5ea0421-7019-4abf-9b44-8c8251fba317",
+  "protocolHash": "74539f5307fcceed478ca365e262c3320d962768a625f33730bb58a3d68e5925",
+  "status": "complete",
+  "split": "dev",
+  "fixtureOnly": false,
+  "conditions": [
+    {
+      "harness": "pi",
+      "model": "deepseek-v4.1-flash",
+      "provider": "opencode-go",
+      "planned": 3,
+      "attempted": 3,
+      "completed": 3,
+      "passed": 3,
+      "score": 1,
+      "categories": {
+        "numerical_evidence": {
+          "planned": 1,
+          "completed": 1,
+          "passed": 1,
+          "score": 1
+        },
+        "literature_support": {
+          "planned": 1,
+          "completed": 1,
+          "passed": 1,
+          "score": 1
+        },
+        "executed_replication": {
+          "planned": 1,
+          "completed": 1,
+          "passed": 1,
+          "score": 1
+        }
+      },
+      "medianSeconds": 13.753,
+      "reportedTokens": 35475,
+      "requests": 13,
+      "medianFirstDeltaMs": 1618.267878999999,
+      "medianFirstTextMs": 1827.5500600000005,
+      "estimatedMedianOutputTokensPerSecond": 241.6108967516237,
+      "catalogCostUsd": 0.0038926919999999997,
+      "meanCatalogCostPerSuccessUsd": 0.001297564
+    },
+    {
+      "harness": "pi-research",
+      "model": "deepseek-v4.1-flash",
+      "provider": "opencode-go",
+      "planned": 3,
+      "attempted": 3,
+      "completed": 3,
+      "passed": 3,
+      "score": 1,
+      "categories": {
+        "numerical_evidence": {
+          "planned": 1,
+          "completed": 1,
+          "passed": 1,
+          "score": 1
+        },
+        "literature_support": {
+          "planned": 1,
+          "completed": 1,
+          "passed": 1,
+          "score": 1
+        },
+        "executed_replication": {
+          "planned": 1,
+          "completed": 1,
+          "passed": 1,
+          "score": 1
+        }
+      },
+      "medianSeconds": 15.401,
+      "reportedTokens": 74786,
+      "requests": 13,
+      "medianFirstDeltaMs": 2221.6259070000006,
+      "medianFirstTextMs": 2221.6259070000006,
+      "estimatedMedianOutputTokensPerSecond": 254.91459847043404,
+      "catalogCostUsd": 0.004213056,
+      "meanCatalogCostPerSuccessUsd": 0.001404352
+    },
+    {
+      "harness": "repi",
+      "model": "deepseek-v4.1-flash",
+      "provider": "opencode-go",
+      "planned": 3,
+      "attempted": 3,
+      "completed": 3,
+      "passed": 3,
+      "score": 1,
+      "categories": {
+        "numerical_evidence": {
+          "planned": 1,
+          "completed": 1,
+          "passed": 1,
+          "score": 1
+        },
+        "literature_support": {
+          "planned": 1,
+          "completed": 1,
+          "passed": 1,
+          "score": 1
+        },
+        "executed_replication": {
+          "planned": 1,
+          "completed": 1,
+          "passed": 1,
+          "score": 1
+        }
+      },
+      "medianSeconds": 14.451,
+      "reportedTokens": 80444,
+      "requests": 12,
+      "medianFirstDeltaMs": 2100.1720854999994,
+      "medianFirstTextMs": 1852.4170030000005,
+      "estimatedMedianOutputTokensPerSecond": 265.29923358255365,
+      "catalogCostUsd": 0.004700111999999999,
+      "meanCatalogCostPerSuccessUsd": 0.0015667039999999997
+    }
+  ],
+  "comparisons": [
+    {
+      "model": "deepseek-v4.1-flash",
+      "baseline": "pi",
+      "harness": "pi-research",
+      "deltaPercentagePoints": 0,
+      "descriptiveTaskClusterBootstrap95": null,
+      "uncertaintyScope": "Task-cluster percentile bootstrap on this fixed generated suite, conditional on settings; not population/general scientific superiority. Fewer than three tasks, fewer than two repeats, or incomplete conditions return null."
+    },
+    {
+      "model": "deepseek-v4.1-flash",
+      "baseline": "pi",
+      "harness": "repi",
+      "deltaPercentagePoints": 0,
+      "descriptiveTaskClusterBootstrap95": null,
+      "uncertaintyScope": "Task-cluster percentile bootstrap on this fixed generated suite, conditional on settings; not population/general scientific superiority. Fewer than three tasks, fewer than two repeats, or incomplete conditions return null."
+    }
+  ],
+  "settings": {
+    "provider": "opencode-go",
+    "thinking": "off",
+    "temperature": 0.2,
+    "timeoutSeconds": 150,
+    "maxRequests": 10,
+    "maxOutputTokens": 4096,
+    "maxReportedTokens": 120000
+  },
+  "expectedTrials": 9,
+  "attemptedTrials": 9,
+  "receiptHashes": [
+    "7b4b59996f9fc300030e47a27de150c57fc2f2419d77370c3a1a96c0308d97ba",
+    "0e34d1a73fe4dfed6645b6b4ad8cbad2ca26287ae229091612df2b90f0ff73a7",
+    "c6c943d3cd567bd856264ff7b1df917d4d05e785f2c2aec4a15d0c32235b5bd9",
+    "a3e30ec1da9fa822ecb0e460ef039fddf120f07e8b6b309b93d9c61066fe4982",
+    "79fe6f09cdcb0e5c57bc1069d237fbf81c8681c036d0bfc1f7b9fa419c332ad3",
+    "20e74018519287cb51dd212aa246435f478483277cb8a5cea520346024e718f3",
+    "e0673c3cff6ee44a04aeb9c4c2a3895c1944a75c641f7b644b34d142cc892c9f",
+    "fa0309891faf85110f10fa9493b7e033226ee2480f30a3307aa92123a9bccfeb",
+    "803c70aa0fbec956b7771c0a775cf37c74b43a06ff3b1e4023741a64cbcb6573"
+  ],
+  "scope": "Seven synthetic research workflow tasks, including a tiny independently reexecuted study. Does not establish real-paper replication, originality, scientific expertise or PhD equivalence.",
+  "interpretation": "Observed results on this generated synthetic suite. No superiority, discovery or PhD-equivalence claim. Cost is catalog-priced, never independently verified billing. Missing telemetry remains null.",
+  "publicationScope": "Aggregate results only. Private events, reasoning, credentials and workspace paths are not published. Hashes identify locally retained evidence, which cannot be independently audited from this aggregate export alone."
+}

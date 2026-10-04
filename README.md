@@ -13,6 +13,8 @@ Start with `repi`. Develop a research question, retrieve sources, freeze an expe
 
 [Project website](https://rubenfb23.github.io/research-pi/) · [Quickstart](docs/quickstart.md) · [Workflows](docs/workflows.md) · [CLI guide](docs/cli-guide.md) · [Comparison](docs/comparison.md) · [Verification](docs/status.md) · [Roadmap](ROADMAP.md)
 
+Evaluate controlled same-model research workflows with `repi bench research run`. Compare Pi SDK profiles, scientific instructions and ResearchPi tools using submitted evidence, isolated code execution and a visual quality/time/cost report. [Benchmark protocol](docs/research-benchmark.md).
+
 ![ResearchPi native terminal interface, captured using the deterministic offline transport](assets/terminal.svg)
 
 *Actual native interface capture with offline test responses; empty screen rows are compacted. [Replayable recording](assets/terminal.cast); live provider reasoning is shown only when the provider exposes it. The header graphic illustrates the workflow.*
