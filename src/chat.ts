@@ -73,6 +73,7 @@ export async function chat(project: string, prompt?: string, options: { offline?
           const plain=chunk.replace(/\x1b\[[0-?]*[ -/]*[@-~]/g,'');
           const hint=/^To resume this session: pi (?:--session-dir .+ )?--session ([a-f0-9-]+)\n$/.exec(plain);
           if (hint) chunk=`To resume this session: repi --session ${hint[1]}\n`;
+          chunk=chunk.replace(/\bpi update\b/g,'repi update');
         }
         return Reflect.apply(originalWrite,this,[chunk,...args]);
       } as typeof process.stdout.write;

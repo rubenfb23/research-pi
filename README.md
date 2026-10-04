@@ -38,6 +38,8 @@ repi
 
 Choose a connection on first launch, or use `repi connect opencode-go`, `repi connect claude`, or `repi connect codex`. Claude uses an API key; Claude Pro/Max login is not implemented. The Codex connection uses Pi's OpenAI/ChatGPT authentication, rather than launching Codex CLI; account access requires a real response to verify. [Connections](docs/connections.md).
 
+Update the embedded Pi SDK with `repi update`; use `repi update --check` to inspect available versions. The updater installs a candidate, compiles ResearchPi, and verifies an offline response and tool call before activation. A failed check keeps the previous runtime active. Source installations also run SDK/session/CLI/connection regression tests. Restart open chats after updating. [Update details](docs/updates.md).
+
 Native installers are unsigned and macOS packages are not notarized. Python 3.14 with venv support is required for experiments and installed separately. The project is not published to npm. [Installation and checksums](docs/installation.md).
 
 ## Run a complete study

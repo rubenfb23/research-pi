@@ -107,6 +107,11 @@ export async function openResearchSession(project: string, config?: AgentConfig,
     return {...result,services,diagnostics:services.diagnostics};
   };
   const host = await createAgentSessionRuntime(createRuntime,{cwd,agentDir:piDirectory(),sessionManager:manager});
+  // Pi modes dispose their host on exit; outer CLI cleanup may call it again.
+  // SDK 1.0.2 invalidates extension contexts after the first disposal.
+  const disposeHost=host.dispose.bind(host);
+  let disposal:Promise<void>|undefined;
+  host.dispose=()=>disposal ??= disposeHost();
   if (!options.interactive) {
     const bind = async () => { await host.session.bindExtensions({}); new Conversations(host.cwd).save(host.session.sessionManager); };
     host.setRebindSession(bind); await bind();

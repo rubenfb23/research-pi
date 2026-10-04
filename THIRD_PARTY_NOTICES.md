@@ -1,6 +1,6 @@
 # Third-party notices
 
-ResearchPi embeds **Pi 1.0.0** through `@earendil-works/pi-coding-agent` and
+ResearchPi embeds **Pi 1.0.2** through `@earendil-works/pi-coding-agent` and
 `@earendil-works/pi-ai`. Upstream: https://github.com/earendil-works/pi
 
 Pi is MIT licensed, copyright (c) 2025 Mario Zechner. The full notice is retained in
@@ -13,6 +13,7 @@ repository does not vendor node_modules, Python wheels, scientific datasets or b
 Native installers bundle production npm packages with their distributed license files,
 retain this notice and docs/Pi-LICENSE.txt, and include the Node runtime LICENSE (with its
 third-party notices) in runtime/Node-LICENSE.txt. Python wheels are installed separately.
+New native packages also bundle npm with its full distributed license files for staged SDK updates.
 The lockfiles identify the exact dependencies. See `docs/dependency-licenses.md` for
 the license metadata inventory; redistributing a bundled application requires preserving
 the full notices and checking the actual bundle contents.

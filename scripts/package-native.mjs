@@ -2,7 +2,7 @@
 import { spawnSync } from 'node:child_process';
 import { createHash } from 'node:crypto';
 import { cpSync, chmodSync, existsSync, mkdirSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
-import { join, resolve } from 'node:path';
+import { dirname, join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const root = fileURLToPath(new URL('../', import.meta.url));
@@ -30,11 +30,21 @@ for (const name of ['dist', 'src', 'python', 'resources', 'docs', 'assets', 'exa
 }
 writeFileSync(join(app, 'package-runtime.json'), JSON.stringify({ version, platform: process.platform,
   arch: process.arch, sourceRevision: spawnSync('git',['rev-parse','HEAD'],{cwd:root,encoding:'utf8'}).stdout?.trim() || null, node: process.versions.node, nodeSha256: sha(process.execPath) }, null, 2) + '\n');
+cpSync(join(root,'tsconfig.json'),join(app,'tsconfig.json'));
+mkdirSync(join(app,'scripts'),{recursive:true});
+cpSync(join(root,'scripts','update-pi.mjs'),join(app,'scripts','update-pi.mjs'));
 // Production dependencies retain their distributed license files and lockfile integrity.
 run(process.platform === 'win32' ? 'npm.cmd' : 'npm', ['ci', '--omit=dev', '--ignore-scripts', '--no-audit', '--no-fund'], app);
 const runtime = join(payload, 'runtime'); mkdirSync(runtime, { recursive: true });
 const nodeName = process.platform === 'win32' ? 'node.exe' : 'node';
 cpSync(process.execPath, join(runtime, nodeName)); chmodSync(join(runtime, nodeName), 0o755);
+// Include npm (and its distributed notices) so repi update needs no system Node/npm.
+const npmRoot=spawnSync(process.platform === 'win32' ? 'npm.cmd' : 'npm',['root','--global'],{encoding:'utf8',shell:process.platform === 'win32'});
+if(npmRoot.status !== 0) throw new Error('Could not locate npm for the bundled updater.');
+const npmDirectory=[join(dirname(process.execPath),'node_modules','npm'),join(dirname(process.execPath),'..','lib','node_modules','npm'),join(npmRoot.stdout.trim(),'npm')]
+  .find(directory=>existsSync(join(directory,'bin','npm-cli.js')));
+if(!npmDirectory) throw new Error('Install the standard Node.js distribution with npm before packaging.');
+cpSync(npmDirectory,join(runtime,'npm'),{recursive:true});
 const licenseResponse = await fetch(`https://raw.githubusercontent.com/nodejs/node/v${process.versions.node}/LICENSE`);
 if (!licenseResponse.ok) throw new Error('Could not retain the Node runtime license.');
 writeFileSync(join(runtime, 'Node-LICENSE.txt'), await licenseResponse.text());

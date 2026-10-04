@@ -1,6 +1,12 @@
 # Implementation and verification status
 
-Updated 2026-10-03. ResearchPi uses Pi SDK 1.0.0 without modifying its core. Original code is MIT licensed; Pi and dependency notices are retained separately. The repository is public at [rubenfb23/research-pi](https://github.com/rubenfb23/research-pi).
+Updated 2026-10-04. ResearchPi uses Pi SDK 1.0.2 without modifying its core. Original code is MIT licensed; Pi and dependency notices are retained separately. The repository is public at [rubenfb23/research-pi](https://github.com/rubenfb23/research-pi).
+
+## SDK updates (unreleased)
+
+`repi update` updates both embedded SDK dependencies in staging and verifies compilation, resource/tool loading and an actual offline SDK/tool roundtrip before activation. Source updates additionally run SDK, CLI, session and connection regressions. `--check` is read-only. Source activation restores replaced files if activation fails; native packages select a per-user verified overlay and retain their system runtime. New packages include npm and its notices. Native Pi update hints now name `repi update`.
+
+Verified locally on Linux: actual SDK 1.0.0 → 1.0.2 source update; 81 tests passing with no skips; injected installation/build/tool/activation failures; actual candidate build and activation through a native-format fixture; subsequent launch through its base launcher. Windows/macOS native updater execution and freshly published installers remain pending. No live provider access is asserted by the offline checks. Earlier release verification below describes the versions used at release time.
 
 ## Current capabilities
 
