@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 import { Command } from 'commander';
+import { spawnSync } from 'node:child_process';
 import { join, resolve } from 'node:path';
 import { chat } from './chat.js';
 import { connect, connectionName, changeModel, connectionRuntime, selectedConfig, connections, connectionNames } from './connections.js';
@@ -31,6 +32,12 @@ const program = new Command().name('repi').version(readJson<{ version: string }>
   .option('--new [name]', 'start a new conversation')
   .option('--session <id>', 'open a saved conversation by ID');
 const project = () => resolve(program.opts().project);
+program.command('update').description('Update the Pi SDK with staged build and offline compatibility checks')
+  .option('--check','check SDK versions without installing').action(opts => {
+    const result=spawnSync(process.execPath,[join(ROOT,'scripts','update-pi.mjs'),ROOT,...(opts.check ? ['--check'] : [])],{stdio:'inherit'});
+    if(result.error) throw result.error;
+    process.exitCode=result.signal === 'SIGINT' ? 130 : result.status ?? 1;
+  });
 const chats=program.command('chats').description('Create, find and manage persisted conversations');
 chats.command('list').option('--all','include every visited project').option('--query <text>','filter names, first messages, project paths or IDs','')
   .action(async opts => console.log(JSON.stringify(await new Conversations(project()).list(opts.all,opts.query),null,2)));

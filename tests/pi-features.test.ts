@@ -195,6 +195,7 @@ test('JSON mode streams actual SDK session and tool events without presentation 
   const f=fixture();
   try {
     const result=spawnSync(process.execPath,[join(ROOT,'dist/cli.js'),'--project',f.project,'chat','--offline','--json','[tool:project_status]'],{encoding:'utf8',env:process.env,timeout:20000});
+    assert.doesNotMatch(result.stderr,/Extension error|ctx is stale/);
     assert.equal(result.status,0,result.stderr);const events=result.stdout.trim().split('\n').map(line=>JSON.parse(line));
     assert(events.some(event=>event.type==='session'));assert(events.some(event=>event.type==='tool_execution_end' && event.toolName==='project_status'));
   } finally {f.cleanup();}

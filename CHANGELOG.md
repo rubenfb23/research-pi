@@ -1,5 +1,11 @@
 # Changelog
 
+## Unreleased
+
+- Add `repi update` and `repi update --check` for the embedded Pi SDK, with staged compilation, offline tool verification and source regression checks before activation.
+- Preserve the previous runtime on failed updates; use per-user runtime overlays for native installations and bundle npm in future installers.
+- Update both direct Pi SDK dependencies to 1.0.2 and route native update hints to `repi update`.
+
 ## 1.5.0
 
 - Add a real Wisconsin dataset study and numeric binary CSV input with declared provenance.

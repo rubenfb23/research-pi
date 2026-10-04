@@ -1,20 +1,45 @@
 #!/usr/bin/env node
 // Dependency-free entry point: a fresh checkout needs only Node and npm.
 import { createHash } from 'node:crypto';
-import { existsSync, mkdirSync, readFileSync, readdirSync, writeFileSync } from 'node:fs';
+import { existsSync, mkdirSync, readFileSync, readdirSync, writeFileSync, realpathSync } from 'node:fs';
+import { homedir } from 'node:os';
 import { dirname, join } from 'node:path';
-import { fileURLToPath } from 'node:url';
+import { fileURLToPath, pathToFileURL } from 'node:url';
 import { spawnSync } from 'node:child_process';
 
-const root = dirname(fileURLToPath(import.meta.url));
+let root = dirname(fileURLToPath(import.meta.url));
 function fail(message) { console.error(message); process.exit(1); }
 const [major, minor] = process.versions.node.split('.').map(Number);
 if (major < 22 || (major === 22 && minor < 19)) fail('ResearchPi requires Node >=22.19. Install it and run ./repi again.');
 if (existsSync(join(root, 'package-runtime.json'))) {
+  const base = realpathSync(root);
+  const version = JSON.parse(readFileSync(join(root,'package.json'),'utf8')).version;
+  const home = homedir();
+  const data = process.env.RESEARCH_PI_DATA_DIR || (process.platform === 'win32'
+    ? join(process.env.LOCALAPPDATA || join(home,'AppData','Local'),'ResearchPi')
+    : process.platform === 'darwin' ? join(home,'Library','Application Support','ResearchPi')
+    : join(process.env.XDG_DATA_HOME?.startsWith('/') ? process.env.XDG_DATA_HOME : join(home,'.local','share'),'research-pi'));
+  const key = createHash('sha256').update(base + '\n' + version).digest('hex').slice(0,24);
+  const pointer = join(data,'runtime-updates',key,'active.json');
+  process.env.RESEARCH_PI_BASE_ROOT=base;
+  process.env.RESEARCH_PI_UPDATE_POINTER=pointer;
+  if (existsSync(pointer)) {
+    const active=JSON.parse(readFileSync(pointer,'utf8'));
+    if (active.base !== base || active.version !== version || !existsSync(join(active.root,'dist','cli.js'))) fail('The updated runtime is unavailable. Remove ' + pointer + ' to use the original installation.');
+    root=active.root;
+  }
+}
+// Run before SDK imports, so a broken dependency cannot prevent an update.
+if (process.argv[2] === 'update') {
+  const result=spawnSync(process.execPath,[join(root,'scripts','update-pi.mjs'),root,...process.argv.slice(3)],{stdio:'inherit',env:process.env});
+  if (result.error) fail(result.error.message);
+  process.exit(result.signal === 'SIGINT' ? 130 : result.status ?? 1);
+}
+if (existsSync(join(root, 'package-runtime.json'))) {
   // Native installers already include Node, dependencies and compiled code.
   // Never install, compile or write inside the system application directory.
   process.argv = [process.execPath, join(root, 'dist', 'cli.js'), ...process.argv.slice(2)];
-  await import('./dist/cli.js');
+  await import(pathToFileURL(join(root,'dist','cli.js')).href);
 } else {
 const digest = paths => {
   const hash = createHash('sha256');
