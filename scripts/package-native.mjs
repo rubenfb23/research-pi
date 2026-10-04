@@ -2,7 +2,7 @@
 import { spawnSync } from 'node:child_process';
 import { createHash } from 'node:crypto';
 import { cpSync, chmodSync, existsSync, mkdirSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
-import { join, resolve } from 'node:path';
+import { dirname, join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const root = fileURLToPath(new URL('../', import.meta.url));
@@ -41,8 +41,9 @@ cpSync(process.execPath, join(runtime, nodeName)); chmodSync(join(runtime, nodeN
 // Include npm (and its distributed notices) so repi update needs no system Node/npm.
 const npmRoot=spawnSync(process.platform === 'win32' ? 'npm.cmd' : 'npm',['root','--global'],{encoding:'utf8',shell:process.platform === 'win32'});
 if(npmRoot.status !== 0) throw new Error('Could not locate npm for the bundled updater.');
-const npmDirectory=join(npmRoot.stdout.trim(),'npm');
-if(!existsSync(join(npmDirectory,'bin','npm-cli.js'))) throw new Error('Install the standard Node.js distribution with npm before packaging.');
+const npmDirectory=[join(dirname(process.execPath),'node_modules','npm'),join(dirname(process.execPath),'..','lib','node_modules','npm'),join(npmRoot.stdout.trim(),'npm')]
+  .find(directory=>existsSync(join(directory,'bin','npm-cli.js')));
+if(!npmDirectory) throw new Error('Install the standard Node.js distribution with npm before packaging.');
 cpSync(npmDirectory,join(runtime,'npm'),{recursive:true});
 const licenseResponse = await fetch(`https://raw.githubusercontent.com/nodejs/node/v${process.versions.node}/LICENSE`);
 if (!licenseResponse.ok) throw new Error('Could not retain the Node runtime license.');
