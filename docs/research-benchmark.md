@@ -4,6 +4,8 @@ The `repi bench research` track measures submitted artifacts and small executed 
 
 The [exploratory DeepSeek pilot](research/research-benchmark-pilot.md) records actual results and the retained failed preparation attempt.
 
+The [GLM-5.3 Flash full-task pilot](research/research-benchmark-glm-pilot.md) records 21 attempts and the dominant tool-schema failure.
+
 ## Same-model conditions
 
 | Profile | Instructions | Tools |
