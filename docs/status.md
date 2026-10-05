@@ -132,3 +132,7 @@ The real OpenCode Go GLM-5.3 Flash pilot attempted all 21 planned seven-task/pro
 ### DeepSeek seven-task follow-up
 
 Under the same seven-task settings as GLM, DeepSeek V4.1 Flash completed all 21 attempts; local consistency audit passed without errors. Pi base and ResearchPi with scientific tools scored 95.24%, while ResearchPi without scientific tools scored 91.67%. All three reproduced their two-method, ten-seed miniature studies. Lost points reflect an undisclosed boolean field type and strict numerical rounding tolerance, not a demonstrated scientific deficit. Frozen scores are unchanged; output contracts need explicit versioned correction before confirmatory runs. The suite remains near ceiling for this model and no harness superiority is established. [Full DeepSeek pilot and profile explanation](research/research-benchmark-deepseek-full-pilot.md).
+
+### Structured JSON writer correction
+
+Common benchmark tools now include `write_json` for objects/arrays with identical path/input restrictions and a prewrite 256 KB UTF-8 cap. All three profiles receive it. The complete local suite passed 88 tests without failures or skips. A real GLM-5.3 Flash metrics follow-up passed in all three profiles, each using five requests instead of the ten exhausted in its historical attempt; all three called `write_json` and no tool errors occurred. The retained run audit passed. This is a small development check, not a repeated full-suite result or isolated overhead measurement. [Verification report](research/json-writer-glm-pilot.md).

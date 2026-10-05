@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Add a shared `write_json` benchmark tool that accepts structured data, preserves workspace protections and rejects oversized artifacts before overwriting files.
+
 - Add controlled same-model research benchmarks with seven artifact-graded tasks, isolated Python replication, retained evidence audits and an offline visual report.
 - Add reusable prediction metrics and ten-seed coverage/aggregation tools. Record an exploratory DeepSeek pilot and Artificial Analysis methodology inspirations.
 

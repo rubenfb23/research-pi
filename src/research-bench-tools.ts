@@ -45,10 +45,22 @@ export function runSandboxedPython(workspace:string,script:string,args:string[]=
  });
 }
 export function workspaceTools(workspace:string,protectedFiles:Set<string>,python:boolean) {
+ const writeArtifact=(path:string,content:string)=>{
+  if(Buffer.byteLength(content,'utf8')>256000) throw new Error('Artifact exceeds the 256 KB limit.');
+  const target=workspacePath(workspace,path,true);
+  if(protectedFiles.has(relative(realpathSync(workspace),target).replaceAll('\\','/'))) throw new Error('Input evidence is read-only.');
+  const fd=openSync(target,constants.O_WRONLY|constants.O_CREAT|constants.O_TRUNC|constants.O_NOFOLLOW,0o600);
+  try{writeFileSync(fd,content);}finally{closeSync(fd);}
+  return {content:[{type:'text' as const,text:'Written '+path}],details:{}};
+ };
  const tools:ToolDefinition[]=[
   defineTool({name:'read_file',label:'Read benchmark evidence',description:'Read a relative file from the isolated task workspace. No access to evaluator, credentials or other projects.',parameters:Type.Object({path:Type.String({maxLength:160})}),async execute(_id,p){return {content:[{type:'text' as const,text:readWorkspace(workspace,p.path)}],details:{}};}}),
-  defineTool({name:'write_file',label:'Write benchmark artifact',description:'Write answer.json, analysis.py or other relative artifact files. Supplied evidence is immutable.',parameters:Type.Object({path:Type.String({maxLength:160}),content:Type.String({maxLength:256000})}),async execute(_id,p){const target=workspacePath(workspace,p.path,true);if(protectedFiles.has(relative(realpathSync(workspace),target).replaceAll('\\','/'))) throw new Error('Input evidence is read-only.');const fd=openSync(target,constants.O_WRONLY|constants.O_CREAT|constants.O_TRUNC|constants.O_NOFOLLOW,0o600);try{writeFileSync(fd,p.content);}finally{closeSync(fd);}return {content:[{type:'text' as const,text:'Written '+p.path}],details:{}};}}),
+  defineTool({name:'write_file',label:'Write benchmark artifact',description:'Write text or code, such as analysis.py, to a relative artifact file. content MUST be a string, never an object. For JSON artifacts use write_json instead. Supplied evidence is immutable; maximum UTF-8 size 256 KB.',parameters:Type.Object({path:Type.String({maxLength:160}),content:Type.String({maxLength:256000})}),async execute(_id,p){return writeArtifact(p.path,p.content);}}),
+  defineTool({name:'write_json',label:'Write structured JSON artifact',description:'Save a JSON object or array directly to a relative file such as answer.json. Pass structured data, without escaping or converting it into a string. Example: {"path":"answer.json","data":{"accuracy":0.85}}. Supplied evidence is immutable; serialized UTF-8 size at most 256 KB.',parameters:Type.Object({path:Type.String({maxLength:160}),data:Type.Union([Type.Record(Type.String(),Type.Unknown()),Type.Array(Type.Unknown())])}),async execute(_id,p){
+   const content=JSON.stringify(p.data,(_key,value)=>{if(typeof value==='number'&&!Number.isFinite(value)) throw new Error('JSON numbers must be finite.');return value;},2)+'\n';
+   return writeArtifact(p.path,content);
+  }}),
  ];
- if(python) tools.push(defineTool({name:'run_python',label:'Execute isolated research code',description:'Execute an EXISTING workspace .py FILE: script must be a short relative filename such as analysis.py, NEVER inline Python source. First use write_file to create the script. Installed Python standard library only. Bubblewrap sandbox: no network/host home/credentials/evaluator, workspace mounted READ-ONLY, writable /tmp, 15 CPU seconds, 512 MiB, no subprocess creation, 20 second deadline. The script must PRINT its JSON result to stdout, NOT write workspace files. Then use write_file to save that result as answer.json.',parameters:Type.Object({script:Type.String({maxLength:160})}),async execute(_id,p,signal){const result=await runSandboxedPython(workspace,p.script,[],signal);return {content:[{type:'text' as const,text:JSON.stringify(result)}],details:result};}}));
+ if(python) tools.push(defineTool({name:'run_python',label:'Execute isolated research code',description:'Execute an EXISTING workspace .py FILE: script must be a short relative filename such as analysis.py, NEVER inline Python source. First use write_file to create the script. Installed Python standard library only. Bubblewrap sandbox: no network/host home/credentials/evaluator, workspace mounted READ-ONLY, writable /tmp, 15 CPU seconds, 512 MiB, no subprocess creation, 20 second deadline. The script must PRINT its JSON result to stdout, NOT write workspace files. Then use write_json with structured data to save the result as answer.json.',parameters:Type.Object({script:Type.String({maxLength:160})}),async execute(_id,p,signal){const result=await runSandboxedPython(workspace,p.script,[],signal);return {content:[{type:'text' as const,text:JSON.stringify(result)}],details:result};}}));
  return tools;
 }

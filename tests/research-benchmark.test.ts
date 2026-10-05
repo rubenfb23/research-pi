@@ -1,6 +1,6 @@
 import {test} from 'node:test';
 import assert from 'node:assert/strict';
-import {mkdtempSync,rmSync,writeFileSync,readFileSync,mkdirSync,symlinkSync} from 'node:fs';
+import {mkdtempSync,rmSync,writeFileSync,readFileSync,mkdirSync,symlinkSync,existsSync} from 'node:fs';
 import {tmpdir} from 'node:os';
 import {join} from 'node:path';
 import {researchTasks,gradeResearch} from '../src/research-bench-tasks.js';
@@ -50,6 +50,21 @@ test('Workspace tools reject traversal, immutable-input mutations and symlink ac
   await assert.rejects(write.execute('test',{path:'input.json',content:'changed'}),/read-only/);
  }finally{rmSync(root,{recursive:true,force:true});}
 });
+test('Structured JSON writing preserves data and rejects protected paths and oversized artifacts before truncation',async()=>{
+ const root=mkdtempSync(join(tmpdir(),'repi-json-writer-')),workspace=join(root,'work');mkdirSync(workspace);writeFileSync(join(workspace,'input.json'),'{}');symlinkSync(root,join(workspace,'escape'),'dir');
+ try {
+  const writer=workspaceTools(workspace,new Set(['input.json']),false).find(t=>t.name==='write_json')!;
+  const data={accuracy:.85,nested:{title:'Unicode: α Ñ',values:[null,true,0,{seed:42}]}};
+  await writer.execute('json',{path:'answer.json',data});assert.deepEqual(readJson(join(workspace,'answer.json')),data);
+  await writer.execute('array',{path:'runs.json',data:[{seed:1},{seed:2}]});assert.deepEqual(readJson(join(workspace,'runs.json')),[{seed:1},{seed:2}]);
+  await assert.rejects(writer.execute('input',{path:'input.json',data:{changed:true}}),/read-only/);assert.equal(readFileSync(join(workspace,'input.json'),'utf8'),'{}');
+  await assert.rejects(writer.execute('escape',{path:'../outside.json',data:{}}),/relative/);
+  await assert.rejects(writer.execute('symlink',{path:'escape/new/result.json',data:{}}),/escapes/);assert(!existsSync(join(root,'new')));
+  const before=readFileSync(join(workspace,'answer.json'),'utf8');
+  await assert.rejects(writer.execute('large',{path:'answer.json',data:{text:'α'.repeat(128000)}}),/256 KB/);assert.equal(readFileSync(join(workspace,'answer.json'),'utf8'),before);
+  await assert.rejects(writer.execute('nonfinite',{path:'answer.json',data:{value:NaN}}),/finite/);assert.equal(readFileSync(join(workspace,'answer.json'),'utf8'),before);
+ }finally{rmSync(root,{recursive:true,force:true});}
+});
 test('Actual isolated Python reproduces a twenty-run implementation and cannot read host files or open a network',{skip:!sandbox},async()=>{
  const root=mkdtempSync(join(tmpdir(),'repi-python-bench-'));
  try {
@@ -67,11 +82,11 @@ test('Actual SDK profiles use matching model settings, bounded tools and a reque
   let loop=false;const prompts:string[]=[],payloads:any[]=[];
   runtime.registerProvider('bench-test',{api:'bench-test-api',apiKey:'fake-test-only',baseUrl:'https://offline.invalid',models:[{id:'fixture-model',name:'fixture',api:'bench-test-api',baseUrl:'https://offline.invalid',reasoning:false,input:['text'],contextWindow:64000,maxTokens:4096,cost:{input:0,output:0,cacheRead:0,cacheWrite:0}}],streamSimple(model,context,options){
    prompts.push(JSON.stringify(context.messages.filter(message=>message.role==='system')));payloads.push(options);const stream=createAssistantMessageEventStream(),last=context.messages.at(-1);
-   queueMicrotask(()=>{const tool=loop||last?.role==='user';const msg:AssistantMessage={role:'assistant',api:model.api,provider:model.provider,model:model.id,content:tool?[{type:'toolCall',id:'write-'+Date.now(),name:'write_file',arguments:{path:'answer.json',content:'{"ok":true}'}}]:[{type:'text',text:'Submitted.'}],stopReason:tool?'toolUse':'stop',timestamp:Date.now(),usage:{input:10,output:10,cacheRead:0,cacheWrite:0,totalTokens:20,cost:{input:0,output:0,cacheRead:0,cacheWrite:0,total:0}}};stream.push({type:'done',reason:msg.stopReason as 'stop'|'toolUse',message:msg});stream.end();});return stream;
+   queueMicrotask(()=>{const tool=loop||last?.role==='user';const msg:AssistantMessage={role:'assistant',api:model.api,provider:model.provider,model:model.id,content:tool?[{type:'toolCall',id:'write-'+Date.now(),name:'write_json',arguments:{path:'answer.json',data:{ok:true}}}]:[{type:'text',text:'Submitted.'}],stopReason:tool?'toolUse':'stop',timestamp:Date.now(),usage:{input:10,output:10,cacheRead:0,cacheWrite:0,totalTokens:20,cost:{input:0,output:0,cacheRead:0,cacheWrite:0,total:0}}};stream.push({type:'done',reason:msg.stopReason as 'stop'|'toolUse',message:msg});stream.end();});return stream;
   }});
   for(const harness of researchHarnesses) {
    const workspace=join(root,harness);mkdirSync(workspace);const config:ResearchWorkerConfig={harness,provider:'bench-test',model:'fixture-model',workspace,output:workspace,prompt:'Submit artifact',protectedFiles:[],python:false,maxRequests:3,maxOutputTokens:512,maxReportedTokens:2000,thinking:'off',temperature:.2};
-   await runResearchWorker(config,runtime);assert.equal(readJson<any>(join(workspace,'result.json')).status,'completed');assert.deepEqual(readJson(join(workspace,'answer.json')),{ok:true});const metadata=readJson<any>(join(workspace,'metadata.json'));assert(!metadata.tools.includes('bash'));assert(!metadata.tools.includes('read'));assert.equal(metadata.tools.includes('calculate_prediction_metrics'),harness==='repi');assert.equal(metadata.reasoningResolved,'off');
+   await runResearchWorker(config,runtime);assert.equal(readJson<any>(join(workspace,'result.json')).status,'completed');assert.deepEqual(readJson(join(workspace,'answer.json')),{ok:true});const metadata=readJson<any>(join(workspace,'metadata.json'));assert(metadata.tools.includes('write_json'));assert(!metadata.tools.includes('bash'));assert(!metadata.tools.includes('read'));assert.equal(metadata.tools.includes('calculate_prediction_metrics'),harness==='repi');assert.equal(metadata.reasoningResolved,'off');
   }
   assert(!prompts[0]!.includes('You are ResearchPi'));assert(prompts.some(p=>p.includes('You are ResearchPi')));assert(payloads.every(p=>p.maxTokens===512&&p.temperature===.2));
   loop=true;const workspace=join(root,'limit');mkdirSync(workspace);await runResearchWorker({harness:'pi',provider:'bench-test',model:'fixture-model',workspace,output:workspace,prompt:'Loop',protectedFiles:[],python:false,maxRequests:1,maxOutputTokens:512,maxReportedTokens:2000,thinking:'off',temperature:.2},runtime);

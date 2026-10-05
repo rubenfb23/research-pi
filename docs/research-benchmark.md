@@ -74,7 +74,7 @@ The default uses the configured provider/model, all three profiles, all seven ta
 
 Shared Python execution requires a working Linux Bubblewrap installation and `/usr/bin/python3`. On Ubuntu/Debian, install `bubblewrap` if missing. Executed replication fails preflight when isolation is unavailable; it never falls back to unrestricted host execution. Other tasks can run without Python, with that tool difference recorded.
 
-The sandbox has no network or host home/evaluator/credential mounts. It reads the task workspace, has writable `/tmp`, uses installed Python's standard library, and has CPU/address-space/file/output/process limits plus a wall deadline. Scripts print results; the agent uses `write_file` to submit `answer.json`. There is no universal guarantee against OS/kernel compromise. Workspace tools reject traversal/symlinks and preserve supplied input files.
+The sandbox has no network or host home/evaluator/credential mounts. It reads the task workspace, has writable `/tmp`, uses installed Python's standard library, and has CPU/address-space/file/output/process limits plus a wall deadline. Scripts print results; the agent uses `write_json(path, data)` to submit structured `answer.json` without manually escaping strings. `write_file` remains available for text/code. Both use the same protected-path rules and a 256 KB serialized UTF-8 limit. All three profiles receive the same writer; historical runs retain their original tool metadata and scores. There is no universal guarantee against OS/kernel compromise. Workspace tools reject traversal/symlinks and preserve supplied input files.
 
 Every agent attempt has a process deadline, a maximum number of model stream invocations and a requested per-response output-token limit. Automatic session retries/compaction are disabled. A reported-token threshold is checked between requests and can be exceeded by one in-flight response; it is not a hard total-token or dollar cap. Provider adapters may have internal retry behavior. Runtime checks cannot certify provider adherence to every requested sampling parameter.
 
@@ -91,6 +91,8 @@ Timing distinguishes task wall time, first observed SDK streaming delta and firs
 Costs use SDK catalog pricing, including exposed cache/output usage. They are estimates rather than independently verified invoices or OpenCode subscription charges. Missing or zero-price telemetry stays unavailable. Raw traces can contain private reasoning and are never automatically published.
 
 Design inspirations: [fixed-model component swaps](https://artificialanalysis.ai/methodology/search-api), [agent variant reporting](https://artificialanalysis.ai/methodology/coding-agents-benchmarking), [separate latency/throughput measures](https://artificialanalysis.ai/methodology/performance-benchmarking). The [source review](research/artificial-analysis-benchmark-design.md) separates observed Artificial Analysis practices from our adaptations. ResearchPi's scores use its own transparent rubric, not the Artificial Analysis Intelligence Index.
+
+The [structured-writer verification](research/json-writer-glm-pilot.md) records a later GLM metrics-only follow-up; historical full-matrix scores remain unchanged.
 
 ## Improving ResearchPi
 
