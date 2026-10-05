@@ -22,7 +22,7 @@ export function treeHashes(root,prefix='',budget={bytes:0}) {
  return result;
 }
 function save(path,data) {writeFileSync(path,JSON.stringify(data,null,2)+'\n',{mode:0o600});}
-async function command(args,{timeout=120000,log}={}) {
+export async function command(args,{timeout=120000,log}={}) {
  return await new Promise((done,reject)=>{
   const p=spawn(args[0],args.slice(1),{stdio:['ignore','pipe','pipe']});
   let out='',err='',timedOut=false;
@@ -74,7 +74,7 @@ function dockerBase(image,name,network='none') {
  return ['docker','run','--rm','--name',name,'--network',network,'--cpus','2','--memory','3g','--memory-swap','3g','--pids-limit','256','--cap-drop','ALL','--security-opt','no-new-privileges','--read-only','--tmpfs','/tmp:rw,size=512m','--tmpfs',`/home/repi:rw,uid=${process.getuid()},size=128m`,'--user',`${process.getuid()}:${process.getgid()}`];
 }
 let activeContainer;
-async function dockerRun(image,name,args,{timeout=120000,log,network='none'}={}) {
+export async function dockerRun(image,name,args,{timeout=120000,log,network='none'}={}) {
  activeContainer=name;
  let timedOut=false;
  const timer=setTimeout(()=>{timedOut=true;spawn('docker',['kill',name],{stdio:'ignore'});},timeout);

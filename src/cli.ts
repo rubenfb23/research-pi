@@ -1,6 +1,9 @@
 #!/usr/bin/env node
 import { Command } from 'commander';
 import { spawnSync } from 'node:child_process';
+import {writeFileSync,mkdirSync} from 'node:fs';
+import {auditIndexRun} from './research-index-audit.js';
+import {freezeIndexProtocol,scoreResearchIndex,renderIndexReport,type IndexProtocol,type IndexEvidence} from './research-index.js';
 import { join, resolve } from 'node:path';
 import { chat } from './chat.js';
 import { connect, connectionName, changeModel, connectionRuntime, selectedConfig, connections, connectionNames } from './connections.js';
@@ -147,6 +150,19 @@ bench.command('official').description('Compare configured OpenCode Go models on 
  .requiredOption('--dataset <path>','prepared dataset directory; see scripts/official-bench/README.md')
  .option('--image <name>','frozen Docker runtime','repi-official-pilot:20261005')
  .action(opts=>{const result=spawnSync(process.execPath,[join(ROOT,'scripts','official-bench','run.mjs'),resolve(opts.dataset),opts.image],{stdio:'inherit'});if(result.error)throw result.error;process.exitCode=result.status??1;});
+const indexBench=bench.command('index').description('Frozen research ratings, scientific rubrics and native development calibration');
+indexBench.command('prepare').requiredOption('--output <directory>','fresh public development task directory')
+ .option('--image <name>','scientific Docker runtime','repi-official-pilot:20261005').option('--trials <n>','fresh agent attempts per condition','1').option('--timeout <seconds>','frozen per-attempt deadline','300')
+ .action(opts=>{const r=spawnSync(process.execPath,[join(ROOT,'scripts/research-index/run.mjs'),'prepare',resolve(opts.output),opts.image,opts.trials,opts.timeout],{stdio:'inherit'});if(r.error)throw r.error;process.exitCode=r.status??1;});
+indexBench.command('run').requiredOption('--dataset <directory>','prepared, frozen development task pack')
+ .option('--image <name>','must match frozen preparation image','repi-official-pilot:20261005')
+ .action(opts=>{const r=spawnSync(process.execPath,[join(ROOT,'scripts/research-index/run.mjs'),'run',resolve(opts.dataset),opts.image],{stdio:'inherit'});if(r.error)throw r.error;process.exitCode=r.status??1;});
+indexBench.command('audit').argument('<run-directory>').description('Verify native receipts, model identity, traces, grading and artifacts').action(directory=>{const result=auditIndexRun(directory);console.log(JSON.stringify(result,null,2));if(result.status!=='verified')process.exitCode=1;});
+indexBench.command('freeze').requiredOption('--input <path>','protocol JSON without protocolHash').requiredOption('--output <path>','frozen protocol JSON')
+ .action(opts=>{writeJson(resolve(opts.output),freezeIndexProtocol(readJson(opts.input)));console.log('Frozen protocol: '+resolve(opts.output));});
+indexBench.command('score').requiredOption('--protocol <path>','frozen protocol JSON').requiredOption('--evidence <path>','complete attempt rubric evidence JSON')
+ .requiredOption('--output <directory>','JSON and HTML report directory')
+ .action(opts=>{const result=scoreResearchIndex(readJson<IndexProtocol>(opts.protocol),readJson<IndexEvidence[]>(opts.evidence));mkdirSync(resolve(opts.output),{recursive:true});writeJson(join(resolve(opts.output),'index.json'),result);writeFileSync(join(resolve(opts.output),'report.html'),renderIndexReport(result));console.log(JSON.stringify({status:result.status,publishable:result.publishable,report:join(resolve(opts.output),'report.html')},null,2));});
 const researchBench=bench.command('research').description('Controlled same-model research workflows with submitted artifacts');
 researchBench.command('tasks').option('--split <id>','dev or generated validation','dev').option('--seed <n>','task generation seed','20261004').action(opts=>{
  if(!['dev','validation'].includes(opts.split))throw new Error('Choose dev or validation.');
