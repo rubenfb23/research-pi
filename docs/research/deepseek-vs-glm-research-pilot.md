@@ -31,3 +31,7 @@ The near-ceiling DeepSeek results contain benchmark defects: the seed task omitt
 Profiles are component ablations, not independent products: Pi base, ResearchPi without additional scientific tools and ResearchPi with those tools. All have common bounded workspace/Python tools; none is a full stock-product comparison.
 
 [Offline visual comparison](deepseek-vs-glm-research-pilot.html), [aggregate comparison JSON](deepseek-vs-glm-research-pilot.json), [DeepSeek evidence scope](research-benchmark-deepseek-full-pilot.md), [GLM failure diagnosis](research-benchmark-glm-pilot.md).
+
+## October 5 structured-writer follow-up
+
+The [visual comparison](deepseek-vs-glm-research-pilot.html) now also shows the new GLM run. [Follow-up protocol and provenance](glm-structured-full-followup.md) disclose its provider failure and continuation. Original results above remain unchanged; DeepSeek was not rerun with the new tool version.

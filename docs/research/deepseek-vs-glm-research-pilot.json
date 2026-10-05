@@ -741,5 +741,199 @@
     "Runs occurred sequentially, not randomized across models; backend identity and sampling adherence are not independently attested.",
     "Catalog costs are estimates, not verified OpenCode Go billing.",
     "GLM-5.3 (non-Flash) was not tested."
-  ]
+  ],
+  "glmAfterStructuredWriter": {
+    "date": "2026-10-05",
+    "model": "glm-5.3-flash",
+    "sourceRuns": [
+      "4cd55dd7-2e46-41f8-90fb-0c5f33e03694",
+      "1e61447f-d16e-4dfc-9756-8563fdfa42ea"
+    ],
+    "settings": {
+      "provider": "opencode-go",
+      "thinking": "off",
+      "temperature": 0.2,
+      "timeoutSeconds": 150,
+      "maxRequests": 10,
+      "maxOutputTokens": 4096,
+      "maxReportedTokens": 120000
+    },
+    "conditions": [
+      {
+        "harness": "pi",
+        "categories": {
+          "numerical_evidence": {
+            "planned": 1,
+            "completed": 1,
+            "passed": 1,
+            "score": 1
+          },
+          "failure_recovery": {
+            "planned": 1,
+            "completed": 1,
+            "passed": 0,
+            "score": 0.6666666666666666
+          },
+          "experimental_design": {
+            "planned": 1,
+            "completed": 1,
+            "passed": 1,
+            "score": 1
+          },
+          "statistical_interpretation": {
+            "planned": 1,
+            "completed": 1,
+            "passed": 1,
+            "score": 1
+          },
+          "causal_reasoning": {
+            "planned": 1,
+            "completed": 1,
+            "passed": 1,
+            "score": 1
+          },
+          "literature_support": {
+            "planned": 1,
+            "completed": 1,
+            "passed": 1,
+            "score": 1
+          },
+          "executed_replication": {
+            "planned": 1,
+            "completed": 1,
+            "passed": 1,
+            "score": 1
+          }
+        },
+        "score": 0.9523809523809523,
+        "passed": 6,
+        "planned": 7,
+        "attempted": 7,
+        "completed": 7,
+        "requests": 34,
+        "reportedTokens": 67247,
+        "medianSeconds": 9.126,
+        "catalogCostUsd": 0.00790401
+      },
+      {
+        "harness": "pi-research",
+        "categories": {
+          "numerical_evidence": {
+            "planned": 1,
+            "completed": 1,
+            "passed": 1,
+            "score": 1
+          },
+          "failure_recovery": {
+            "planned": 1,
+            "completed": 1,
+            "passed": 0,
+            "score": 0.6666666666666666
+          },
+          "experimental_design": {
+            "planned": 1,
+            "completed": 1,
+            "passed": 1,
+            "score": 1
+          },
+          "statistical_interpretation": {
+            "planned": 1,
+            "completed": 1,
+            "passed": 1,
+            "score": 1
+          },
+          "causal_reasoning": {
+            "planned": 1,
+            "completed": 1,
+            "passed": 1,
+            "score": 1
+          },
+          "literature_support": {
+            "planned": 1,
+            "completed": 0,
+            "passed": 0,
+            "score": 0
+          },
+          "executed_replication": {
+            "planned": 1,
+            "completed": 1,
+            "passed": 0,
+            "score": 0.5
+          }
+        },
+        "score": 0.738095238095238,
+        "passed": 4,
+        "planned": 7,
+        "attempted": 7,
+        "completed": 6,
+        "requests": 26,
+        "reportedTokens": 128702,
+        "medianSeconds": 13.482,
+        "catalogCostUsd": 0.012932329999999999
+      },
+      {
+        "harness": "repi",
+        "categories": {
+          "numerical_evidence": {
+            "planned": 1,
+            "completed": 1,
+            "passed": 1,
+            "score": 1
+          },
+          "failure_recovery": {
+            "planned": 1,
+            "completed": 1,
+            "passed": 0,
+            "score": 0.6666666666666666
+          },
+          "experimental_design": {
+            "planned": 1,
+            "completed": 1,
+            "passed": 1,
+            "score": 1
+          },
+          "statistical_interpretation": {
+            "planned": 1,
+            "completed": 1,
+            "passed": 1,
+            "score": 1
+          },
+          "causal_reasoning": {
+            "planned": 1,
+            "completed": 1,
+            "passed": 1,
+            "score": 1
+          },
+          "literature_support": {
+            "planned": 1,
+            "completed": 1,
+            "passed": 1,
+            "score": 1
+          },
+          "executed_replication": {
+            "planned": 1,
+            "completed": 1,
+            "passed": 1,
+            "score": 1
+          }
+        },
+        "score": 0.9523809523809523,
+        "passed": 6,
+        "planned": 7,
+        "attempted": 7,
+        "completed": 7,
+        "requests": 32,
+        "reportedTokens": 190152,
+        "medianSeconds": 6.803,
+        "catalogCostUsd": 0.014313739999999998
+      }
+    ],
+    "derivation": "The first run stopped after 18 attempts on an upstream timeout. Its failed source-synthesis cell remains zero. A second run attempted only the three previously unattempted replication cells. Combined values describe 21 actual attempts, not a single complete audited run. Original frozen summaries remain unchanged.",
+    "toolErrors": {
+      "writeFileContentType": 10,
+      "runPythonFilename": 2
+    },
+    "historicalWriteFileContentTypeErrors": 119,
+    "comparisonCaveat": "DeepSeek results use earlier tools without write_json. Same tasks/settings, different tool versions; not a controlled model ranking. One repeat per cell."
+  }
 }

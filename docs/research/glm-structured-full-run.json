@@ -1,0 +1,247 @@
+{
+  "id": "4cd55dd7-2e46-41f8-90fb-0c5f33e03694",
+  "protocolHash": "5bb4668da617bc0a98a586975bd15a6da739e7464e6342722da363621e08cf74",
+  "status": "incomplete",
+  "split": "dev",
+  "fixtureOnly": false,
+  "conditions": [
+    {
+      "harness": "pi",
+      "model": "glm-5.3-flash",
+      "provider": "opencode-go",
+      "planned": 7,
+      "attempted": 6,
+      "completed": 6,
+      "passed": 5,
+      "score": 0.8095238095238094,
+      "categories": {
+        "numerical_evidence": {
+          "planned": 1,
+          "completed": 1,
+          "passed": 1,
+          "score": 1
+        },
+        "failure_recovery": {
+          "planned": 1,
+          "completed": 1,
+          "passed": 0,
+          "score": 0.6666666666666666
+        },
+        "experimental_design": {
+          "planned": 1,
+          "completed": 1,
+          "passed": 1,
+          "score": 1
+        },
+        "statistical_interpretation": {
+          "planned": 1,
+          "completed": 1,
+          "passed": 1,
+          "score": 1
+        },
+        "causal_reasoning": {
+          "planned": 1,
+          "completed": 1,
+          "passed": 1,
+          "score": 1
+        },
+        "literature_support": {
+          "planned": 1,
+          "completed": 1,
+          "passed": 1,
+          "score": 1
+        },
+        "executed_replication": {
+          "planned": 1,
+          "completed": 0,
+          "passed": 0,
+          "score": 0
+        }
+      },
+      "medianSeconds": 7.4079999999999995,
+      "reportedTokens": 49647,
+      "requests": 29,
+      "medianFirstDeltaMs": 962.2153189999999,
+      "medianFirstTextMs": 672.7644935000003,
+      "estimatedMedianOutputTokensPerSecond": 17120.626347793514,
+      "catalogCostUsd": 0.0053684499999999994,
+      "meanCatalogCostPerSuccessUsd": 0.00107369
+    },
+    {
+      "harness": "pi-research",
+      "model": "glm-5.3-flash",
+      "provider": "opencode-go",
+      "planned": 7,
+      "attempted": 6,
+      "completed": 5,
+      "passed": 4,
+      "score": 0.6666666666666666,
+      "categories": {
+        "numerical_evidence": {
+          "planned": 1,
+          "completed": 1,
+          "passed": 1,
+          "score": 1
+        },
+        "failure_recovery": {
+          "planned": 1,
+          "completed": 1,
+          "passed": 0,
+          "score": 0.6666666666666666
+        },
+        "experimental_design": {
+          "planned": 1,
+          "completed": 1,
+          "passed": 1,
+          "score": 1
+        },
+        "statistical_interpretation": {
+          "planned": 1,
+          "completed": 1,
+          "passed": 1,
+          "score": 1
+        },
+        "causal_reasoning": {
+          "planned": 1,
+          "completed": 1,
+          "passed": 1,
+          "score": 1
+        },
+        "literature_support": {
+          "planned": 1,
+          "completed": 0,
+          "passed": 0,
+          "score": 0
+        },
+        "executed_replication": {
+          "planned": 1,
+          "completed": 0,
+          "passed": 0,
+          "score": 0
+        }
+      },
+      "medianSeconds": 12.212,
+      "reportedTokens": 94984,
+      "requests": 21,
+      "medianFirstDeltaMs": 1362.1133464999998,
+      "medianFirstTextMs": 1261.5687310000012,
+      "estimatedMedianOutputTokensPerSecond": 6321.695833878586,
+      "catalogCostUsd": null,
+      "meanCatalogCostPerSuccessUsd": null
+    },
+    {
+      "harness": "repi",
+      "model": "glm-5.3-flash",
+      "provider": "opencode-go",
+      "planned": 7,
+      "attempted": 6,
+      "completed": 6,
+      "passed": 5,
+      "score": 0.8095238095238094,
+      "categories": {
+        "numerical_evidence": {
+          "planned": 1,
+          "completed": 1,
+          "passed": 1,
+          "score": 1
+        },
+        "failure_recovery": {
+          "planned": 1,
+          "completed": 1,
+          "passed": 0,
+          "score": 0.6666666666666666
+        },
+        "experimental_design": {
+          "planned": 1,
+          "completed": 1,
+          "passed": 1,
+          "score": 1
+        },
+        "statistical_interpretation": {
+          "planned": 1,
+          "completed": 1,
+          "passed": 1,
+          "score": 1
+        },
+        "causal_reasoning": {
+          "planned": 1,
+          "completed": 1,
+          "passed": 1,
+          "score": 1
+        },
+        "literature_support": {
+          "planned": 1,
+          "completed": 1,
+          "passed": 1,
+          "score": 1
+        },
+        "executed_replication": {
+          "planned": 1,
+          "completed": 0,
+          "passed": 0,
+          "score": 0
+        }
+      },
+      "medianSeconds": 6.2059999999999995,
+      "reportedTokens": 152004,
+      "requests": 27,
+      "medianFirstDeltaMs": 1005.044416,
+      "medianFirstTextMs": 706.6022720000001,
+      "estimatedMedianOutputTokensPerSecond": 16553.550736634155,
+      "catalogCostUsd": 0.01076662,
+      "meanCatalogCostPerSuccessUsd": 0.002153324
+    }
+  ],
+  "comparisons": [
+    {
+      "model": "glm-5.3-flash",
+      "baseline": "pi",
+      "harness": "pi-research",
+      "deltaPercentagePoints": -14.28571428571428,
+      "descriptiveTaskClusterBootstrap95": null,
+      "uncertaintyScope": "Task-cluster percentile bootstrap on this fixed generated suite, conditional on settings; not population/general scientific superiority. Fewer than three tasks, fewer than two repeats, or incomplete conditions return null."
+    },
+    {
+      "model": "glm-5.3-flash",
+      "baseline": "pi",
+      "harness": "repi",
+      "deltaPercentagePoints": 0,
+      "descriptiveTaskClusterBootstrap95": null,
+      "uncertaintyScope": "Task-cluster percentile bootstrap on this fixed generated suite, conditional on settings; not population/general scientific superiority. Fewer than three tasks, fewer than two repeats, or incomplete conditions return null."
+    }
+  ],
+  "settings": {
+    "provider": "opencode-go",
+    "thinking": "off",
+    "temperature": 0.2,
+    "timeoutSeconds": 150,
+    "maxRequests": 10,
+    "maxOutputTokens": 4096,
+    "maxReportedTokens": 120000
+  },
+  "expectedTrials": 21,
+  "attemptedTrials": 18,
+  "receiptHashes": [
+    "98ef707154e84d118c829949aacc77a32b5c6380167132ea7fae4550ecc87ba9",
+    "1dc4784d3978075c78dd7040832149e9e9a07bc33ae252ff7cb53bc7fe08184a",
+    "b8bc4866e5e3095b9c7a6fc77f2df9eb66b8da3bc551bbe11975ecc3c330b9da",
+    "e492b37f216b1878f4d6b771422691db964e09949e2b1aeaec541b0e62f8ae33",
+    "b333366d5ac637c51df9ea363b754a558f3999bd67149826e953f1d82d9ee308",
+    "7608b31c7ccd7faa2861bf9c297f06d5c63d08f232ad580c94db9f43300400f9",
+    "c90bdd0fd1e1ce7d8dff316236d0acf976279ebfa6941fd3eff97080b8486764",
+    "df4516ad55fd1c225735e82c4186603a2648df41543cf4b20ea95c542c44c324",
+    "68febe913258e7706ba465c8467c3b11dc991a27d6ea6d2794b65b3d769c934b",
+    "a3a7ec9aff2c5d7c79a5a2611288f3cba00041249b7b74015772ed8143a5d4df",
+    "ab499a370df2e8c0bbaa66a2748f1837977e410d1f4ea22b1c89a86c7cda4587",
+    "a5805cfb22ac3f8b8787a5211c59e6b0a4161730a35bcd8c8428fef56401aad6",
+    "92eb7163e321f9ba6e83461acaa489fb06231ec639d7be561a6b2d54bebda4a2",
+    "3beb8e09de988d7135b813db039e4f5b9c15658c3ece1d0e558dcf32ff9ec4f0",
+    "e787e172b8120f993166ea3098fbc5799c2752c9fca6d58b20ce9fd4df8b404d",
+    "85bebdeaa4cc68756bd829c3cf22d07d0e9f73b7398397cb6e20d89250d41ffc",
+    "bc4eb033a764f73cce6f160c372bfa3cb1774cb4877168adf48e27350a7dc4de",
+    "d0e879f5958e34e57c100cf6d9899d2ecef5517e48155919fc1329af52aad38c"
+  ],
+  "scope": "Seven synthetic research workflow tasks, including a tiny independently reexecuted study. Does not establish real-paper replication, originality, scientific expertise or PhD equivalence.",
+  "interpretation": "Observed results on this generated synthetic suite. No superiority, discovery or PhD-equivalence claim. Cost is catalog-priced, never independently verified billing. Missing telemetry remains null.",
+  "publicationScope": "Aggregate results only; private events/paths/credentials/reasoning excluded."
+}

@@ -136,3 +136,7 @@ Under the same seven-task settings as GLM, DeepSeek V4.1 Flash completed all 21 
 ### Structured JSON writer correction
 
 Common benchmark tools now include `write_json` for objects/arrays with identical path/input restrictions and a prewrite 256 KB UTF-8 cap. All three profiles receive it. The complete local suite passed 88 tests without failures or skips. A real GLM-5.3 Flash metrics follow-up passed in all three profiles, each using five requests instead of the ten exhausted in its historical attempt; all three called `write_json` and no tool errors occurred. The retained run audit passed. This is a small development check, not a repeated full-suite result or isolated overhead measurement. [Verification report](research/json-writer-glm-pilot.md).
+
+### GLM full structured-writer follow-up
+
+All seven scenarios were attempted across a stopped 18-attempt run and an explicit three-study continuation; the upstream synthesis timeout remains failed. Pi base and ResearchPi with tools scored 95.24%, while the instruction-only profile scored 73.81%. Write-content type errors decreased from 119 to 10. Correct study reproduction passed in two profiles; the other failed run-oracle and artifact/replay agreement checks. The visual page preserves original scores and marks the changed tool versions. [Full provenance](research/glm-structured-full-followup.md).
