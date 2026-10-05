@@ -5,7 +5,8 @@ import {spawn} from 'node:child_process';
 import {readFileSync,writeFileSync,mkdirSync,cpSync,existsSync,readdirSync,lstatSync} from 'node:fs';
 import {resolve,join,dirname} from 'node:path';
 import {fileURLToPath} from 'node:url';
-import {connectionRuntime} from '../../dist/connections.js';
+import {transducerFPower} from '../official-replay-parser.mjs';
+import {verifyReferences} from './preflight.mjs';
 
 const scriptDir=dirname(fileURLToPath(import.meta.url));
 export const sha=bytes=>createHash('sha256').update(bytes).digest('hex');
@@ -114,7 +115,7 @@ async function grade(root,caseRoot,task,image) {
    const output=join(replay,'results','results_model_based_robust_stabilization_experiment.txt');
    if(existsSync(output)){const match=readFileSync(output,'utf8').match(/^optimal\s+[-+\d.]+\s+([-+\d.eE]+)/m);reproduction.measuredValue=match?Number(match[1]):null;}
   } else {
-   const match=r.out.match(/Transducer:\s*F[\s\S]*?Pload\s*=\s*([-+\d.eE]+)/);reproduction.measuredValue=match?Number(match[1]):null;
+   reproduction.measuredValue=transducerFPower(r.out);
   }
   const taskGold=JSON.parse(readFileSync(join(root,'private',task.id+'.json')));const question=Object.keys(taskGold.results[0])[0];
   const reported=existsSync(join(work,'submission.json'))?JSON.parse(readFileSync(join(work,'submission.json'))):{};
@@ -123,19 +124,24 @@ async function grade(root,caseRoot,task,image) {
  return {official:result,reproduction,success:result.all_correct===true&&reproduction.status==='completed'&&reproduction.matchesSubmission===true};
 }
 export async function main(root,image='repi-official-pilot:20261005') {
+ if(process.platform!=='linux')throw Error('This experimental Docker CPU evaluator currently requires Linux.');
  root=resolve(root);
  const protocol=JSON.parse(readFileSync(join(root,'protocol.json'))),tasks=JSON.parse(readFileSync(join(root,'tasks.json')));
  if(JSON.stringify(treeHashes(join(root,'inputs')))!==JSON.stringify(protocol.taskFiles)||JSON.stringify(treeHashes(join(root,'private')))!==JSON.stringify(protocol.graderFiles))throw Error('Input or grader hash mismatch');
  for(const task of tasks)if(sha(task.prompt)!==protocol.prompts[task.id])throw Error('Prompt hash mismatch');
+ const {connectionRuntime}=await import('../../dist/connections.js');
  const runtime=await connectionRuntime(),auth=await runtime.getAuth('opencode-go');
  if(!auth?.auth.apiKey)throw Error('Existing OpenCode Go API key is required');
  const models=protocol.condition.models.map(id=>runtime.getModel('opencode-go',id));
  if(models.some(m=>!m||m.api!=='openai-completions'||m.baseUrl!=='https://opencode.ai/zen/go/v1'))throw Error('Provider catalog does not match verified transport');
  const imageResult=await command(['docker','image','inspect',image,'--format','{{.Id}}']);if(imageResult.code!==0)throw Error('Build the pinned image first');
+ console.log('Verifying original references and official graders before model calls…');
+ const referenceVerification=await verifyReferences(root,imageResult.out.trim());
  const runRoot=join(root,'runs',randomUUID());mkdirSync(runRoot,{recursive:true,mode:0o700});
  // Runtime contains package-manager symlinks; fingerprint its locked dependencies,
  // built code and research resources rather than traversing executable links.
- const frozen={...protocol,imageId:imageResult.out.trim(),evaluatorFiles:treeHashes(scriptDir),models:models.map(({id,api,baseUrl,reasoning,cost,contextWindow,maxTokens})=>({id,api,baseUrl,reasoning,cost,contextWindow,maxTokens})),runtimeFiles:{...treeHashes(join(root,'image','app','dist')),resources:treeHashes(join(root,'image','app','resources')),lockfile:sha(readFileSync(join(root,'image','app','package-lock.json')))},started:new Date().toISOString()};save(join(runRoot,'frozen-protocol.json'),frozen);
+ const frozen={...protocol,imageId:imageResult.out.trim(),referenceVerification,replayParserHash:sha(readFileSync(join(scriptDir,'../official-replay-parser.mjs'))),evaluatorFiles:treeHashes(scriptDir),models:models.map(({id,api,baseUrl,reasoning,cost,contextWindow,maxTokens})=>({id,api,baseUrl,reasoning,cost,contextWindow,maxTokens})),runtimeFiles:{...treeHashes(join(root,'image','app','dist')),resources:treeHashes(join(root,'image','app','resources')),lockfile:sha(readFileSync(join(root,'image','app','package-lock.json')))},started:new Date().toISOString()};save(join(runRoot,'frozen-protocol.json'),frozen);
+ image=frozen.imageId;
  const network='repi-bench-'+randomUUID();await command(['docker','network','create','--internal',network]);
  const inspect=await command(['docker','network','inspect',network]);const gateway=JSON.parse(inspect.out)[0].IPAM.Config[0].Gateway;
  const attempts=[];let stopped=false;const stop=()=>{stopped=true;if(activeContainer)spawn('docker',['kill',activeContainer],{stdio:'ignore'});};process.once('SIGINT',stop);process.once('SIGTERM',stop);

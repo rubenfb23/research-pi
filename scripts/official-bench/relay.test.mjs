@@ -28,7 +28,7 @@ test('relay retains provider stream, isolates credential and enforces model/requ
   r=await fetch(url.replace(relay.token,'unknown'),{method:'POST',body:'{}'});assert.equal(r.status,404);
  }finally{await relay.close();upstream.closeAllConnections();await new Promise(ok=>upstream.close(ok));}
 });
-test('artifact hashing refuses links outside the agent workspace',()=>{
+test('artifact hashing refuses links outside the agent workspace',{skip:process.platform==='win32'},()=>{
  const dir=mkdtempSync(join(tmpdir(),'repi-artifacts-'));
  try{writeFileSync(join(dir,'safe'),'data');assert.equal(Object.keys(treeHashes(dir)).length,1);symlinkSync('/etc/passwd',join(dir,'submission.json'));assert.throws(()=>treeHashes(dir),/Symlink/);}finally{rmSync(dir,{recursive:true,force:true});}
 });
