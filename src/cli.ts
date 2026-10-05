@@ -152,8 +152,8 @@ bench.command('official').description('Compare configured OpenCode Go models on 
  .action(opts=>{const result=spawnSync(process.execPath,[join(ROOT,'scripts','official-bench','run.mjs'),resolve(opts.dataset),opts.image],{stdio:'inherit'});if(result.error)throw result.error;process.exitCode=result.status??1;});
 const indexBench=bench.command('index').description('Frozen research ratings, scientific rubrics and native development calibration');
 indexBench.command('prepare').requiredOption('--output <directory>','fresh public development task directory')
- .option('--image <name>','scientific Docker runtime','repi-official-pilot:20261005').option('--trials <n>','fresh agent attempts per condition','1').option('--timeout <seconds>','frozen per-attempt deadline','300')
- .action(opts=>{const r=spawnSync(process.execPath,[join(ROOT,'scripts/research-index/run.mjs'),'prepare',resolve(opts.output),opts.image,opts.trials,opts.timeout],{stdio:'inherit'});if(r.error)throw r.error;process.exitCode=r.status??1;});
+ .option('--image <name>','scientific Docker runtime','repi-official-pilot:20261005').option('--trials <n>','fresh agent attempts per condition','1').option('--timeout <seconds>','frozen per-attempt deadline','300').option('--models <ids>','2–8 distinct OpenCode Go chat-completion model IDs; first is the fixed reference','deepseek-v4.1-flash,glm-5.3-flash')
+ .action(opts=>{const r=spawnSync(process.execPath,[join(ROOT,'scripts/research-index/run.mjs'),'prepare',resolve(opts.output),opts.image,opts.trials,opts.timeout,opts.models],{stdio:'inherit'});if(r.error)throw r.error;process.exitCode=r.status??1;});
 indexBench.command('run').requiredOption('--dataset <directory>','prepared, frozen development task pack')
  .option('--image <name>','must match frozen preparation image','repi-official-pilot:20261005')
  .action(opts=>{const r=spawnSync(process.execPath,[join(ROOT,'scripts/research-index/run.mjs'),'run',resolve(opts.dataset),opts.image],{stdio:'inherit'});if(r.error)throw r.error;process.exitCode=r.status??1;});

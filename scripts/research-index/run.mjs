@@ -17,6 +17,7 @@ function numericMatch(a,b) {
 }
 export async function prepare(root,{image='repi-official-pilot:20261005',trials=1,seconds=300,models=['deepseek-v4.1-flash','glm-5.3-flash']}={}) {
  if(process.platform!=='linux')throw Error('Native index calibration currently requires Linux and Docker.');
+ if(models.length<2||models.length>8||new Set(models).size!==models.length||models.some(id=>typeof id!=='string'||!/^[a-z0-9][a-z0-9._-]{0,149}$/i.test(id)))throw Error('Choose 2–8 distinct safe OpenCode Go model IDs.');
  root=resolve(root);if(existsSync(root))throw Error('Use a fresh output directory.');
  const revisions=await command(['docker','image','inspect',image,'--format','{{.Id}}']);if(revisions.code!==0)throw Error('Build the scientific CPU runtime first.');
  // Snapshot bibliographic identity only; metadata does not prove scientific claims.
@@ -125,8 +126,8 @@ export async function run(root,image='repi-official-pilot:20261005') {
  return directory;
 }
 if(process.argv[1]===fileURLToPath(import.meta.url)) {
- const [mode,path,image,trials,seconds]=process.argv.slice(2);
- if(mode==='prepare')await prepare(path,{image,trials:Number(trials??1),seconds:Number(seconds??300)});
+ const [mode,path,image,trials,seconds,modelIds]=process.argv.slice(2);
+ if(mode==='prepare')await prepare(path,{image,trials:Number(trials??1),seconds:Number(seconds??300),models:modelIds?.split(',')});
  else if(mode==='run')console.log(await run(path,image));
  else throw Error('Use prepare or run.');
 }

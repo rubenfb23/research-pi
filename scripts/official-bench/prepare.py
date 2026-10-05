@@ -56,7 +56,12 @@ shutil.copy2(repo / 'scripts' / 'official-bench' / 'requirements.lock.txt', cont
 shutil.copy2(shutil.which('node'), context / 'node')
 app = context / 'app'; app.mkdir()
 for name in ['dist','resources','scripts','node_modules']:
-    shutil.copytree(repo/name, app/name, symlinks=True)
+    if name == 'scripts':
+        # Agent runtime needs ordinary research scripts, never benchmark graders/generators.
+        excluded = shutil.ignore_patterns('official-bench', 'research-index', 'render-official-benchmark.py', 'render-research-index.mjs', 'official-replay-parser.mjs', 'official-replay-parser.test.mjs')
+        shutil.copytree(repo/name, app/name, symlinks=True, ignore=excluded)
+    else:
+        shutil.copytree(repo/name, app/name, symlinks=True)
 for name in ['package.json','package-lock.json','repi']:
     shutil.copy2(repo/name, app/name)
 print(json.dumps({'output':str(output), 'tasks':[t['id'] for t in tasks]}))
