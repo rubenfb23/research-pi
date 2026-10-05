@@ -13,4 +13,6 @@ GLM's statistics session produced HTTP 400: native reasoning control reasoning_e
 
 Uniform amendment excludes the ambiguous independentTrainingSeeds writing criterion from both models; all other notes are unchanged. Original grades and provenance are retained. Ten original receipts passed the audit, using documented legacy optional-settings digest reconstruction; no raw receipt or model artifact was edited. Original evaluator commit: 0e9e989.
 
+An exploratory author inspection also found that DeepSeek's narrative incorrectly claims a mean ± one-SD band overlaps the baseline. The supplied values and plotting code place the baseline outside the band. This is not independent blinded grading, and the mechanical notes were not changed. The example shows why artifact-format checks cannot certify scientific writing.
+
 [Interactive report](research-agent-index-development.html) · [Results, correction and provenance](research-agent-index-development.json) · [Commands](../../scripts/research-index/README.md).

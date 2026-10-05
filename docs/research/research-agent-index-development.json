@@ -869,6 +869,21 @@
       ]
     }
   ],
+  "authorInspection": [
+    {
+      "conditionId": "repi/deepseek-v4.1-flash",
+      "trial": 1,
+      "issue": "The paper claims that the candidate mean ± one sample SD band overlaps the baseline, but the supplied values and plotting code contradict this.",
+      "measurements": {
+        "baseline": 0.7098214349949837,
+        "lower": 0.7282543198243948,
+        "upper": 0.7728044888233966
+      },
+      "paperSha256": "5162f023a756c3f8d887a387ca22dc18a1078ea913db4bd8c8540eaca1634668",
+      "assessment": "Exploratory author inspection, not blinded independent expert grading.",
+      "changesGrades": false
+    }
+  ],
   "referenceChecks": {
     "status": "passed",
     "checked": "2026-10-05T11:20:18.916Z",
