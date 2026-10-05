@@ -13,7 +13,9 @@ Start with `repi`. Develop a research question, retrieve sources, freeze an expe
 
 [Project website](https://rubenfb23.github.io/research-pi/) · [Quickstart](docs/quickstart.md) · [Workflows](docs/workflows.md) · [CLI guide](docs/cli-guide.md) · [Comparison](docs/comparison.md) · [Verification](docs/status.md) · [Roadmap](ROADMAP.md)
 
-Evaluate controlled same-model research workflows with `repi bench research run`. Compare Pi SDK profiles, scientific instructions and ResearchPi tools using submitted evidence, isolated code execution and a visual quality/time/cost report. [Benchmark protocol](docs/research-benchmark.md).
+Evaluate controlled same-model research workflows with `repi bench research run`. These generated tasks compare component ablations, not complete native products. [Benchmark protocol](docs/research-benchmark.md).
+
+For a first evaluation on published scientific tasks, `repi bench official --dataset <prepared-directory>` runs the full native CLI on an isolated Linux CPU subset of MLAgentBench and CORE-Bench Extended/OOD. It compares DeepSeek V4.1 Flash and GLM-5.3 Flash using OpenCode Go, separate graders and fresh replay containers. [Setup and limitations](scripts/official-bench/README.md) · [Executed model comparison](docs/research/deepseek-vs-glm-research-pilot.html). This small pilot does not establish model or harness superiority.
 
 ![ResearchPi native terminal interface, captured using the deterministic offline transport](assets/terminal.svg)
 

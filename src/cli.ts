@@ -143,6 +143,10 @@ program.command('disconnect').argument('<connection>', connectionNames).action(a
   console.log('Local credential removed. Environment variables and provider authorization are managed separately.');
 });
 const bench=program.command('bench').description('Run a frozen research microtask evaluation with real agent CLIs');
+bench.command('official').description('Compare configured OpenCode Go models on prepared official CPU benchmark inputs')
+ .requiredOption('--dataset <path>','prepared dataset directory; see scripts/official-bench/README.md')
+ .option('--image <name>','frozen Docker runtime','repi-official-pilot:20261005')
+ .action(opts=>{const result=spawnSync(process.execPath,[join(ROOT,'scripts','official-bench','run.mjs'),resolve(opts.dataset),opts.image],{stdio:'inherit'});if(result.error)throw result.error;process.exitCode=result.status??1;});
 const researchBench=bench.command('research').description('Controlled same-model research workflows with submitted artifacts');
 researchBench.command('tasks').option('--split <id>','dev or generated validation','dev').option('--seed <n>','task generation seed','20261004').action(opts=>{
  if(!['dev','validation'].includes(opts.split))throw new Error('Choose dev or validation.');
