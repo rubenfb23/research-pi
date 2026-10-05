@@ -6,6 +6,8 @@ The [exploratory DeepSeek pilot](research/research-benchmark-pilot.md) records a
 
 The [GLM-5.3 Flash full-task pilot](research/research-benchmark-glm-pilot.md) records 21 attempts and the dominant tool-schema failure.
 
+The [direct DeepSeek vs GLM comparison](research/deepseek-vs-glm-research-pilot.md) shows all seven scenarios across all profiles under matching settings.
+
 ## Same-model conditions
 
 | Profile | Instructions | Tools |
