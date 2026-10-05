@@ -4,7 +4,7 @@ import {mkdtempSync,mkdirSync,writeFileSync,rmSync} from 'node:fs';
 import {tmpdir} from 'node:os';
 import {join} from 'node:path';
 import {createHash} from 'node:crypto';
-import {auditIndexRun} from '../src/research-index-audit.js';
+import {auditIndexRun,requestEvidenceMatches} from '../src/research-index-audit.js';
 import {freezeIndexProtocol,scoreResearchIndex,indexDomains,type IndexEvidence} from '../src/research-index.js';
 import {hash,writeJson} from '../src/storage.js';
 test('audit verifies native evidence then detects artifact and grade tampering',()=>{
@@ -23,4 +23,11 @@ test('audit verifies native evidence then detects artifact and grade tampering',
   writeFileSync(join(firstWork,'answer.json'),'tampered');assert.ok(auditIndexRun(root).errors.some(e=>e.includes('Artifact digest')));
   evidence[0]!.criteria.correct=0;writeJson(join(root,'evidence.json'),evidence);assert.ok(auditIndexRun(root).errors.some(e=>e.includes('grading mismatch')));
  }finally{rmSync(root,{recursive:true,force:true});}
+});
+
+test('legacy optional-setting reconstruction preserves digests without accepting changed wire values',()=>{
+ const original=[{settings:{max_tokens:8192,max_completion_tokens:undefined,temperature:undefined,reasoning_effort:'high',stream:true},status:200}];
+ const serialized=JSON.parse(JSON.stringify(original));
+ assert.deepEqual(requestEvidenceMatches(serialized,hash(original)),{matched:true,legacyOptionalSettings:true});
+ serialized[0].settings.reasoning_effort='low';assert.equal(requestEvidenceMatches(serialized,hash(original)).matched,false);
 });

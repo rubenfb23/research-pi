@@ -32,7 +32,7 @@ export async function prepare(root,{image='repi-official-pilot:20261005',trials=
  if(generated.code!==0)throw Error('Task preparation failed: '+generated.err);
  const tasks=read(join(root,'tasks.json'));
  const conditions=models.map(model=>({id:'repi/'+model,harness:'ResearchPi native CLI',revision:revisions.out.trim(),model,provider:'opencode-go',settings:{thinking:'medium',retry:{maxRetries:2},temperature:'native provider default'}}));
- const protocol=freezeIndexProtocol({schemaVersion:1,version:'RAI-development-0.1',phase:'development',reference:conditions[0]?.id,conditions,tasks:tasks.map(({prompt,...task})=>({...task,inputHash:hash(treeHashes(join(root,'inputs',task.id)))})),trials,budgets:{seconds,requests:24,outputTokens:8192},domainWeights:Object.fromEntries(indexDomains.map(d=>[d,.2])),rating:{regularization:.5,tieTolerance:.01,bootstrapSamples:1000,bootstrapSeed:9173},disclosure:'Five public authored development tasks; automated grading plus pending independent expert review. Anchor is a prespecified transport reference, not an established research champion. No sealed holdout, human baseline or competing harness run.'});
+ const protocol=freezeIndexProtocol({schemaVersion:1,version:'RAI-development-0.2',phase:'development',reference:conditions[0]?.id,conditions,tasks:tasks.map(({prompt,...task})=>({...task,inputHash:hash(treeHashes(join(root,'inputs',task.id)))})),trials,budgets:{seconds,requests:24,outputTokens:8192},domainWeights:Object.fromEntries(indexDomains.map(d=>[d,.2])),rating:{regularization:.5,tieTolerance:.01,bootstrapSamples:1000,bootstrapSeed:9173},disclosure:'Five public authored development tasks; automated grading plus pending independent expert review. Anchor is a prespecified transport reference, not an established research champion. No sealed holdout, human baseline or competing harness run.'});
  save(join(root,'protocol.json'),protocol);
  save(join(root,'integrity.json'),{inputs:treeHashes(join(root,'inputs')),private:treeHashes(join(root,'private')),tasksHash:sha(readFileSync(join(root,'tasks.json'))),sourceHashes:treeHashes(here),runtimeSources:runtimeSources(),imageId:revisions.out.trim(),registryRetrieved:new Date().toISOString()});
  console.log('Prepared public development pack: '+root);return root;
@@ -65,6 +65,7 @@ async function assess(root,caseRoot,task,image,trace) {
  return {answer,criteria,valid:unchanged,replayDetails,notes:'Mechanical artifact checks only; independent expert review pending. Unchanged-input integrity gate: '+unchanged+'. These checks do not establish scientific validity or paper quality.'};
 }
 export async function verifyPack(root,image) {
+ root=resolve(root);
  const tasks=read(join(root,'tasks.json'));const directory=join(root,'reference-checks',randomUUID());mkdirSync(directory,{recursive:true,mode:0o700});const checks=[];
  for(const task of tasks) {
   const expected=read(join(root,'private',task.id+'.json')).expected,caseRoot=join(directory,task.id),work=join(caseRoot,'work');mkdirSync(caseRoot);cpSync(join(root,'inputs',task.id),work,{recursive:true});save(join(work,'answer.json'),expected);
@@ -85,6 +86,7 @@ export async function verifyPack(root,image) {
 }
 export async function run(root,image='repi-official-pilot:20261005') {
  root=resolve(root);const protocol=verifyIndexProtocol(read(join(root,'protocol.json'))),integrity=read(join(root,'integrity.json')),tasks=read(join(root,'tasks.json'));
+ if(protocol.phase!=='development'||protocol.conditions.some(c=>c.harness!=='ResearchPi native CLI'))throw Error('This runner supports public native ResearchPi development calibration only, not an unverified holdout or competing harness.');
  const actual=await command(['docker','image','inspect',image,'--format','{{.Id}}']);if(actual.code!==0||actual.out.trim()!==integrity.imageId)throw Error('Use the frozen preparation runtime image.');image=actual.out.trim();
  const check=()=>{if(hash(treeHashes(join(root,'inputs')))!==hash(integrity.inputs)||hash(treeHashes(join(root,'private')))!==hash(integrity.private)||sha(readFileSync(join(root,'tasks.json')))!==integrity.tasksHash||hash(treeHashes(here))!==hash(integrity.sourceHashes)||hash(runtimeSources())!==hash(integrity.runtimeSources))throw Error('Task/evaluator integrity changed after freeze.');};check();
  console.log('Checking mechanical references and wrong-answer rejection before model calls…');
@@ -111,7 +113,7 @@ export async function run(root,image='repi-official-pilot:20261005') {
     try{native=await dockerRun(image,activeName,['-v',`${work}:/work`,'-v',`${state}:/state`,'-e','RESEARCH_PI_API_KEY=benchmark-relay-placeholder',image,'node','/app/dist/cli.js','--project','/work','chat','--json','--new','benchmark',task.prompt+` Per-attempt wall limit: ${protocol.budgets.seconds} seconds.`],{network,timeout:protocol.budgets.seconds*1000,log:join(caseRoot,'native-trace')});}finally{await relay.close();activeName=undefined;save(join(caseRoot,'requests.json'),events);}
     const seconds=(Date.now()-start)/1000;const errors=native.out.split('\n').flatMap(line=>{try{const e=JSON.parse(line);return e.type==='message_end'&&e.message?.stopReason==='error'?[e.message.errorMessage]:[];}catch{return [];}});
     let grade;try{grade=await assess(root,caseRoot,task,image,native.out);}catch(e){grade={criteria:Object.fromEntries(task.criteria.map(c=>[c,0])),valid:false,notes:'Artifact assessment failed: '+e.message};}
-    check();const artifacts=treeHashes(work),receipt={taskId:task.id,conditionId:condition.id,trial,nativeStatus:native.timedOut?'timeout':errors.length?'provider_failed':native.code===0?'completed':'agent_failed',errors,seconds,requests:events.length,requestHash:hash(events),traceHash:sha(native.out),artifactHashes:artifacts,grade,protocolHash:protocol.protocolHash};save(join(caseRoot,'receipt.json'),receipt);
+    check();const artifacts=treeHashes(work),receipt={taskId:task.id,conditionId:condition.id,trial,nativeStatus:native.timedOut?'timeout':errors.length?'provider_failed':native.code===0?'completed':'agent_failed',errors,seconds,requests:events.length,requestHash:hash(read(join(caseRoot,'requests.json'))),traceHash:sha(native.out),artifactHashes:artifacts,grade,protocolHash:protocol.protocolHash};save(join(caseRoot,'receipt.json'),receipt);
     const submitted=existsSync(join(work,'answer.json'));
     const item={taskId:task.id,conditionId:condition.id,trial,status:submitted?'completed':native.timedOut?'timeout':'failed',valid:grade.valid,criteria:grade.criteria,receiptHash:hash(receipt),artifactHash:hash(artifacts),review:{kind:'automated',notes:grade.notes+' Native session: '+receipt.nativeStatus+'.'},seconds};
     evidence.push(item);save(join(directory,'evidence.json'),evidence);

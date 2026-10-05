@@ -1,0 +1,993 @@
+{
+  "index": {
+    "schemaVersion": 1,
+    "version": "RAI-development-0.1-amendment-1",
+    "phase": "development",
+    "protocolHash": "47ba53e1ed036740975c4557db97f0f158f5fc1c3eb09ad21050971ccbcc9399",
+    "evidenceHash": "cd7ca57b006f6962b8267283c01965786c8cd0159e1b6c9e82be83602b013b36",
+    "reference": "repi/deepseek-v4.1-flash",
+    "status": "development_only",
+    "publishable": false,
+    "missingDomains": [],
+    "missingAttempts": 0,
+    "pendingReviews": 8,
+    "matches": 5,
+    "uncertainty": "Unavailable: require at least three independent families per domain and two attempts per condition. No claim of significant ordering.",
+    "ratingScope": "Regularized Bradley–Terry relative strength; fixed reference 50; ties encoded as half-wins. A display transform does not remove saturation. Not percent PhD competence.",
+    "reviewScope": "Expert identity and blinding are submitter attestations, not automatically verified credentials. Review quality and independence require external audit.",
+    "rows": [
+      {
+        "id": "repi/deepseek-v4.1-flash",
+        "harness": "ResearchPi native CLI",
+        "revision": "sha256:58ff9ba8e910ba03e88628a47f90421eb3954972f227a9fbfcb0b4625c5b5481",
+        "model": "deepseek-v4.1-flash",
+        "provider": "opencode-go",
+        "settings": {
+          "thinking": "medium",
+          "retry": {
+            "maxRetries": 2
+          },
+          "temperature": "native provider default"
+        },
+        "rai": null,
+        "developmentRating": 50,
+        "interval95": null,
+        "domains": {
+          "reproduction": 100,
+          "experimentation": 100,
+          "statistics_causality": 100,
+          "literature": 100,
+          "scientific_writing": 83.33333333333334
+        },
+        "scientificQuality": 96.66666666666667,
+        "attempted": 5,
+        "planned": 5,
+        "validCompleted": 5,
+        "seconds": 397.95500000000004,
+        "costUsd": null,
+        "gapToLeader": 0
+      },
+      {
+        "id": "repi/glm-5.3-flash",
+        "harness": "ResearchPi native CLI",
+        "revision": "sha256:58ff9ba8e910ba03e88628a47f90421eb3954972f227a9fbfcb0b4625c5b5481",
+        "model": "glm-5.3-flash",
+        "provider": "opencode-go",
+        "settings": {
+          "thinking": "medium",
+          "retry": {
+            "maxRetries": 2
+          },
+          "temperature": "native provider default"
+        },
+        "rai": null,
+        "developmentRating": 50,
+        "interval95": null,
+        "domains": {
+          "reproduction": 100,
+          "experimentation": 100,
+          "statistics_causality": 0,
+          "literature": 100,
+          "scientific_writing": 100
+        },
+        "scientificQuality": 80,
+        "attempted": 5,
+        "planned": 5,
+        "validCompleted": 4,
+        "seconds": 306.878,
+        "costUsd": null,
+        "gapToLeader": 0
+      }
+    ],
+    "sameModelHarnessLift": [],
+    "saturated": false,
+    "evidence": [
+      {
+        "taskId": "bootstrap-reproduction",
+        "conditionId": "repi/deepseek-v4.1-flash",
+        "trial": 1,
+        "status": "completed",
+        "valid": true,
+        "criteria": {
+          "baselineRmse": 1,
+          "seeds": 1,
+          "candidateRmses": 1,
+          "candidateMean": 1,
+          "candidateSampleSd": 1,
+          "populationUncertaintyEstablished": 1,
+          "scriptExecuted": 1,
+          "freshReplay": 1,
+          "perturbedInputReplay": 1
+        },
+        "receiptHash": "ce79258872e65b79c08680f2b566e761de99f5aeefe789e5034f1bf00630f572",
+        "artifactHash": "ab5c6d5f2ff859c05dcd2f0d2d14af9822a2b556b67671300e0b7743e6628616",
+        "review": {
+          "kind": "automated",
+          "notes": "Mechanical artifact checks only; independent expert review pending. Unchanged-input integrity gate: true. These checks do not establish scientific validity or paper quality. Native session: completed."
+        },
+        "seconds": 58.197
+      },
+      {
+        "taskId": "bootstrap-reproduction",
+        "conditionId": "repi/glm-5.3-flash",
+        "trial": 1,
+        "status": "completed",
+        "valid": true,
+        "criteria": {
+          "baselineRmse": 1,
+          "seeds": 1,
+          "candidateRmses": 1,
+          "candidateMean": 1,
+          "candidateSampleSd": 1,
+          "populationUncertaintyEstablished": 1,
+          "scriptExecuted": 1,
+          "freshReplay": 1,
+          "perturbedInputReplay": 1
+        },
+        "receiptHash": "cad7d0ba2eec365914c816a04f4879f7baadb21b2a56720f435feec9d6a3af2a",
+        "artifactHash": "b44d8aa1315d5a65897d8380d30e9c1c9cac62829df79c5757ec299d0dc20266",
+        "review": {
+          "kind": "automated",
+          "notes": "Mechanical artifact checks only; independent expert review pending. Unchanged-input integrity gate: true. These checks do not establish scientific validity or paper quality. Native session: completed."
+        },
+        "seconds": 75.512
+      },
+      {
+        "taskId": "grouped-study-design",
+        "conditionId": "repi/glm-5.3-flash",
+        "trial": 1,
+        "status": "completed",
+        "valid": true,
+        "criteria": {
+          "validProtocols": 1,
+          "leakageByProtocol": 1,
+          "independentUnit": 1,
+          "tenInitializationSeedsEstablishPopulationUncertainty": 1,
+          "externalHospitalClaimSupported": 1,
+          "protocolArtifactPresent": 1
+        },
+        "receiptHash": "8fae6e614a3ea002a9f47408befd5d351abe246e8eadc7a610d8b07482392ac6",
+        "artifactHash": "a35ca2ea2fd58ab485908eec0b6b5460e8b15b92742f10d01fac1c9a6141de37",
+        "review": {
+          "kind": "automated",
+          "notes": "Mechanical artifact checks only; independent expert review pending. Unchanged-input integrity gate: true. These checks do not establish scientific validity or paper quality. Native session: completed."
+        },
+        "seconds": 32.987
+      },
+      {
+        "taskId": "grouped-study-design",
+        "conditionId": "repi/deepseek-v4.1-flash",
+        "trial": 1,
+        "status": "completed",
+        "valid": true,
+        "criteria": {
+          "validProtocols": 1,
+          "leakageByProtocol": 1,
+          "independentUnit": 1,
+          "tenInitializationSeedsEstablishPopulationUncertainty": 1,
+          "externalHospitalClaimSupported": 1,
+          "protocolArtifactPresent": 1
+        },
+        "receiptHash": "798771610594dff38012ae70348e8a9ffea655d15553ecd80447117f783500ad",
+        "artifactHash": "033bc7ad845d4311e143dbe10f9712b51e80e74b21453d94e4175754d4d2beb1",
+        "review": {
+          "kind": "automated",
+          "notes": "Mechanical artifact checks only; independent expert review pending. Unchanged-input integrity gate: true. These checks do not establish scientific validity or paper quality. Native session: completed."
+        },
+        "seconds": 83.73
+      },
+      {
+        "taskId": "clustered-and-causal-analysis",
+        "conditionId": "repi/deepseek-v4.1-flash",
+        "trial": 1,
+        "status": "completed",
+        "valid": true,
+        "criteria": {
+          "subjectMeanDifference": 1,
+          "subjectSampleSd": 1,
+          "bootstrapLower": 1,
+          "bootstrapUpper": 1,
+          "subjectCount": 1,
+          "marginalRiskDifference": 1,
+          "allSiteAteIdentified": 1,
+          "initializationSdIsPopulationInterval": 1,
+          "explanationArtifactPresent": 1
+        },
+        "receiptHash": "9d5ec5d84edcd8f3540b4415713538d758f69aaeff12b3351d7c581e4343498c",
+        "artifactHash": "66a238e1eba62a89904b4d1977b26a70b0984b4a14aa2f449a9a0dcd9981531f",
+        "review": {
+          "kind": "automated",
+          "notes": "Mechanical artifact checks only; independent expert review pending. Unchanged-input integrity gate: true. These checks do not establish scientific validity or paper quality. Native session: completed."
+        },
+        "seconds": 66.023
+      },
+      {
+        "taskId": "clustered-and-causal-analysis",
+        "conditionId": "repi/glm-5.3-flash",
+        "trial": 1,
+        "status": "failed",
+        "valid": true,
+        "criteria": {
+          "subjectMeanDifference": 0,
+          "subjectSampleSd": 0,
+          "bootstrapLower": 0,
+          "bootstrapUpper": 0,
+          "subjectCount": 0,
+          "marginalRiskDifference": 0,
+          "allSiteAteIdentified": 0,
+          "initializationSdIsPopulationInterval": 0,
+          "explanationArtifactPresent": 0
+        },
+        "receiptHash": "7b2776ee9ce8d2e9387d6eaa0598729c2829c4ea91f0d7f8349e9d1113639757",
+        "artifactHash": "d16f33cfa57513ad6ab4f7ac76dc9b13200ad6e60b017d10e555fc27ff8de514",
+        "review": {
+          "kind": "automated",
+          "notes": "Mechanical artifact checks only; independent expert review pending. Unchanged-input integrity gate: true. These checks do not establish scientific validity or paper quality. Native session: provider_failed."
+        },
+        "seconds": 72.205
+      },
+      {
+        "taskId": "bibliographic-integrity",
+        "conditionId": "repi/glm-5.3-flash",
+        "trial": 1,
+        "status": "completed",
+        "valid": true,
+        "criteria": {
+          "validReferences": 1,
+          "mismatchedReferences": 1,
+          "doiExistenceAloneVerifiesCitation": 1,
+          "metadataAloneEstablishesScientificClaim": 1,
+          "verifiedLiveInternet": 1,
+          "explanationArtifactPresent": 1
+        },
+        "receiptHash": "a7b14b5fb1f9f95b63245ab0aeca0108a54bc74917801779e8dd37c273a6da1a",
+        "artifactHash": "3d200daaf41a4c5ab2347c3f58122cc90acea6c85033de1bd441b7aa5f2171db",
+        "review": {
+          "kind": "automated",
+          "notes": "Mechanical artifact checks only; independent expert review pending. Unchanged-input integrity gate: true. These checks do not establish scientific validity or paper quality. Native session: completed."
+        },
+        "seconds": 65.645
+      },
+      {
+        "taskId": "bibliographic-integrity",
+        "conditionId": "repi/deepseek-v4.1-flash",
+        "trial": 1,
+        "status": "completed",
+        "valid": true,
+        "criteria": {
+          "validReferences": 1,
+          "mismatchedReferences": 1,
+          "doiExistenceAloneVerifiesCitation": 1,
+          "metadataAloneEstablishesScientificClaim": 1,
+          "verifiedLiveInternet": 1,
+          "explanationArtifactPresent": 1
+        },
+        "receiptHash": "3118e38d628cb1a700ec03f41e35cf73a3cc4b0736b039ebefec9c0055cc9471",
+        "artifactHash": "b91280d3be47c9bd07447d90b5c4ec2ea6b91dacf071316344b8a25a72cf0151",
+        "review": {
+          "kind": "automated",
+          "notes": "Mechanical artifact checks only; independent expert review pending. Unchanged-input integrity gate: true. These checks do not establish scientific validity or paper quality. Native session: completed."
+        },
+        "seconds": 40.797
+      },
+      {
+        "taskId": "evidence-grounded-paper",
+        "conditionId": "repi/deepseek-v4.1-flash",
+        "trial": 1,
+        "status": "completed",
+        "valid": true,
+        "criteria": {
+          "candidateBetterOnAverage": 1,
+          "populationGeneralizationEstablished": 1,
+          "causalImprovementEstablished": 1,
+          "baselineNeedsTenIdenticalRefits": 0,
+          "paperSectionsPresent": 1,
+          "figurePresent": 1
+        },
+        "receiptHash": "869a96f33e0169eabc2d8b03ec3a47f8ed6cf2603a99d85e88d1c627bc3d2776",
+        "artifactHash": "246545716c290981aac17110915d4dcbabbe015913128b6a973729d89fd727a3",
+        "review": {
+          "kind": "automated",
+          "notes": "Mechanical artifact checks only; independent expert review pending. Unchanged-input integrity gate: true. These checks do not establish scientific validity or paper quality. Native session: completed. Uniform rubric amendment seed-role-rubric-amendment-1 applied; receiptHash refers to unchanged original receipt."
+        },
+        "seconds": 149.208
+      },
+      {
+        "taskId": "evidence-grounded-paper",
+        "conditionId": "repi/glm-5.3-flash",
+        "trial": 1,
+        "status": "completed",
+        "valid": true,
+        "criteria": {
+          "candidateBetterOnAverage": 1,
+          "populationGeneralizationEstablished": 1,
+          "causalImprovementEstablished": 1,
+          "baselineNeedsTenIdenticalRefits": 1,
+          "paperSectionsPresent": 1,
+          "figurePresent": 1
+        },
+        "receiptHash": "768566b917c0ac300e1db5c61422a368588055ce8487caf106ce3f20381d1a19",
+        "artifactHash": "96d06fb9944ca88c137f2dd467623375e6022f659d848ff377dfc8462fa85ebc",
+        "review": {
+          "kind": "automated",
+          "notes": "Mechanical artifact checks only; independent expert review pending. Unchanged-input integrity gate: true. These checks do not establish scientific validity or paper quality. Native session: completed. Uniform rubric amendment seed-role-rubric-amendment-1 applied; receiptHash refers to unchanged original receipt."
+        },
+        "seconds": 60.529
+      }
+    ]
+  },
+  "protocol": {
+    "schemaVersion": 1,
+    "version": "RAI-development-0.1-amendment-1",
+    "phase": "development",
+    "reference": "repi/deepseek-v4.1-flash",
+    "conditions": [
+      {
+        "id": "repi/deepseek-v4.1-flash",
+        "harness": "ResearchPi native CLI",
+        "revision": "sha256:58ff9ba8e910ba03e88628a47f90421eb3954972f227a9fbfcb0b4625c5b5481",
+        "model": "deepseek-v4.1-flash",
+        "provider": "opencode-go",
+        "settings": {
+          "thinking": "medium",
+          "retry": {
+            "maxRetries": 2
+          },
+          "temperature": "native provider default"
+        }
+      },
+      {
+        "id": "repi/glm-5.3-flash",
+        "harness": "ResearchPi native CLI",
+        "revision": "sha256:58ff9ba8e910ba03e88628a47f90421eb3954972f227a9fbfcb0b4625c5b5481",
+        "model": "glm-5.3-flash",
+        "provider": "opencode-go",
+        "settings": {
+          "thinking": "medium",
+          "retry": {
+            "maxRetries": 2
+          },
+          "temperature": "native provider default"
+        }
+      }
+    ],
+    "tasks": [
+      {
+        "id": "bootstrap-reproduction",
+        "domain": "reproduction",
+        "family": "bootstrap-reproduction",
+        "requiresExpertReview": false,
+        "criteria": [
+          "baselineRmse",
+          "seeds",
+          "candidateRmses",
+          "candidateMean",
+          "candidateSampleSd",
+          "populationUncertaintyEstablished",
+          "scriptExecuted",
+          "freshReplay",
+          "perturbedInputReplay"
+        ],
+        "inputHash": "2a121ba66e7ca043a9988f44239df93353c07cd7803bc6dd6a7d679278df1f71"
+      },
+      {
+        "id": "grouped-study-design",
+        "domain": "experimentation",
+        "family": "grouped-study-design",
+        "requiresExpertReview": true,
+        "criteria": [
+          "validProtocols",
+          "leakageByProtocol",
+          "independentUnit",
+          "tenInitializationSeedsEstablishPopulationUncertainty",
+          "externalHospitalClaimSupported",
+          "protocolArtifactPresent"
+        ],
+        "inputHash": "6a4572c85f7b681b33bff090f15640df9552722aa3f98a21956ea002c373e39f"
+      },
+      {
+        "id": "clustered-and-causal-analysis",
+        "domain": "statistics_causality",
+        "family": "clustered-and-causal-analysis",
+        "requiresExpertReview": true,
+        "criteria": [
+          "subjectMeanDifference",
+          "subjectSampleSd",
+          "bootstrapLower",
+          "bootstrapUpper",
+          "subjectCount",
+          "marginalRiskDifference",
+          "allSiteAteIdentified",
+          "initializationSdIsPopulationInterval",
+          "explanationArtifactPresent"
+        ],
+        "inputHash": "260336d5538055df086981913988b13fc2818bbb4ddcd2e5d53a810f9fdf1820"
+      },
+      {
+        "id": "bibliographic-integrity",
+        "domain": "literature",
+        "family": "bibliographic-integrity",
+        "requiresExpertReview": true,
+        "criteria": [
+          "validReferences",
+          "mismatchedReferences",
+          "doiExistenceAloneVerifiesCitation",
+          "metadataAloneEstablishesScientificClaim",
+          "verifiedLiveInternet",
+          "explanationArtifactPresent"
+        ],
+        "inputHash": "8e7ee122859dbaa9bfe92cf521bb5e5273b2aef8e4d2dc9096a74988b92c8461"
+      },
+      {
+        "id": "evidence-grounded-paper",
+        "domain": "scientific_writing",
+        "family": "evidence-grounded-paper",
+        "requiresExpertReview": true,
+        "criteria": [
+          "candidateBetterOnAverage",
+          "populationGeneralizationEstablished",
+          "causalImprovementEstablished",
+          "baselineNeedsTenIdenticalRefits",
+          "paperSectionsPresent",
+          "figurePresent"
+        ],
+        "inputHash": "eda73c8b11381eec91ab4a868d6f918a7bc3f13c51ba00c42593a4b846afd79c"
+      }
+    ],
+    "trials": 1,
+    "budgets": {
+      "seconds": 300,
+      "requests": 24,
+      "outputTokens": 8192
+    },
+    "domainWeights": {
+      "reproduction": 0.2,
+      "experimentation": 0.2,
+      "statistics_causality": 0.2,
+      "literature": 0.2,
+      "scientific_writing": 0.2
+    },
+    "rating": {
+      "regularization": 0.5,
+      "tieTolerance": 0.01,
+      "bootstrapSamples": 1000,
+      "bootstrapSeed": 9173
+    },
+    "disclosure": "Five public authored development tasks; automated grading plus pending independent expert review. Anchor is a prespecified transport reference, not an established research champion. No sealed holdout, human baseline or competing harness run. Uniform post-run rubric amendment: exclude the ambiguous seed-role criterion for both candidates. Original receipts and grades retained. Supersedes protocol 1b6ae236611df9c84188182e439f551d2ae72cec2d5e5757bd9be179b59592b0.",
+    "protocolHash": "47ba53e1ed036740975c4557db97f0f158f5fc1c3eb09ad21050971ccbcc9399"
+  },
+  "correction": {
+    "id": "seed-role-rubric-amendment-1",
+    "reason": "The writing criterion independentTrainingSeeds conflated bootstrap resampling seeds with stochastic training initialization. Both candidates distinguished these roles. Exclude the ambiguous criterion uniformly, without imputing a replacement answer or rerunning a model.",
+    "excludedCriterion": "independentTrainingSeeds",
+    "affectedTasks": [
+      "evidence-grounded-paper"
+    ],
+    "originalProtocolHash": "1b6ae236611df9c84188182e439f551d2ae72cec2d5e5757bd9be179b59592b0",
+    "originalEvidenceHash": "c4dbe2677000e7e0a3b7aef0815653dfaabb44d6555ef5493e6d1ee53d1eb3d6",
+    "originalEvaluatorCommit": "0e9e989",
+    "rawIndexSha256": "e1dbff1a6e842719dfa13ae3ead7f7409dcdd1a35f861e4e4d9f31012fcf8de4",
+    "changesModelOutputs": false
+  },
+  "audit": {
+    "status": "verified",
+    "checked": 10,
+    "errors": [],
+    "legacyOptionalSettingsDigests": 10,
+    "serializationNote": "Legacy native settings included undefined values normalized as null by the digest, then omitted by JSON. Only the five known optional wire-setting keys may be reconstructed; changed values still fail.",
+    "protocolHash": "1b6ae236611df9c84188182e439f551d2ae72cec2d5e5757bd9be179b59592b0",
+    "evidenceHash": "c4dbe2677000e7e0a3b7aef0815653dfaabb44d6555ef5493e6d1ee53d1eb3d6",
+    "scope": "Checks local receipt, grading, model identity and file consistency. Does not authenticate scientific reviewers or certify scientific validity."
+  },
+  "receipts": [
+    {
+      "taskId": "bootstrap-reproduction",
+      "conditionId": "repi/deepseek-v4.1-flash",
+      "trial": 1,
+      "nativeStatus": "completed",
+      "errors": [],
+      "seconds": 58.197,
+      "requests": 12,
+      "receiptHash": "ce79258872e65b79c08680f2b566e761de99f5aeefe789e5034f1bf00630f572",
+      "originalCriteria": {
+        "baselineRmse": 1,
+        "seeds": 1,
+        "candidateRmses": 1,
+        "candidateMean": 1,
+        "candidateSampleSd": 1,
+        "populationUncertaintyEstablished": 1,
+        "scriptExecuted": 1,
+        "freshReplay": 1,
+        "perturbedInputReplay": 1
+      },
+      "correctedCriteria": {
+        "baselineRmse": 1,
+        "seeds": 1,
+        "candidateRmses": 1,
+        "candidateMean": 1,
+        "candidateSampleSd": 1,
+        "populationUncertaintyEstablished": 1,
+        "scriptExecuted": 1,
+        "freshReplay": 1,
+        "perturbedInputReplay": 1
+      },
+      "effectiveSettings": [
+        {
+          "max_tokens": 8192,
+          "reasoning_effort": "high",
+          "stream": true
+        }
+      ],
+      "returnedModels": [
+        "deepseek-v4.1-flash"
+      ]
+    },
+    {
+      "taskId": "bootstrap-reproduction",
+      "conditionId": "repi/glm-5.3-flash",
+      "trial": 1,
+      "nativeStatus": "completed",
+      "errors": [],
+      "seconds": 75.512,
+      "requests": 7,
+      "receiptHash": "cad7d0ba2eec365914c816a04f4879f7baadb21b2a56720f435feec9d6a3af2a",
+      "originalCriteria": {
+        "baselineRmse": 1,
+        "seeds": 1,
+        "candidateRmses": 1,
+        "candidateMean": 1,
+        "candidateSampleSd": 1,
+        "populationUncertaintyEstablished": 1,
+        "scriptExecuted": 1,
+        "freshReplay": 1,
+        "perturbedInputReplay": 1
+      },
+      "correctedCriteria": {
+        "baselineRmse": 1,
+        "seeds": 1,
+        "candidateRmses": 1,
+        "candidateMean": 1,
+        "candidateSampleSd": 1,
+        "populationUncertaintyEstablished": 1,
+        "scriptExecuted": 1,
+        "freshReplay": 1,
+        "perturbedInputReplay": 1
+      },
+      "effectiveSettings": [
+        {
+          "max_tokens": 8192,
+          "reasoning_effort": "high",
+          "stream": true
+        }
+      ],
+      "returnedModels": [
+        "glm-5.3-flash"
+      ]
+    },
+    {
+      "taskId": "grouped-study-design",
+      "conditionId": "repi/glm-5.3-flash",
+      "trial": 1,
+      "nativeStatus": "completed",
+      "errors": [],
+      "seconds": 32.987,
+      "requests": 10,
+      "receiptHash": "8fae6e614a3ea002a9f47408befd5d351abe246e8eadc7a610d8b07482392ac6",
+      "originalCriteria": {
+        "validProtocols": 1,
+        "leakageByProtocol": 1,
+        "independentUnit": 1,
+        "tenInitializationSeedsEstablishPopulationUncertainty": 1,
+        "externalHospitalClaimSupported": 1,
+        "protocolArtifactPresent": 1
+      },
+      "correctedCriteria": {
+        "validProtocols": 1,
+        "leakageByProtocol": 1,
+        "independentUnit": 1,
+        "tenInitializationSeedsEstablishPopulationUncertainty": 1,
+        "externalHospitalClaimSupported": 1,
+        "protocolArtifactPresent": 1
+      },
+      "effectiveSettings": [
+        {
+          "max_tokens": 8192,
+          "reasoning_effort": "high",
+          "stream": true
+        }
+      ],
+      "returnedModels": [
+        "glm-5.3-flash"
+      ]
+    },
+    {
+      "taskId": "grouped-study-design",
+      "conditionId": "repi/deepseek-v4.1-flash",
+      "trial": 1,
+      "nativeStatus": "completed",
+      "errors": [],
+      "seconds": 83.73,
+      "requests": 9,
+      "receiptHash": "798771610594dff38012ae70348e8a9ffea655d15553ecd80447117f783500ad",
+      "originalCriteria": {
+        "validProtocols": 1,
+        "leakageByProtocol": 1,
+        "independentUnit": 1,
+        "tenInitializationSeedsEstablishPopulationUncertainty": 1,
+        "externalHospitalClaimSupported": 1,
+        "protocolArtifactPresent": 1
+      },
+      "correctedCriteria": {
+        "validProtocols": 1,
+        "leakageByProtocol": 1,
+        "independentUnit": 1,
+        "tenInitializationSeedsEstablishPopulationUncertainty": 1,
+        "externalHospitalClaimSupported": 1,
+        "protocolArtifactPresent": 1
+      },
+      "effectiveSettings": [
+        {
+          "max_tokens": 8192,
+          "reasoning_effort": "high",
+          "stream": true
+        }
+      ],
+      "returnedModels": [
+        "deepseek-v4.1-flash"
+      ]
+    },
+    {
+      "taskId": "clustered-and-causal-analysis",
+      "conditionId": "repi/deepseek-v4.1-flash",
+      "trial": 1,
+      "nativeStatus": "completed",
+      "errors": [],
+      "seconds": 66.023,
+      "requests": 10,
+      "receiptHash": "9d5ec5d84edcd8f3540b4415713538d758f69aaeff12b3351d7c581e4343498c",
+      "originalCriteria": {
+        "subjectMeanDifference": 1,
+        "subjectSampleSd": 1,
+        "bootstrapLower": 1,
+        "bootstrapUpper": 1,
+        "subjectCount": 1,
+        "marginalRiskDifference": 1,
+        "allSiteAteIdentified": 1,
+        "initializationSdIsPopulationInterval": 1,
+        "explanationArtifactPresent": 1
+      },
+      "correctedCriteria": {
+        "subjectMeanDifference": 1,
+        "subjectSampleSd": 1,
+        "bootstrapLower": 1,
+        "bootstrapUpper": 1,
+        "subjectCount": 1,
+        "marginalRiskDifference": 1,
+        "allSiteAteIdentified": 1,
+        "initializationSdIsPopulationInterval": 1,
+        "explanationArtifactPresent": 1
+      },
+      "effectiveSettings": [
+        {
+          "max_tokens": 8192,
+          "reasoning_effort": "high",
+          "stream": true
+        }
+      ],
+      "returnedModels": [
+        "deepseek-v4.1-flash"
+      ]
+    },
+    {
+      "taskId": "clustered-and-causal-analysis",
+      "conditionId": "repi/glm-5.3-flash",
+      "trial": 1,
+      "nativeStatus": "provider_failed",
+      "errors": [
+        "400: {\"type\":\"invalid_request_error\",\"message\":\"Upstream request failed: [invalid_request_error] native reasoning control reasoning_effort is not allowed\"}"
+      ],
+      "seconds": 72.205,
+      "requests": 4,
+      "receiptHash": "7b2776ee9ce8d2e9387d6eaa0598729c2829c4ea91f0d7f8349e9d1113639757",
+      "originalCriteria": {
+        "subjectMeanDifference": 0,
+        "subjectSampleSd": 0,
+        "bootstrapLower": 0,
+        "bootstrapUpper": 0,
+        "subjectCount": 0,
+        "marginalRiskDifference": 0,
+        "allSiteAteIdentified": 0,
+        "initializationSdIsPopulationInterval": 0,
+        "explanationArtifactPresent": 0
+      },
+      "correctedCriteria": {
+        "subjectMeanDifference": 0,
+        "subjectSampleSd": 0,
+        "bootstrapLower": 0,
+        "bootstrapUpper": 0,
+        "subjectCount": 0,
+        "marginalRiskDifference": 0,
+        "allSiteAteIdentified": 0,
+        "initializationSdIsPopulationInterval": 0,
+        "explanationArtifactPresent": 0
+      },
+      "effectiveSettings": [
+        {
+          "max_tokens": 8192,
+          "reasoning_effort": "high",
+          "stream": true
+        }
+      ],
+      "returnedModels": [
+        "glm-5.3-flash"
+      ]
+    },
+    {
+      "taskId": "bibliographic-integrity",
+      "conditionId": "repi/glm-5.3-flash",
+      "trial": 1,
+      "nativeStatus": "completed",
+      "errors": [],
+      "seconds": 65.645,
+      "requests": 7,
+      "receiptHash": "a7b14b5fb1f9f95b63245ab0aeca0108a54bc74917801779e8dd37c273a6da1a",
+      "originalCriteria": {
+        "validReferences": 1,
+        "mismatchedReferences": 1,
+        "doiExistenceAloneVerifiesCitation": 1,
+        "metadataAloneEstablishesScientificClaim": 1,
+        "verifiedLiveInternet": 1,
+        "explanationArtifactPresent": 1
+      },
+      "correctedCriteria": {
+        "validReferences": 1,
+        "mismatchedReferences": 1,
+        "doiExistenceAloneVerifiesCitation": 1,
+        "metadataAloneEstablishesScientificClaim": 1,
+        "verifiedLiveInternet": 1,
+        "explanationArtifactPresent": 1
+      },
+      "effectiveSettings": [
+        {
+          "max_tokens": 8192,
+          "reasoning_effort": "high",
+          "stream": true
+        }
+      ],
+      "returnedModels": [
+        "glm-5.3-flash"
+      ]
+    },
+    {
+      "taskId": "bibliographic-integrity",
+      "conditionId": "repi/deepseek-v4.1-flash",
+      "trial": 1,
+      "nativeStatus": "completed",
+      "errors": [],
+      "seconds": 40.797,
+      "requests": 9,
+      "receiptHash": "3118e38d628cb1a700ec03f41e35cf73a3cc4b0736b039ebefec9c0055cc9471",
+      "originalCriteria": {
+        "validReferences": 1,
+        "mismatchedReferences": 1,
+        "doiExistenceAloneVerifiesCitation": 1,
+        "metadataAloneEstablishesScientificClaim": 1,
+        "verifiedLiveInternet": 1,
+        "explanationArtifactPresent": 1
+      },
+      "correctedCriteria": {
+        "validReferences": 1,
+        "mismatchedReferences": 1,
+        "doiExistenceAloneVerifiesCitation": 1,
+        "metadataAloneEstablishesScientificClaim": 1,
+        "verifiedLiveInternet": 1,
+        "explanationArtifactPresent": 1
+      },
+      "effectiveSettings": [
+        {
+          "max_tokens": 8192,
+          "reasoning_effort": "high",
+          "stream": true
+        }
+      ],
+      "returnedModels": [
+        "deepseek-v4.1-flash"
+      ]
+    },
+    {
+      "taskId": "evidence-grounded-paper",
+      "conditionId": "repi/deepseek-v4.1-flash",
+      "trial": 1,
+      "nativeStatus": "completed",
+      "errors": [],
+      "seconds": 149.208,
+      "requests": 18,
+      "receiptHash": "869a96f33e0169eabc2d8b03ec3a47f8ed6cf2603a99d85e88d1c627bc3d2776",
+      "originalCriteria": {
+        "candidateBetterOnAverage": 1,
+        "populationGeneralizationEstablished": 1,
+        "causalImprovementEstablished": 1,
+        "independentTrainingSeeds": 0,
+        "baselineNeedsTenIdenticalRefits": 0,
+        "paperSectionsPresent": 1,
+        "figurePresent": 1
+      },
+      "correctedCriteria": {
+        "candidateBetterOnAverage": 1,
+        "populationGeneralizationEstablished": 1,
+        "causalImprovementEstablished": 1,
+        "baselineNeedsTenIdenticalRefits": 0,
+        "paperSectionsPresent": 1,
+        "figurePresent": 1
+      },
+      "effectiveSettings": [
+        {
+          "max_tokens": 8192,
+          "reasoning_effort": "high",
+          "stream": true
+        }
+      ],
+      "returnedModels": [
+        "deepseek-v4.1-flash"
+      ]
+    },
+    {
+      "taskId": "evidence-grounded-paper",
+      "conditionId": "repi/glm-5.3-flash",
+      "trial": 1,
+      "nativeStatus": "completed",
+      "errors": [],
+      "seconds": 60.529,
+      "requests": 16,
+      "receiptHash": "768566b917c0ac300e1db5c61422a368588055ce8487caf106ce3f20381d1a19",
+      "originalCriteria": {
+        "candidateBetterOnAverage": 1,
+        "populationGeneralizationEstablished": 1,
+        "causalImprovementEstablished": 1,
+        "independentTrainingSeeds": 0,
+        "baselineNeedsTenIdenticalRefits": 1,
+        "paperSectionsPresent": 1,
+        "figurePresent": 1
+      },
+      "correctedCriteria": {
+        "candidateBetterOnAverage": 1,
+        "populationGeneralizationEstablished": 1,
+        "causalImprovementEstablished": 1,
+        "baselineNeedsTenIdenticalRefits": 1,
+        "paperSectionsPresent": 1,
+        "figurePresent": 1
+      },
+      "effectiveSettings": [
+        {
+          "max_tokens": 8192,
+          "reasoning_effort": "high",
+          "stream": true
+        }
+      ],
+      "returnedModels": [
+        "glm-5.3-flash"
+      ]
+    }
+  ],
+  "referenceChecks": {
+    "status": "passed",
+    "checked": "2026-10-05T11:20:18.916Z",
+    "checks": [
+      {
+        "task": "bootstrap-reproduction",
+        "correctReferenceAccepted": true,
+        "incorrectReferenceRejected": true,
+        "referenceReplay": [
+          {
+            "criterion": "freshReplay",
+            "exitCode": 0,
+            "stdoutHash": "04225f4f844eda4e7ebecfdde88e610c1acc18c4f56bc4c06196628e8a65fc95",
+            "stderr": "",
+            "score": 1
+          },
+          {
+            "criterion": "perturbedInputReplay",
+            "exitCode": 0,
+            "stdoutHash": "7a4d1eb7d4d96ccccfaedbf190876743f08305dba5f4dc30097594cad82fe486",
+            "stderr": "",
+            "score": 1
+          }
+        ],
+        "scope": "Mechanical checks only; fixture documents do not validate scientific arguments."
+      },
+      {
+        "task": "grouped-study-design",
+        "correctReferenceAccepted": true,
+        "incorrectReferenceRejected": true,
+        "referenceReplay": [],
+        "scope": "Mechanical checks only; fixture documents do not validate scientific arguments."
+      },
+      {
+        "task": "clustered-and-causal-analysis",
+        "correctReferenceAccepted": true,
+        "incorrectReferenceRejected": true,
+        "referenceReplay": [],
+        "scope": "Mechanical checks only; fixture documents do not validate scientific arguments."
+      },
+      {
+        "task": "bibliographic-integrity",
+        "correctReferenceAccepted": true,
+        "incorrectReferenceRejected": true,
+        "referenceReplay": [],
+        "scope": "Mechanical checks only; fixture documents do not validate scientific arguments."
+      },
+      {
+        "task": "evidence-grounded-paper",
+        "correctReferenceAccepted": true,
+        "incorrectReferenceRejected": true,
+        "referenceReplay": [],
+        "scope": "Mechanical checks only; fixture documents do not validate scientific arguments."
+      }
+    ]
+  },
+  "originalRows": [
+    {
+      "id": "repi/deepseek-v4.1-flash",
+      "harness": "ResearchPi native CLI",
+      "revision": "sha256:58ff9ba8e910ba03e88628a47f90421eb3954972f227a9fbfcb0b4625c5b5481",
+      "model": "deepseek-v4.1-flash",
+      "provider": "opencode-go",
+      "settings": {
+        "thinking": "medium",
+        "retry": {
+          "maxRetries": 2
+        },
+        "temperature": "native provider default"
+      },
+      "rai": null,
+      "developmentRating": 50,
+      "interval95": null,
+      "domains": {
+        "reproduction": 100,
+        "experimentation": 100,
+        "statistics_causality": 100,
+        "literature": 100,
+        "scientific_writing": 71.42857142857143
+      },
+      "scientificQuality": 94.28571428571429,
+      "attempted": 5,
+      "planned": 5,
+      "validCompleted": 5,
+      "seconds": 397.95500000000004,
+      "costUsd": null,
+      "gapToLeader": 0
+    },
+    {
+      "id": "repi/glm-5.3-flash",
+      "harness": "ResearchPi native CLI",
+      "revision": "sha256:58ff9ba8e910ba03e88628a47f90421eb3954972f227a9fbfcb0b4625c5b5481",
+      "model": "glm-5.3-flash",
+      "provider": "opencode-go",
+      "settings": {
+        "thinking": "medium",
+        "retry": {
+          "maxRetries": 2
+        },
+        "temperature": "native provider default"
+      },
+      "rai": null,
+      "developmentRating": 50,
+      "interval95": null,
+      "domains": {
+        "reproduction": 100,
+        "experimentation": 100,
+        "statistics_causality": 0,
+        "literature": 100,
+        "scientific_writing": 85.71428571428571
+      },
+      "scientificQuality": 77.14285714285714,
+      "attempted": 5,
+      "planned": 5,
+      "validCompleted": 4,
+      "seconds": 306.878,
+      "costUsd": null,
+      "gapToLeader": 0
+    }
+  ],
+  "runId": "173f0e6b-f6ab-4246-87d0-3d4a56d9f698"
+}

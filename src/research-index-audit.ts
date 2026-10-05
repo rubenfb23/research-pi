@@ -3,6 +3,11 @@ import {join,resolve} from 'node:path';
 import {createHash} from 'node:crypto';
 import {hash,readJson} from './storage.js';
 import {scoreResearchIndex,type IndexProtocol,type IndexEvidence} from './research-index.js';
+export function requestEvidenceMatches(requests:unknown[],digest:string) {
+ if(hash(requests)===digest)return {matched:true,legacyOptionalSettings:false};
+ const restored=requests.map(item=>{const r=item as Record<string,unknown>;if(!r.settings||typeof r.settings!=='object')return r;const settings={...r.settings as Record<string,unknown>};for(const key of ['max_tokens','max_completion_tokens','temperature','reasoning_effort','stream'])if(!(key in settings))settings[key]=null;return {...r,settings};});
+ return {matched:hash(restored)===digest,legacyOptionalSettings:hash(restored)===digest};
+}
 function artifacts(root:string,prefix='',budget={bytes:0}):Record<string,string> {
  const files:Record<string,string>={};
  for(const name of readdirSync(root).sort()) {
@@ -15,7 +20,7 @@ function artifacts(root:string,prefix='',budget={bytes:0}):Record<string,string>
  return files;
 }
 export function auditIndexRun(directory:string) {
- const root=resolve(directory),errors:string[]=[];let checked=0;
+ const root=resolve(directory),errors:string[]=[];let checked=0,legacyOptionalSettingsDigests=0;
  try {
   const protocol=readJson<IndexProtocol>(join(root,'protocol.json')),evidence=readJson<IndexEvidence[]>(join(root,'evidence.json'));
   const result=scoreResearchIndex(protocol,evidence);
@@ -36,13 +41,13 @@ export function auditIndexRun(directory:string) {
    const files=artifacts(join(receipt.path,'work'));
    if(hash(files)!==e.artifactHash||hash(files)!==hash(receipt.value.artifactHashes))errors.push('Artifact digest mismatch: '+key);
    const requests=readJson<any[]>(join(receipt.path,'requests.json'));
-   if(hash(requests)!==receipt.value.requestHash)errors.push('Request evidence mismatch: '+key);
+   const requestCheck=requestEvidenceMatches(requests,receipt.value.requestHash);if(!requestCheck.matched)errors.push('Request evidence mismatch: '+key);if(requestCheck.legacyOptionalSettings)legacyOptionalSettingsDigests++;
    if(requests.some(r=>r.returnedModel&&r.returnedModel!==protocol.conditions.find(c=>c.id===e.conditionId)?.model))errors.push('Returned model identity mismatch: '+key);
    const traceHash=createHash('sha256').update(readFileSync(join(receipt.path,'native-trace.jsonl'))).digest('hex');
    if(traceHash!==receipt.value.traceHash)errors.push('Native trace mismatch: '+key);
   }
   if(receipts.size!==evidence.length)errors.push('Receipt/evidence attempt count mismatch.');
   if(hash(readJson(join(root,'index.json')))!==hash(result))errors.push('Computed index differs from saved result.');
-  return {status:errors.length?'invalid':result.missingAttempts||result.missingDomains.length?'incomplete':'verified',checked,errors,protocolHash:protocol.protocolHash,evidenceHash:result.evidenceHash,scope:'Checks local receipt, grading, model identity and file consistency. Does not authenticate scientific reviewers or certify scientific validity.'};
+  return {status:errors.length?'invalid':result.missingAttempts||result.missingDomains.length?'incomplete':'verified',checked,errors,legacyOptionalSettingsDigests,serializationNote:'Legacy native settings included undefined values normalized as null by the digest, then omitted by JSON. Only the five known optional wire-setting keys may be reconstructed; changed values still fail.',protocolHash:protocol.protocolHash,evidenceHash:result.evidenceHash,scope:'Checks local receipt, grading, model identity and file consistency. Does not authenticate scientific reviewers or certify scientific validity.'};
  }catch(e){return {status:'invalid',checked,errors:[...errors,(e as Error).message],scope:'No scientific certification.'};}
 }
