@@ -1,0 +1,389 @@
+{
+  "runId": "ce3c8216-e1bb-4bae-9132-03d1fc9ae821",
+  "status": "complete",
+  "finished": "2026-10-05T10:13:04.804Z",
+  "frozenProtocolHash": "69b5753c3bf2ca07477fa6c44cb22b4b2bdf49075b2dd62d5b63d107192cd87c",
+  "imageId": "sha256:58ff9ba8e910ba03e88628a47f90421eb3954972f227a9fbfcb0b4625c5b5481",
+  "sources": {
+    "mlagentbench": "5d71205cc20a8e95d43aa7cb7120e89ca3323e31",
+    "coreOOD": "00cfba0d8d83c093eac856f39b4f450a0c8aad9f",
+    "hal": "0dd6962c23147a11ee12751db85f28328dadd50f"
+  },
+  "condition": {
+    "harness": "ResearchPi native CLI",
+    "models": [
+      "deepseek-v4.1-flash",
+      "glm-5.3-flash"
+    ],
+    "provider": "opencode-go",
+    "attemptsPerTaskModel": 1,
+    "seconds": 600,
+    "cpu": 2,
+    "memory": "3g",
+    "maxRequests": 40,
+    "maxOutputTokensPerRequest": 8192,
+    "thinking": "medium",
+    "internet": "model relay only; no web or package downloads",
+    "ordering": "alternate model order per task",
+    "failurePolicy": "retain every started attempt; no selective replacement"
+  },
+  "localEndpoints": {
+    "vectorization": "changed code, valid claimed runtime, correct fresh outputs and independently measured median speedup >= 1.10",
+    "core": "official answer correct, clean replay exits zero and independently parsed generated result matches submission"
+  },
+  "limitations": [
+    "CPU feasibility subset, not official leaderboard scores",
+    "one attempt per task/model; no superiority inference",
+    "medium capsules in a shared modern Python environment, not original Code Ocean images",
+    "published tasks may be in model training data"
+  ],
+  "attempts": [
+    {
+      "id": "vectorization--deepseek-v4.1-flash",
+      "task": "vectorization",
+      "suite": "MLAgentBench",
+      "model": "deepseek-v4.1-flash",
+      "status": "completed",
+      "seconds": 518.434,
+      "requests": 31,
+      "usage": {
+        "input": 51636,
+        "output": 34638,
+        "cacheRead": 920576,
+        "cacheWrite": 0,
+        "catalogUSD": 0.031289927999999995
+      },
+      "toolCalls": {
+        "bash": 25,
+        "read": 1,
+        "write": 6
+      },
+      "toolErrors": 1,
+      "providerErrorCount": 0,
+      "effectiveReasoning": [
+        "high"
+      ],
+      "returnedModels": [
+        "deepseek-v4.1-flash"
+      ],
+      "grade": {
+        "success": true,
+        "correct": true,
+        "codeChanged": true,
+        "officialReportedSeconds": 0.009363889694213867,
+        "independentBaselineSeconds": 2.1821300570009043,
+        "independentCandidateSeconds": 0.006916773010743782,
+        "speedup": 315.48383236104684,
+        "probeError": null
+      },
+      "gradingCorrection": null
+    },
+    {
+      "id": "vectorization--glm-5.3-flash",
+      "task": "vectorization",
+      "suite": "MLAgentBench",
+      "model": "glm-5.3-flash",
+      "status": "completed",
+      "seconds": 271.926,
+      "requests": 15,
+      "usage": {
+        "input": 36204,
+        "output": 7421,
+        "cacheRead": 183360,
+        "cacheWrite": 0,
+        "catalogUSD": 0.014641899999999998
+      },
+      "toolCalls": {
+        "ls": 1,
+        "read": 2,
+        "bash": 6,
+        "edit": 3,
+        "write": 2
+      },
+      "toolErrors": 0,
+      "providerErrorCount": 0,
+      "effectiveReasoning": [
+        "high"
+      ],
+      "returnedModels": [
+        "glm-5.3-flash"
+      ],
+      "grade": {
+        "success": true,
+        "correct": true,
+        "codeChanged": true,
+        "officialReportedSeconds": 0.007157564163208008,
+        "independentBaselineSeconds": 2.205738292002934,
+        "independentCandidateSeconds": 0.006123350991401821,
+        "speedup": 360.2175173528593,
+        "probeError": null
+      },
+      "gradingCorrection": null
+    },
+    {
+      "id": "capsule-8610546--glm-5.3-flash",
+      "task": "capsule-8610546",
+      "suite": "CORE-Bench Extended/OOD",
+      "model": "glm-5.3-flash",
+      "status": "provider_failed",
+      "seconds": 424.938,
+      "requests": 16,
+      "usage": {
+        "input": 87105,
+        "output": 2017,
+        "cacheRead": 119552,
+        "cacheWrite": 0,
+        "catalogUSD": 0.01766081
+      },
+      "toolCalls": {
+        "bash": 11,
+        "write": 2,
+        "edit": 1
+      },
+      "toolErrors": 1,
+      "providerErrorCount": 3,
+      "effectiveReasoning": [
+        "high"
+      ],
+      "returnedModels": [
+        "glm-5.3-flash"
+      ],
+      "grade": {
+        "success": true,
+        "official": {
+          "correct_written_answers": 1,
+          "correct_vision_answers": 0,
+          "total_written_questions": 1,
+          "total_vision_questions": 0,
+          "all_correct": true
+        },
+        "reproduction": {
+          "status": "completed",
+          "exitCode": 0,
+          "matchesSubmission": true,
+          "outputHash": "09447ec0120577c766f6e4f689b3de27bef193ddc7a9fc7d20e5ab2030e8e1be"
+        }
+      },
+      "gradingCorrection": null
+    },
+    {
+      "id": "capsule-8610546--deepseek-v4.1-flash",
+      "task": "capsule-8610546",
+      "suite": "CORE-Bench Extended/OOD",
+      "model": "deepseek-v4.1-flash",
+      "status": "completed",
+      "seconds": 255.434,
+      "requests": 16,
+      "usage": {
+        "input": 30751,
+        "output": 6726,
+        "cacheRead": 440192,
+        "cacheWrite": 0,
+        "catalogUSD": 0.009968825999999998
+      },
+      "toolCalls": {
+        "bash": 18,
+        "write": 3
+      },
+      "toolErrors": 0,
+      "providerErrorCount": 0,
+      "effectiveReasoning": [
+        "high"
+      ],
+      "returnedModels": [
+        "deepseek-v4.1-flash"
+      ],
+      "grade": {
+        "success": true,
+        "official": {
+          "correct_written_answers": 1,
+          "correct_vision_answers": 0,
+          "total_written_questions": 1,
+          "total_vision_questions": 0,
+          "all_correct": true
+        },
+        "reproduction": {
+          "status": "completed",
+          "exitCode": 0,
+          "matchesSubmission": true,
+          "outputHash": "1974bd5ad06bcb17774113eff0386cfc93c31c8791cf739a1fc2397b1a76b56e"
+        }
+      },
+      "gradingCorrection": null
+    },
+    {
+      "id": "capsule-8185407--deepseek-v4.1-flash",
+      "task": "capsule-8185407",
+      "suite": "CORE-Bench Extended/OOD",
+      "model": "deepseek-v4.1-flash",
+      "status": "completed",
+      "seconds": 158.829,
+      "requests": 20,
+      "usage": {
+        "input": 31323,
+        "output": 12811,
+        "cacheRead": 508416,
+        "cacheWrite": 0,
+        "catalogUSD": 0.013910298
+      },
+      "toolCalls": {
+        "bash": 18,
+        "read": 6,
+        "write": 3,
+        "edit": 1
+      },
+      "toolErrors": 0,
+      "providerErrorCount": 0,
+      "effectiveReasoning": [
+        "high"
+      ],
+      "returnedModels": [
+        "deepseek-v4.1-flash"
+      ],
+      "grade": {
+        "success": true,
+        "official": {
+          "correct_written_answers": 1,
+          "correct_vision_answers": 0,
+          "total_written_questions": 1,
+          "total_vision_questions": 0,
+          "all_correct": true
+        },
+        "reproduction": {
+          "status": "completed",
+          "exitCode": 0,
+          "matchesSubmission": true,
+          "outputHash": "b491b4b61014d41a7150754af76a5f581a3c1503c59b3d36a97dcfc3d7a77422"
+        }
+      },
+      "gradingCorrection": {
+        "kind": "replay stdout parser correction",
+        "rawSuccess": false,
+        "correctedSuccess": true,
+        "method": "Bound each Pload value to its own transducer block; reject conflicting F measurements",
+        "parserHash": "b78491c9e2ff658613f52aa48992ba8bfa05b3f43b19b08958459d6e5ee567cc",
+        "rawResultHash": "23f858be20282c06389a0ffe346670865a1860ae75000f387a9f097f871fc311"
+      }
+    },
+    {
+      "id": "capsule-8185407--glm-5.3-flash",
+      "task": "capsule-8185407",
+      "suite": "CORE-Bench Extended/OOD",
+      "model": "glm-5.3-flash",
+      "status": "completed",
+      "seconds": 254.381,
+      "requests": 17,
+      "usage": {
+        "input": 39850,
+        "output": 5831,
+        "cacheRead": 290304,
+        "cacheWrite": 0,
+        "catalogUSD": 0.01760212
+      },
+      "toolCalls": {
+        "bash": 17,
+        "write": 3
+      },
+      "toolErrors": 2,
+      "providerErrorCount": 0,
+      "effectiveReasoning": [
+        "high"
+      ],
+      "returnedModels": [
+        "glm-5.3-flash"
+      ],
+      "grade": {
+        "success": true,
+        "official": {
+          "correct_written_answers": 1,
+          "correct_vision_answers": 0,
+          "total_written_questions": 1,
+          "total_vision_questions": 0,
+          "all_correct": true
+        },
+        "reproduction": {
+          "status": "completed",
+          "exitCode": 0,
+          "matchesSubmission": true,
+          "outputHash": "a2ea603f4d47d4ea9171017bf5e4b77d9c4638505cbd98f286bffddb715510c2"
+        }
+      },
+      "gradingCorrection": {
+        "kind": "replay stdout parser correction",
+        "rawSuccess": false,
+        "correctedSuccess": true,
+        "method": "Bound each Pload value to its own transducer block; reject conflicting F measurements",
+        "parserHash": "b78491c9e2ff658613f52aa48992ba8bfa05b3f43b19b08958459d6e5ee567cc",
+        "rawResultHash": "ec669dd9cdcc6a9a4ddefc8a131fc5d3fd82c5332d498d48fa92d2f74bd0fb51"
+      }
+    }
+  ],
+  "infrastructureRun": {
+    "runId": "42dc5ce2-5802-4cb9-afc3-981fc17e1ff4",
+    "excluded": true,
+    "reason": "Relay omitted required native session header; all six requests rejected before generation. Retained separately; complete balanced matrix rerun after repair."
+  },
+  "postRunSourceReview": [
+    {
+      "id": "vectorization--deepseek-v4.1-flash",
+      "originalPythonFilesChanged": [
+        "train.py"
+      ],
+      "fiveScriptsListed": null
+    },
+    {
+      "id": "vectorization--glm-5.3-flash",
+      "originalPythonFilesChanged": [
+        "train.py"
+      ],
+      "fiveScriptsListed": null
+    },
+    {
+      "id": "capsule-8610546--glm-5.3-flash",
+      "originalPythonFilesChanged": [],
+      "fiveScriptsListed": null
+    },
+    {
+      "id": "capsule-8610546--deepseek-v4.1-flash",
+      "originalPythonFilesChanged": [],
+      "fiveScriptsListed": null
+    },
+    {
+      "id": "capsule-8185407--deepseek-v4.1-flash",
+      "originalPythonFilesChanged": [],
+      "fiveScriptsListed": true
+    },
+    {
+      "id": "capsule-8185407--glm-5.3-flash",
+      "originalPythonFilesChanged": [],
+      "fiveScriptsListed": true
+    }
+  ],
+  "postRunReferenceVerification": {
+    "status": "passed",
+    "imageId": "repi-official-pilot:20261005",
+    "checked": "2026-10-05T10:22:48.713Z",
+    "checks": [
+      {
+        "task": "capsule-8610546",
+        "fullReferencePassed": true,
+        "correctAnswerAccepted": true,
+        "wrongAnswerRejected": true,
+        "logHash": "eb1ce6aa3fa90e958a81ad071ff1b1d34b1c96f420ee03872c3cb9a289ab6b01"
+      },
+      {
+        "task": "capsule-8185407",
+        "fullReferencePassed": true,
+        "correctAnswerAccepted": true,
+        "wrongAnswerRejected": true,
+        "logHash": "f2f660218e657516c67ada88c8d14ab9c03c5b474c344fb1e2a318685639f414"
+      },
+      {
+        "task": "vectorization",
+        "fullReferencePassed": true,
+        "correctnessCases": 6,
+        "timingInputs": 3
+      }
+    ]
+  }
+}

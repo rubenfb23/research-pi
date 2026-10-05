@@ -1,0 +1,939 @@
+{
+  "title": "DeepSeek V4.1 Flash vs GLM-5.3 Flash",
+  "created": "2026-10-05",
+  "sourceRuns": [
+    "bb5e60a2-2af8-40a3-99f9-a403a582f39b",
+    "eb0bf245-ff16-4198-85d3-437b4a745b60"
+  ],
+  "sameTaskDefinitionsVerified": true,
+  "sameSettingsVerified": true,
+  "settings": {
+    "provider": "opencode-go",
+    "thinking": "off",
+    "temperature": 0.2,
+    "timeoutSeconds": 150,
+    "maxRequests": 10,
+    "maxOutputTokens": 4096,
+    "maxReportedTokens": 120000
+  },
+  "agentRepeatsPerTask": 1,
+  "plannedAttemptsPerModel": 21,
+  "scenarios": [
+    {
+      "scenario": "Prediction metrics",
+      "category": "numerical_evidence",
+      "profiles": {
+        "pi": {
+          "DeepSeek V4.1 Flash": {
+            "planned": 1,
+            "completed": 1,
+            "passed": 1,
+            "score": 1
+          },
+          "GLM-5.3 Flash": {
+            "planned": 1,
+            "completed": 0,
+            "passed": 0,
+            "score": 0
+          }
+        },
+        "pi-research": {
+          "DeepSeek V4.1 Flash": {
+            "planned": 1,
+            "completed": 1,
+            "passed": 1,
+            "score": 1
+          },
+          "GLM-5.3 Flash": {
+            "planned": 1,
+            "completed": 0,
+            "passed": 0,
+            "score": 0
+          }
+        },
+        "repi": {
+          "DeepSeek V4.1 Flash": {
+            "planned": 1,
+            "completed": 1,
+            "passed": 1,
+            "score": 1
+          },
+          "GLM-5.3 Flash": {
+            "planned": 1,
+            "completed": 0,
+            "passed": 0,
+            "score": 0
+          }
+        }
+      }
+    },
+    {
+      "scenario": "Seed coverage",
+      "category": "failure_recovery",
+      "profiles": {
+        "pi": {
+          "DeepSeek V4.1 Flash": {
+            "planned": 1,
+            "completed": 1,
+            "passed": 0,
+            "score": 0.6666666666666666
+          },
+          "GLM-5.3 Flash": {
+            "planned": 1,
+            "completed": 1,
+            "passed": 0,
+            "score": 0.6666666666666666
+          }
+        },
+        "pi-research": {
+          "DeepSeek V4.1 Flash": {
+            "planned": 1,
+            "completed": 1,
+            "passed": 0,
+            "score": 0.6666666666666666
+          },
+          "GLM-5.3 Flash": {
+            "planned": 1,
+            "completed": 0,
+            "passed": 0,
+            "score": 0
+          }
+        },
+        "repi": {
+          "DeepSeek V4.1 Flash": {
+            "planned": 1,
+            "completed": 1,
+            "passed": 0,
+            "score": 0.6666666666666666
+          },
+          "GLM-5.3 Flash": {
+            "planned": 1,
+            "completed": 0,
+            "passed": 0,
+            "score": 0
+          }
+        }
+      }
+    },
+    {
+      "scenario": "Data leakage",
+      "category": "experimental_design",
+      "profiles": {
+        "pi": {
+          "DeepSeek V4.1 Flash": {
+            "planned": 1,
+            "completed": 1,
+            "passed": 1,
+            "score": 1
+          },
+          "GLM-5.3 Flash": {
+            "planned": 1,
+            "completed": 0,
+            "passed": 0,
+            "score": 0
+          }
+        },
+        "pi-research": {
+          "DeepSeek V4.1 Flash": {
+            "planned": 1,
+            "completed": 1,
+            "passed": 1,
+            "score": 1
+          },
+          "GLM-5.3 Flash": {
+            "planned": 1,
+            "completed": 1,
+            "passed": 1,
+            "score": 1
+          }
+        },
+        "repi": {
+          "DeepSeek V4.1 Flash": {
+            "planned": 1,
+            "completed": 1,
+            "passed": 1,
+            "score": 1
+          },
+          "GLM-5.3 Flash": {
+            "planned": 1,
+            "completed": 1,
+            "passed": 1,
+            "score": 1
+          }
+        }
+      }
+    },
+    {
+      "scenario": "Paired uncertainty",
+      "category": "statistical_interpretation",
+      "profiles": {
+        "pi": {
+          "DeepSeek V4.1 Flash": {
+            "planned": 1,
+            "completed": 1,
+            "passed": 1,
+            "score": 1
+          },
+          "GLM-5.3 Flash": {
+            "planned": 1,
+            "completed": 0,
+            "passed": 0,
+            "score": 0
+          }
+        },
+        "pi-research": {
+          "DeepSeek V4.1 Flash": {
+            "planned": 1,
+            "completed": 1,
+            "passed": 0,
+            "score": 0.75
+          },
+          "GLM-5.3 Flash": {
+            "planned": 1,
+            "completed": 1,
+            "passed": 1,
+            "score": 1
+          }
+        },
+        "repi": {
+          "DeepSeek V4.1 Flash": {
+            "planned": 1,
+            "completed": 1,
+            "passed": 1,
+            "score": 1
+          },
+          "GLM-5.3 Flash": {
+            "planned": 1,
+            "completed": 0,
+            "passed": 0,
+            "score": 0
+          }
+        }
+      }
+    },
+    {
+      "scenario": "Causal claim",
+      "category": "causal_reasoning",
+      "profiles": {
+        "pi": {
+          "DeepSeek V4.1 Flash": {
+            "planned": 1,
+            "completed": 1,
+            "passed": 1,
+            "score": 1
+          },
+          "GLM-5.3 Flash": {
+            "planned": 1,
+            "completed": 0,
+            "passed": 0,
+            "score": 0
+          }
+        },
+        "pi-research": {
+          "DeepSeek V4.1 Flash": {
+            "planned": 1,
+            "completed": 1,
+            "passed": 1,
+            "score": 1
+          },
+          "GLM-5.3 Flash": {
+            "planned": 1,
+            "completed": 0,
+            "passed": 0,
+            "score": 0
+          }
+        },
+        "repi": {
+          "DeepSeek V4.1 Flash": {
+            "planned": 1,
+            "completed": 1,
+            "passed": 1,
+            "score": 1
+          },
+          "GLM-5.3 Flash": {
+            "planned": 1,
+            "completed": 0,
+            "passed": 0,
+            "score": 0
+          }
+        }
+      }
+    },
+    {
+      "scenario": "Source synthesis",
+      "category": "literature_support",
+      "profiles": {
+        "pi": {
+          "DeepSeek V4.1 Flash": {
+            "planned": 1,
+            "completed": 1,
+            "passed": 1,
+            "score": 1
+          },
+          "GLM-5.3 Flash": {
+            "planned": 1,
+            "completed": 0,
+            "passed": 0,
+            "score": 0
+          }
+        },
+        "pi-research": {
+          "DeepSeek V4.1 Flash": {
+            "planned": 1,
+            "completed": 1,
+            "passed": 1,
+            "score": 1
+          },
+          "GLM-5.3 Flash": {
+            "planned": 1,
+            "completed": 0,
+            "passed": 0,
+            "score": 0
+          }
+        },
+        "repi": {
+          "DeepSeek V4.1 Flash": {
+            "planned": 1,
+            "completed": 1,
+            "passed": 1,
+            "score": 1
+          },
+          "GLM-5.3 Flash": {
+            "planned": 1,
+            "completed": 0,
+            "passed": 0,
+            "score": 0
+          }
+        }
+      }
+    },
+    {
+      "scenario": "Executed replication",
+      "category": "executed_replication",
+      "profiles": {
+        "pi": {
+          "DeepSeek V4.1 Flash": {
+            "planned": 1,
+            "completed": 1,
+            "passed": 1,
+            "score": 1
+          },
+          "GLM-5.3 Flash": {
+            "planned": 1,
+            "completed": 0,
+            "passed": 0,
+            "score": 0
+          }
+        },
+        "pi-research": {
+          "DeepSeek V4.1 Flash": {
+            "planned": 1,
+            "completed": 1,
+            "passed": 1,
+            "score": 1
+          },
+          "GLM-5.3 Flash": {
+            "planned": 1,
+            "completed": 0,
+            "passed": 0,
+            "score": 0
+          }
+        },
+        "repi": {
+          "DeepSeek V4.1 Flash": {
+            "planned": 1,
+            "completed": 1,
+            "passed": 1,
+            "score": 1
+          },
+          "GLM-5.3 Flash": {
+            "planned": 1,
+            "completed": 0,
+            "passed": 0,
+            "score": 0
+          }
+        }
+      }
+    }
+  ],
+  "conditions": {
+    "DeepSeek V4.1 Flash": [
+      {
+        "harness": "pi",
+        "model": "deepseek-v4.1-flash",
+        "provider": "opencode-go",
+        "planned": 7,
+        "attempted": 7,
+        "completed": 7,
+        "passed": 6,
+        "score": 0.9523809523809523,
+        "categories": {
+          "numerical_evidence": {
+            "planned": 1,
+            "completed": 1,
+            "passed": 1,
+            "score": 1
+          },
+          "failure_recovery": {
+            "planned": 1,
+            "completed": 1,
+            "passed": 0,
+            "score": 0.6666666666666666
+          },
+          "experimental_design": {
+            "planned": 1,
+            "completed": 1,
+            "passed": 1,
+            "score": 1
+          },
+          "statistical_interpretation": {
+            "planned": 1,
+            "completed": 1,
+            "passed": 1,
+            "score": 1
+          },
+          "causal_reasoning": {
+            "planned": 1,
+            "completed": 1,
+            "passed": 1,
+            "score": 1
+          },
+          "literature_support": {
+            "planned": 1,
+            "completed": 1,
+            "passed": 1,
+            "score": 1
+          },
+          "executed_replication": {
+            "planned": 1,
+            "completed": 1,
+            "passed": 1,
+            "score": 1
+          }
+        },
+        "medianSeconds": 10.413,
+        "reportedTokens": 63682,
+        "requests": 29,
+        "medianFirstDeltaMs": 1636.699087,
+        "medianFirstTextMs": 1608.0744839999988,
+        "estimatedMedianOutputTokensPerSecond": 254.23276966995283,
+        "catalogCostUsd": 0.006664116000000001,
+        "meanCatalogCostPerSuccessUsd": 0.0011106860000000003
+      },
+      {
+        "harness": "pi-research",
+        "model": "deepseek-v4.1-flash",
+        "provider": "opencode-go",
+        "planned": 7,
+        "attempted": 7,
+        "completed": 7,
+        "passed": 5,
+        "score": 0.9166666666666666,
+        "categories": {
+          "numerical_evidence": {
+            "planned": 1,
+            "completed": 1,
+            "passed": 1,
+            "score": 1
+          },
+          "failure_recovery": {
+            "planned": 1,
+            "completed": 1,
+            "passed": 0,
+            "score": 0.6666666666666666
+          },
+          "experimental_design": {
+            "planned": 1,
+            "completed": 1,
+            "passed": 1,
+            "score": 1
+          },
+          "statistical_interpretation": {
+            "planned": 1,
+            "completed": 1,
+            "passed": 0,
+            "score": 0.75
+          },
+          "causal_reasoning": {
+            "planned": 1,
+            "completed": 1,
+            "passed": 1,
+            "score": 1
+          },
+          "literature_support": {
+            "planned": 1,
+            "completed": 1,
+            "passed": 1,
+            "score": 1
+          },
+          "executed_replication": {
+            "planned": 1,
+            "completed": 1,
+            "passed": 1,
+            "score": 1
+          }
+        },
+        "medianSeconds": 11.547,
+        "reportedTokens": 187084,
+        "requests": 32,
+        "medianFirstDeltaMs": 1620.1028750000007,
+        "medianFirstTextMs": 1644.4223665000006,
+        "estimatedMedianOutputTokensPerSecond": 247.5244677351283,
+        "catalogCostUsd": 0.00930177,
+        "meanCatalogCostPerSuccessUsd": 0.0018603539999999998
+      },
+      {
+        "harness": "repi",
+        "model": "deepseek-v4.1-flash",
+        "provider": "opencode-go",
+        "planned": 7,
+        "attempted": 7,
+        "completed": 7,
+        "passed": 6,
+        "score": 0.9523809523809523,
+        "categories": {
+          "numerical_evidence": {
+            "planned": 1,
+            "completed": 1,
+            "passed": 1,
+            "score": 1
+          },
+          "failure_recovery": {
+            "planned": 1,
+            "completed": 1,
+            "passed": 0,
+            "score": 0.6666666666666666
+          },
+          "experimental_design": {
+            "planned": 1,
+            "completed": 1,
+            "passed": 1,
+            "score": 1
+          },
+          "statistical_interpretation": {
+            "planned": 1,
+            "completed": 1,
+            "passed": 1,
+            "score": 1
+          },
+          "causal_reasoning": {
+            "planned": 1,
+            "completed": 1,
+            "passed": 1,
+            "score": 1
+          },
+          "literature_support": {
+            "planned": 1,
+            "completed": 1,
+            "passed": 1,
+            "score": 1
+          },
+          "executed_replication": {
+            "planned": 1,
+            "completed": 1,
+            "passed": 1,
+            "score": 1
+          }
+        },
+        "medianSeconds": 12.359,
+        "reportedTokens": 185693,
+        "requests": 30,
+        "medianFirstDeltaMs": 1904.8221055,
+        "medianFirstTextMs": 1726.6610120000005,
+        "estimatedMedianOutputTokensPerSecond": 261.59161028313446,
+        "catalogCostUsd": 0.008266062000000001,
+        "meanCatalogCostPerSuccessUsd": 0.0013776770000000001
+      }
+    ],
+    "GLM-5.3 Flash": [
+      {
+        "harness": "pi",
+        "model": "glm-5.3-flash",
+        "provider": "opencode-go",
+        "planned": 7,
+        "attempted": 7,
+        "completed": 1,
+        "passed": 0,
+        "score": 0.09523809523809523,
+        "categories": {
+          "numerical_evidence": {
+            "planned": 1,
+            "completed": 0,
+            "passed": 0,
+            "score": 0
+          },
+          "failure_recovery": {
+            "planned": 1,
+            "completed": 1,
+            "passed": 0,
+            "score": 0.6666666666666666
+          },
+          "experimental_design": {
+            "planned": 1,
+            "completed": 0,
+            "passed": 0,
+            "score": 0
+          },
+          "statistical_interpretation": {
+            "planned": 1,
+            "completed": 0,
+            "passed": 0,
+            "score": 0
+          },
+          "causal_reasoning": {
+            "planned": 1,
+            "completed": 0,
+            "passed": 0,
+            "score": 0
+          },
+          "literature_support": {
+            "planned": 1,
+            "completed": 0,
+            "passed": 0,
+            "score": 0
+          },
+          "executed_replication": {
+            "planned": 1,
+            "completed": 0,
+            "passed": 0,
+            "score": 0
+          }
+        },
+        "medianSeconds": 32.722,
+        "reportedTokens": 208286,
+        "requests": 63,
+        "medianFirstDeltaMs": 1013.056728,
+        "medianFirstTextMs": 752.7562870000002,
+        "estimatedMedianOutputTokensPerSecond": 1475.361738667621,
+        "catalogCostUsd": 0.02268713,
+        "meanCatalogCostPerSuccessUsd": null
+      },
+      {
+        "harness": "pi-research",
+        "model": "glm-5.3-flash",
+        "provider": "opencode-go",
+        "planned": 7,
+        "attempted": 7,
+        "completed": 2,
+        "passed": 2,
+        "score": 0.2857142857142857,
+        "categories": {
+          "numerical_evidence": {
+            "planned": 1,
+            "completed": 0,
+            "passed": 0,
+            "score": 0
+          },
+          "failure_recovery": {
+            "planned": 1,
+            "completed": 0,
+            "passed": 0,
+            "score": 0
+          },
+          "experimental_design": {
+            "planned": 1,
+            "completed": 1,
+            "passed": 1,
+            "score": 1
+          },
+          "statistical_interpretation": {
+            "planned": 1,
+            "completed": 1,
+            "passed": 1,
+            "score": 1
+          },
+          "causal_reasoning": {
+            "planned": 1,
+            "completed": 0,
+            "passed": 0,
+            "score": 0
+          },
+          "literature_support": {
+            "planned": 1,
+            "completed": 0,
+            "passed": 0,
+            "score": 0
+          },
+          "executed_replication": {
+            "planned": 1,
+            "completed": 0,
+            "passed": 0,
+            "score": 0
+          }
+        },
+        "medianSeconds": 37.836,
+        "reportedTokens": 379143,
+        "requests": 62,
+        "medianFirstDeltaMs": 1676.599349,
+        "medianFirstTextMs": 3104.800081499996,
+        "estimatedMedianOutputTokensPerSecond": 4985.289261634198,
+        "catalogCostUsd": 0.028838049999999997,
+        "meanCatalogCostPerSuccessUsd": 0.014419024999999999
+      },
+      {
+        "harness": "repi",
+        "model": "glm-5.3-flash",
+        "provider": "opencode-go",
+        "planned": 7,
+        "attempted": 7,
+        "completed": 1,
+        "passed": 1,
+        "score": 0.14285714285714285,
+        "categories": {
+          "numerical_evidence": {
+            "planned": 1,
+            "completed": 0,
+            "passed": 0,
+            "score": 0
+          },
+          "failure_recovery": {
+            "planned": 1,
+            "completed": 0,
+            "passed": 0,
+            "score": 0
+          },
+          "experimental_design": {
+            "planned": 1,
+            "completed": 1,
+            "passed": 1,
+            "score": 1
+          },
+          "statistical_interpretation": {
+            "planned": 1,
+            "completed": 0,
+            "passed": 0,
+            "score": 0
+          },
+          "causal_reasoning": {
+            "planned": 1,
+            "completed": 0,
+            "passed": 0,
+            "score": 0
+          },
+          "literature_support": {
+            "planned": 1,
+            "completed": 0,
+            "passed": 0,
+            "score": 0
+          },
+          "executed_replication": {
+            "planned": 1,
+            "completed": 0,
+            "passed": 0,
+            "score": 0
+          }
+        },
+        "medianSeconds": 32.07,
+        "reportedTokens": 473247,
+        "requests": 64,
+        "medianFirstDeltaMs": 1421.3990289999995,
+        "medianFirstTextMs": 3024.7602510000006,
+        "estimatedMedianOutputTokensPerSecond": 6755.692039600712,
+        "catalogCostUsd": 0.03342004,
+        "meanCatalogCostPerSuccessUsd": 0.03342004
+      }
+    ]
+  },
+  "limitations": [
+    "Exploratory one-session-per-task results, not statistical superiority.",
+    "GLM failures predominantly reflect invalid write tool argument types, not isolated scientific reasoning.",
+    "Seed completion field type and numerical precision were underspecified; frozen scores retained unchanged.",
+    "Runs occurred sequentially, not randomized across models; backend identity and sampling adherence are not independently attested.",
+    "Catalog costs are estimates, not verified OpenCode Go billing.",
+    "GLM-5.3 (non-Flash) was not tested."
+  ],
+  "glmAfterStructuredWriter": {
+    "date": "2026-10-05",
+    "model": "glm-5.3-flash",
+    "sourceRuns": [
+      "4cd55dd7-2e46-41f8-90fb-0c5f33e03694",
+      "1e61447f-d16e-4dfc-9756-8563fdfa42ea"
+    ],
+    "settings": {
+      "provider": "opencode-go",
+      "thinking": "off",
+      "temperature": 0.2,
+      "timeoutSeconds": 150,
+      "maxRequests": 10,
+      "maxOutputTokens": 4096,
+      "maxReportedTokens": 120000
+    },
+    "conditions": [
+      {
+        "harness": "pi",
+        "categories": {
+          "numerical_evidence": {
+            "planned": 1,
+            "completed": 1,
+            "passed": 1,
+            "score": 1
+          },
+          "failure_recovery": {
+            "planned": 1,
+            "completed": 1,
+            "passed": 0,
+            "score": 0.6666666666666666
+          },
+          "experimental_design": {
+            "planned": 1,
+            "completed": 1,
+            "passed": 1,
+            "score": 1
+          },
+          "statistical_interpretation": {
+            "planned": 1,
+            "completed": 1,
+            "passed": 1,
+            "score": 1
+          },
+          "causal_reasoning": {
+            "planned": 1,
+            "completed": 1,
+            "passed": 1,
+            "score": 1
+          },
+          "literature_support": {
+            "planned": 1,
+            "completed": 1,
+            "passed": 1,
+            "score": 1
+          },
+          "executed_replication": {
+            "planned": 1,
+            "completed": 1,
+            "passed": 1,
+            "score": 1
+          }
+        },
+        "score": 0.9523809523809523,
+        "passed": 6,
+        "planned": 7,
+        "attempted": 7,
+        "completed": 7,
+        "requests": 34,
+        "reportedTokens": 67247,
+        "medianSeconds": 9.126,
+        "catalogCostUsd": 0.00790401
+      },
+      {
+        "harness": "pi-research",
+        "categories": {
+          "numerical_evidence": {
+            "planned": 1,
+            "completed": 1,
+            "passed": 1,
+            "score": 1
+          },
+          "failure_recovery": {
+            "planned": 1,
+            "completed": 1,
+            "passed": 0,
+            "score": 0.6666666666666666
+          },
+          "experimental_design": {
+            "planned": 1,
+            "completed": 1,
+            "passed": 1,
+            "score": 1
+          },
+          "statistical_interpretation": {
+            "planned": 1,
+            "completed": 1,
+            "passed": 1,
+            "score": 1
+          },
+          "causal_reasoning": {
+            "planned": 1,
+            "completed": 1,
+            "passed": 1,
+            "score": 1
+          },
+          "literature_support": {
+            "planned": 1,
+            "completed": 0,
+            "passed": 0,
+            "score": 0
+          },
+          "executed_replication": {
+            "planned": 1,
+            "completed": 1,
+            "passed": 0,
+            "score": 0.5
+          }
+        },
+        "score": 0.738095238095238,
+        "passed": 4,
+        "planned": 7,
+        "attempted": 7,
+        "completed": 6,
+        "requests": 26,
+        "reportedTokens": 128702,
+        "medianSeconds": 13.482,
+        "catalogCostUsd": 0.012932329999999999
+      },
+      {
+        "harness": "repi",
+        "categories": {
+          "numerical_evidence": {
+            "planned": 1,
+            "completed": 1,
+            "passed": 1,
+            "score": 1
+          },
+          "failure_recovery": {
+            "planned": 1,
+            "completed": 1,
+            "passed": 0,
+            "score": 0.6666666666666666
+          },
+          "experimental_design": {
+            "planned": 1,
+            "completed": 1,
+            "passed": 1,
+            "score": 1
+          },
+          "statistical_interpretation": {
+            "planned": 1,
+            "completed": 1,
+            "passed": 1,
+            "score": 1
+          },
+          "causal_reasoning": {
+            "planned": 1,
+            "completed": 1,
+            "passed": 1,
+            "score": 1
+          },
+          "literature_support": {
+            "planned": 1,
+            "completed": 1,
+            "passed": 1,
+            "score": 1
+          },
+          "executed_replication": {
+            "planned": 1,
+            "completed": 1,
+            "passed": 1,
+            "score": 1
+          }
+        },
+        "score": 0.9523809523809523,
+        "passed": 6,
+        "planned": 7,
+        "attempted": 7,
+        "completed": 7,
+        "requests": 32,
+        "reportedTokens": 190152,
+        "medianSeconds": 6.803,
+        "catalogCostUsd": 0.014313739999999998
+      }
+    ],
+    "derivation": "The first run stopped after 18 attempts on an upstream timeout. Its failed source-synthesis cell remains zero. A second run attempted only the three previously unattempted replication cells. Combined values describe 21 actual attempts, not a single complete audited run. Original frozen summaries remain unchanged.",
+    "toolErrors": {
+      "writeFileContentType": 10,
+      "runPythonFilename": 2
+    },
+    "historicalWriteFileContentTypeErrors": 119,
+    "comparisonCaveat": "DeepSeek results use earlier tools without write_json. Same tasks/settings, different tool versions; not a controlled model ranking. One repeat per cell."
+  }
+}

@@ -1,5 +1,7 @@
 # Research microtask benchmark
 
+For controlled Pi/Pi-with-research-instructions/ResearchPi comparisons, submitted artifacts and independently reexecuted study code, use the new [research workflow track](research-benchmark.md): `repi bench research run`. It supports the configured OpenCode Go DeepSeek model and explicit multi-model matrices, with separate development/generated-validation conditions and an offline visual report.
+
 The initial suite contains **twenty synthetic, closed-input tasks** across seed coverage, numerical correctness, leakage, causal claim scope and bibliographic compatibility. It is a constrained microtask evaluation, not a benchmark of complete papers, experiments or research expertise. Each condition defaults to ten independent trials per task. Trial IDs are repetitions, not controllable model RNG seeds.
 
 ## Verify the evaluator
@@ -44,3 +46,7 @@ A completed summary means trials returned, not that they all passed. Missing acc
 Add held-out end-to-end tasks: real interrupted-run recovery, dataset/code provenance, independent prediction recalculation, source-supported synthesis and methodology writing. Include stock Pi, identical-instruction baselines and scientific-tool ablations using the same supported model where possible. Grade actual artifacts, calibrate blinded scientific reviewers, prespecify exclusions and report effect sizes/uncertainty, failures, time, observed cost and human interventions.
 
 The design follows primary guidance that agent performance measures a model together with its harness and depends on execution resources. [Anthropic evaluation guidance](https://www.anthropic.com/engineering/demystifying-evals-for-ai-agents), [infrastructure experiments](https://www.anthropic.com/engineering/infrastructure-noise). No superiority claim is made without the corresponding experiment and published evidence.
+
+## Research Agent Index
+
+`repi bench index prepare`, `run`, `freeze` and `score` support a preregistered comparative research rating with five scientific domains. Development calibration is visibly provisional, missing domains or attempts stay unranked, and expert-review attestations are required wherever the frozen rubric requests them before a holdout rating can publish. The rating and raw criterion quality are distinct. See [commands, model costs and prerequisites](../scripts/research-index/README.md) and the [scientific evaluation design](research/research-agent-index-proposal.md).

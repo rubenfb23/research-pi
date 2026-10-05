@@ -13,6 +13,12 @@ Start with `repi`. Develop a research question, retrieve sources, freeze an expe
 
 [Project website](https://rubenfb23.github.io/research-pi/) · [Quickstart](docs/quickstart.md) · [Workflows](docs/workflows.md) · [CLI guide](docs/cli-guide.md) · [Comparison](docs/comparison.md) · [Verification](docs/status.md) · [Roadmap](ROADMAP.md)
 
+Evaluate controlled same-model research workflows with `repi bench research run`. These generated tasks compare component ablations, not complete native products. [Benchmark protocol](docs/research-benchmark.md).
+
+The experimental `repi bench index` track adds a frozen five-domain research rubric, a fixed-reference 0–100 rating, provenance receipts and native DeepSeek/GLM development calibration. It keeps incomplete coverage unranked and final holdout scores blocked pending required independent expert review. [Commands and limits](scripts/research-index/README.md) · [Index design](docs/research/research-agent-index-proposal.md) · [Executed development calibration](docs/research/research-agent-index-development.html).
+
+For a first evaluation on published scientific tasks, `repi bench official --dataset <prepared-directory>` runs the full native CLI on an isolated Linux CPU subset of MLAgentBench and CORE-Bench Extended/OOD. It compares DeepSeek V4.1 Flash and GLM-5.3 Flash using OpenCode Go, separate graders and fresh replay containers. [Setup and limitations](scripts/official-bench/README.md) · [Executed official CPU comparison](docs/research/deepseek-vs-glm-official-pilot.html). This small pilot does not establish model or harness superiority.
+
 ![ResearchPi native terminal interface, captured using the deterministic offline transport](assets/terminal.svg)
 
 *Actual native interface capture with offline test responses; empty screen rows are compacted. [Replayable recording](assets/terminal.cast); live provider reasoning is shown only when the provider exposes it. The header graphic illustrates the workflow.*

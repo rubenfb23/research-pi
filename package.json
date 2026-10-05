@@ -17,7 +17,7 @@
     "install:cli": "node scripts/install-cli.mjs",
     "uninstall:cli": "npm uninstall --global research-pi",
     "package:native": "node scripts/package-native.mjs",
-    "test": "tsx --test tests/*.test.ts",
+    "test": "tsx --test tests/*.test.ts && node --test scripts/official-bench/relay.test.mjs scripts/official-replay-parser.test.mjs",
     "check": "npm run build && npm test",
     "demo": "node repi demo"
   },

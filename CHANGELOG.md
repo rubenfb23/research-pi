@@ -2,6 +2,11 @@
 
 ## Unreleased
 
+- Add a shared `write_json` benchmark tool that accepts structured data, preserves workspace protections and rejects oversized artifacts before overwriting files.
+
+- Add controlled same-model research benchmarks with seven artifact-graded tasks, isolated Python replication, retained evidence audits and an offline visual report.
+- Add reusable prediction metrics and ten-seed coverage/aggregation tools. Record an exploratory DeepSeek pilot and Artificial Analysis methodology inspirations.
+
 - Add `repi update` and `repi update --check` for the embedded Pi SDK, with staged compilation, offline tool verification and source regression checks before activation.
 - Preserve the previous runtime on failed updates; use per-user runtime overlays for native installations and bundle npm in future installers.
 - Update both direct Pi SDK dependencies to 1.0.2 and route native update hints to `repi update`.

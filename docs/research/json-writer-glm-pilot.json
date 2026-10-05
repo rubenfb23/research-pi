@@ -1,0 +1,128 @@
+{
+  "id": "cf59faa0-ee39-4a12-bce2-3922d3940b93",
+  "protocolHash": "2b94811ce2aebe7feca94378155932f83f2efae88ee4cae487e91e7ece48c712",
+  "status": "complete",
+  "split": "dev",
+  "fixtureOnly": false,
+  "conditions": [
+    {
+      "harness": "pi",
+      "model": "glm-5.3-flash",
+      "provider": "opencode-go",
+      "planned": 1,
+      "attempted": 1,
+      "completed": 1,
+      "passed": 1,
+      "score": 1,
+      "categories": {
+        "numerical_evidence": {
+          "planned": 1,
+          "completed": 1,
+          "passed": 1,
+          "score": 1
+        }
+      },
+      "medianSeconds": 18.594,
+      "reportedTokens": 8669,
+      "requests": 5,
+      "medianFirstDeltaMs": 2117.6814399999985,
+      "medianFirstTextMs": 1094.308414000001,
+      "estimatedMedianOutputTokensPerSecond": 14190.497606163199,
+      "catalogCostUsd": 0.0009034099999999999,
+      "meanCatalogCostPerSuccessUsd": 0.0009034099999999999
+    },
+    {
+      "harness": "pi-research",
+      "model": "glm-5.3-flash",
+      "provider": "opencode-go",
+      "planned": 1,
+      "attempted": 1,
+      "completed": 1,
+      "passed": 1,
+      "score": 1,
+      "categories": {
+        "numerical_evidence": {
+          "planned": 1,
+          "completed": 1,
+          "passed": 1,
+          "score": 1
+        }
+      },
+      "medianSeconds": 6.982,
+      "reportedTokens": 24502,
+      "requests": 5,
+      "medianFirstDeltaMs": 857.8418339999998,
+      "medianFirstTextMs": 571.895512,
+      "estimatedMedianOutputTokensPerSecond": 19527.729375714545,
+      "catalogCostUsd": 0.00218858,
+      "meanCatalogCostPerSuccessUsd": 0.00218858
+    },
+    {
+      "harness": "repi",
+      "model": "glm-5.3-flash",
+      "provider": "opencode-go",
+      "planned": 1,
+      "attempted": 1,
+      "completed": 1,
+      "passed": 1,
+      "score": 1,
+      "categories": {
+        "numerical_evidence": {
+          "planned": 1,
+          "completed": 1,
+          "passed": 1,
+          "score": 1
+        }
+      },
+      "medianSeconds": 5.612,
+      "reportedTokens": 28534,
+      "requests": 5,
+      "medianFirstDeltaMs": 604.2845520000001,
+      "medianFirstTextMs": 473.589105,
+      "estimatedMedianOutputTokensPerSecond": 54757.2875225128,
+      "catalogCostUsd": 0.0019342299999999999,
+      "meanCatalogCostPerSuccessUsd": 0.0019342299999999999
+    }
+  ],
+  "comparisons": [
+    {
+      "model": "glm-5.3-flash",
+      "baseline": "pi",
+      "harness": "pi-research",
+      "deltaPercentagePoints": 0,
+      "descriptiveTaskClusterBootstrap95": null,
+      "uncertaintyScope": "Task-cluster percentile bootstrap on this fixed generated suite, conditional on settings; not population/general scientific superiority. Fewer than three tasks, fewer than two repeats, or incomplete conditions return null."
+    },
+    {
+      "model": "glm-5.3-flash",
+      "baseline": "pi",
+      "harness": "repi",
+      "deltaPercentagePoints": 0,
+      "descriptiveTaskClusterBootstrap95": null,
+      "uncertaintyScope": "Task-cluster percentile bootstrap on this fixed generated suite, conditional on settings; not population/general scientific superiority. Fewer than three tasks, fewer than two repeats, or incomplete conditions return null."
+    }
+  ],
+  "settings": {
+    "provider": "opencode-go",
+    "thinking": "off",
+    "temperature": 0.2,
+    "timeoutSeconds": 150,
+    "maxRequests": 10,
+    "maxOutputTokens": 4096,
+    "maxReportedTokens": 120000
+  },
+  "expectedTrials": 3,
+  "attemptedTrials": 3,
+  "receiptHashes": [
+    "096bb9cdf1519c915a35aadc6b13fe8346c0b365e8a1301239774a6320ac8759",
+    "6b97f5fe43f3b78b73e6a4dd49764388b67745d7274d4be9a6bd1b237aee3f82",
+    "47c1f9e2f94498863e7b49e3d9604a73fe750f4286f01bc06419c4d4e3fb659a"
+  ],
+  "scope": "Seven synthetic research workflow tasks, including a tiny independently reexecuted study. Does not establish real-paper replication, originality, scientific expertise or PhD equivalence.",
+  "interpretation": "Observed results on this generated synthetic suite. No superiority, discovery or PhD-equivalence claim. Cost is catalog-priced, never independently verified billing. Missing telemetry remains null.",
+  "publicationScope": "Aggregate-only exploratory development pilot. Private traces and reasoning excluded. Same metrics task and budgets as previous GLM run; tool set/descriptions changed for every profile.",
+  "toolTelemetry": {
+    "write_jsonCalls": 3,
+    "totalToolErrors": 0
+  }
+}

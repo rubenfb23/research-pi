@@ -1,6 +1,9 @@
 #!/usr/bin/env node
 import { Command } from 'commander';
 import { spawnSync } from 'node:child_process';
+import {writeFileSync,mkdirSync} from 'node:fs';
+import {auditIndexRun} from './research-index-audit.js';
+import {freezeIndexProtocol,scoreResearchIndex,renderIndexReport,type IndexProtocol,type IndexEvidence} from './research-index.js';
 import { join, resolve } from 'node:path';
 import { chat } from './chat.js';
 import { connect, connectionName, changeModel, connectionRuntime, selectedConfig, connections, connectionNames } from './connections.js';
@@ -20,6 +23,10 @@ import { SessionManager, runRpcMode } from '@earendil-works/pi-coding-agent';
 import {benchTasks,runBenchmark,auditBenchmark,type BenchOptions} from './benchmark.js';
 import {ReferenceVerifier,type BibliographicReference} from './references.js';
 import {doctor} from './doctor.js';
+import {runResearchBenchmark,auditResearchBenchmark} from './research-benchmark.js';
+import {researchTasks} from './research-bench-tasks.js';
+import type {ResearchHarness} from './research-bench-worker.js';
+import type {ThinkingLevel} from './preferences.js';
 import { configureClipboard, clipboardStatus, ensureClipboardTools } from './clipboard.js';
 
 configureClipboard();
@@ -139,6 +146,37 @@ program.command('disconnect').argument('<connection>', connectionNames).action(a
   console.log('Local credential removed. Environment variables and provider authorization are managed separately.');
 });
 const bench=program.command('bench').description('Run a frozen research microtask evaluation with real agent CLIs');
+bench.command('official').description('Compare configured OpenCode Go models on prepared official CPU benchmark inputs')
+ .requiredOption('--dataset <path>','prepared dataset directory; see scripts/official-bench/README.md')
+ .option('--image <name>','frozen Docker runtime','repi-official-pilot:20261005')
+ .action(opts=>{const result=spawnSync(process.execPath,[join(ROOT,'scripts','official-bench','run.mjs'),resolve(opts.dataset),opts.image],{stdio:'inherit'});if(result.error)throw result.error;process.exitCode=result.status??1;});
+const indexBench=bench.command('index').description('Frozen research ratings, scientific rubrics and native development calibration');
+indexBench.command('prepare').requiredOption('--output <directory>','fresh public development task directory')
+ .option('--image <name>','scientific Docker runtime','repi-official-pilot:20261005').option('--trials <n>','fresh agent attempts per condition','1').option('--timeout <seconds>','frozen per-attempt deadline','300').option('--models <ids>','2–8 distinct OpenCode Go chat-completion model IDs; first is the fixed reference','deepseek-v4.1-flash,glm-5.3-flash')
+ .action(opts=>{const r=spawnSync(process.execPath,[join(ROOT,'scripts/research-index/run.mjs'),'prepare',resolve(opts.output),opts.image,opts.trials,opts.timeout,opts.models],{stdio:'inherit'});if(r.error)throw r.error;process.exitCode=r.status??1;});
+indexBench.command('run').requiredOption('--dataset <directory>','prepared, frozen development task pack')
+ .option('--image <name>','must match frozen preparation image','repi-official-pilot:20261005')
+ .action(opts=>{const r=spawnSync(process.execPath,[join(ROOT,'scripts/research-index/run.mjs'),'run',resolve(opts.dataset),opts.image],{stdio:'inherit'});if(r.error)throw r.error;process.exitCode=r.status??1;});
+indexBench.command('audit').argument('<run-directory>').description('Verify native receipts, model identity, traces, grading and artifacts').action(directory=>{const result=auditIndexRun(directory);console.log(JSON.stringify(result,null,2));if(result.status!=='verified')process.exitCode=1;});
+indexBench.command('freeze').requiredOption('--input <path>','protocol JSON without protocolHash').requiredOption('--output <path>','frozen protocol JSON')
+ .action(opts=>{writeJson(resolve(opts.output),freezeIndexProtocol(readJson(opts.input)));console.log('Frozen protocol: '+resolve(opts.output));});
+indexBench.command('score').requiredOption('--protocol <path>','frozen protocol JSON').requiredOption('--evidence <path>','complete attempt rubric evidence JSON')
+ .requiredOption('--output <directory>','JSON and HTML report directory')
+ .action(opts=>{const result=scoreResearchIndex(readJson<IndexProtocol>(opts.protocol),readJson<IndexEvidence[]>(opts.evidence));mkdirSync(resolve(opts.output),{recursive:true});writeJson(join(resolve(opts.output),'index.json'),result);writeFileSync(join(resolve(opts.output),'report.html'),renderIndexReport(result));console.log(JSON.stringify({status:result.status,publishable:result.publishable,report:join(resolve(opts.output),'report.html')},null,2));});
+const researchBench=bench.command('research').description('Controlled same-model research workflows with submitted artifacts');
+researchBench.command('tasks').option('--split <id>','dev or generated validation','dev').option('--seed <n>','task generation seed','20261004').action(opts=>{
+ if(!['dev','validation'].includes(opts.split))throw new Error('Choose dev or validation.');
+ console.log(JSON.stringify(researchTasks(opts.split,Number(opts.seed)).map(({expected,files,...task})=>({...task,inputFiles:Object.keys(files)})),null,2));
+});
+researchBench.command('audit').argument('<id>').action(id=>{const result=auditResearchBenchmark(project(),id);console.log(JSON.stringify(result,null,2));if(result.status!=='complete')process.exitCode=1;});
+researchBench.command('run').option('--harnesses <ids>','pi,pi-research,repi','pi,pi-research,repi').option('--models <ids>','comma-separated models; defaults to the active model').option('--provider <id>','defaults to the active provider')
+ .option('--split <id>','dev for tuning; validation for separate generated cases','dev').option('--seed <n>','task generator seed','20261004').option('--trials <n>','independent attempts per task and condition','10').option('--tasks <ids>','comma-separated task IDs')
+ .option('--timeout <seconds>','per-attempt deadline','120').option('--max-requests <n>','provider requests per attempt','6').option('--max-output-tokens <n>','requested output limit per response','4096').option('--max-reported-tokens <n>','SDK token threshold checked between requests','60000')
+ .option('--thinking <level>','common requested effort','off').option('--temperature <n>','common requested temperature','0.2').option('--fixture','stored-reference smoke, no model calls')
+ .action(async opts=>{const controller=new AbortController(),stop=()=>controller.abort();process.once('SIGINT',stop);try{
+  const result=await runResearchBenchmark(project(),{harnesses:opts.harnesses.split(',') as ResearchHarness[],models:opts.models?.split(','),provider:opts.provider,split:opts.split,seed:Number(opts.seed),trials:Number(opts.trials),tasks:opts.tasks?.split(','),timeoutSeconds:Number(opts.timeout),maxRequests:Number(opts.maxRequests),maxOutputTokens:Number(opts.maxOutputTokens),maxReportedTokens:Number(opts.maxReportedTokens),thinking:opts.thinking as ThinkingLevel,temperature:Number(opts.temperature),fixture:!!opts.fixture},controller.signal);
+  console.log(JSON.stringify(result,null,2));if(result.status!=='complete')process.exitCode=controller.signal.aborted?130:1;
+ }finally{process.removeListener('SIGINT',stop);}});
 bench.command('tasks').action(()=>console.log(JSON.stringify(benchTasks().map(({expected,...task})=>task),null,2)));
 bench.command('audit').argument('<id>').action(id=>{const report=auditBenchmark(project(),id);console.log(JSON.stringify(report,null,2));if(report.status!=='complete')process.exitCode=1;});
 bench.command('run').requiredOption('--agent <id>','repi, claude, codex or fixture').option('--trials <n>','independent trials per task','10').option('--tasks <ids>','comma-separated task IDs')

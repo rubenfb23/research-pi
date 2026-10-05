@@ -1,0 +1,83 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Research Agent Index</title><style>body{margin:0;background:#0b1220;color:#e4ebf5;font:16px/1.65 system-ui}main{max-width:1250px;margin:auto;padding:36px 24px}h1{font-size:clamp(30px,5vw,54px);line-height:1.1}h1,h2{color:#bceede}a{color:#91d8ff}.card{padding:24px;margin:22px 0;background:#142033;border:1px solid #2d405b;border-radius:16px}.badge{color:#ffe1a3;font-weight:bold}.scroll{overflow:auto}table{border-collapse:collapse;width:100%;font-size:14px}th,td{padding:13px;border-bottom:1px solid #2d405b;text-align:left;vertical-align:top}small{color:#acbdd2}.notice{border-left:4px solid #ffc66d;padding-left:18px}code{overflow-wrap:anywhere}details{margin:14px 0}pre{white-space:pre-wrap}</style></head><body><main><p>RESEARCHPI · SCIENTIFIC EVALUATION</p><h1>Research Agent Index</h1><p class="badge">RAI-development-0.1-amendment-1 · development only</p><p class="notice">Development calibration only. No validated research ranking or harness superiority has been established.</p><div class="card"><h2>Run and interpretation</h2><p>10 real native ResearchPi attempts: 5 public development tasks × 2 OpenCode Go configurations × 1 fresh sessions. No competing harness or human researcher was evaluated. The published RAI remains pending; the shown rating is development calibration.</p><p>The ordinal pairwise ratings tie. Domain-by-domain comparisons use prespecified equal weights and half-wins for ties. The rubric-weighted mean below retains magnitude; it is a different descriptive statistic. Neither establishes a research champion.</p><p>deepseek-v4.1-flash: 96.67 mechanical criterion points · glm-5.3-flash: 80.00 mechanical criterion points. Many mechanical endpoints remain easy; the sigmoid has not solved ceiling effects.</p><p>Observed native/provider errors: repi/glm-5.3-flash: <code>400: {&quot;type&quot;:&quot;invalid_request_error&quot;,&quot;message&quot;:&quot;Upstream request failed: [invalid_request_error] native reasoning control reasoning_effort is not allowed&quot;}</code> All failures are retained. A provider error is not proof of inferior scientific reasoning.</p><p>Writing scores cover calculations and artifact contracts; argument quality, originality and figure readability await independent expert review. Cost telemetry is unavailable in this index export; no missing cost is treated as zero.</p><p><a href="deepseek-vs-glm-official-pilot.html">Earlier official CPU pilot</a> · <a href="deepseek-vs-glm-microtasks-history.html">Original microtask history</a> · <a href="research-agent-index-development.json">Results and provenance JSON</a> · <a href="research-agent-index-proposal.md">Scientific design</a></p></div><div class="card"><h2>Uniform grading correction</h2><p>The first writing rubric used an ambiguous “independent training seeds” field for bootstrap resamples. Both candidates made the distinction. That criterion was excluded for both, with no new model calls. Original grades, receipt hashes and evaluator commit remain in the JSON export.</p><p>deepseek-v4.1-flash: original writing 71.43, corrected 83.33 · glm-5.3-flash: original writing 85.71, corrected 100.00. The remaining baseline-refit criterion keeps its original grade and requires expert interpretation alongside the paper.</p><p>The original request metadata digest included undefined optional settings that JSON omitted. The audit restores only five known missing keys as null to verify the original digests. Changed setting values still fail verification; a regression test covers this. New runs hash persisted JSON directly.</p><p>Original evaluator: <code>0e9e989</code>. Audit: 10 receipts verified. Original protocol: <code>1b6ae236611df9c84188182e439f551d2ae72cec2d5e5757bd9be179b59592b0</code>.</p></div><div class="card"><h2>Scientific review observations</h2><p>repi/deepseek-v4.1-flash: The paper claims that the candidate mean ± one sample SD band overlaps the baseline, but the supplied values and plotting code contradict this.</p><p>Baseline 0.709821; band [0.728254, 0.772804]. The baseline lies outside this band.</p><p>Exploratory author inspection, not blinded independent expert grading. Original mechanical grades remain unchanged. Section and figure checks did not catch this unsupported narrative claim.</p></div><div class="card"><h2>A fixed reference, transparent evidence</h2><p>Reference: <strong>repi/deepseek-v4.1-flash</strong> = 50. A finite relative rating approaches 100. It is not accuracy or percentage PhD capability. Scientific domain scores below are criterion percentages; they can reach 100.</p><p>Unavailable: require at least three independent families per domain and two attempts per condition. No claim of significant ordering.</p></div><div class="card scroll"><table><thead><tr><th>Configuration</th><th>Development rating</th><th>Gap to observed leader</th><th>reproduction</th><th>experimentation</th><th>statistics causality</th><th>literature</th><th>scientific writing</th><th>Integrity-passing submissions</th></tr></thead><tbody><tr><td><strong>repi/deepseek-v4.1-flash</strong><br><small>ResearchPi native CLI · deepseek-v4.1-flash</small></td><td>50.0</td><td>0.0</td><td>100.0</td><td>100.0</td><td>100.0</td><td>100.0</td><td>83.3</td><td>5/5</td></tr><tr><td><strong>repi/glm-5.3-flash</strong><br><small>ResearchPi native CLI · glm-5.3-flash</small></td><td>50.0</td><td>0.0</td><td>100.0</td><td>100.0</td><td>0.0</td><td>100.0</td><td>100.0</td><td>4/5</td></tr></tbody></table></div><div class="card"><h2>Coverage and assessment</h2><p>Missing attempts: 0. Missing domains: none. Pending independent expert reviews: 8.</p><p>Expert identity and blinding are submitter attestations, not automatically verified credentials. Review quality and independence require external audit.</p><p>Costs, times and complete evidence are retained in the JSON export. One fitted rating can hide domain trade-offs. These development tasks are public and cannot establish generalization to a sealed test.</p></div><div class="card"><h2>Evidence receipts</h2><details><summary>bootstrap-reproduction · repi/deepseek-v4.1-flash · attempt 1 · completed</summary><p>Declared integrity/validity gate: true. Assessment: automated.</p><p>Mechanical artifact checks only; independent expert review pending. Unchanged-input integrity gate: true. These checks do not establish scientific validity or paper quality. Native session: completed.</p><pre>{
+  &quot;baselineRmse&quot;: 1,
+  &quot;seeds&quot;: 1,
+  &quot;candidateRmses&quot;: 1,
+  &quot;candidateMean&quot;: 1,
+  &quot;candidateSampleSd&quot;: 1,
+  &quot;populationUncertaintyEstablished&quot;: 1,
+  &quot;scriptExecuted&quot;: 1,
+  &quot;freshReplay&quot;: 1,
+  &quot;perturbedInputReplay&quot;: 1
+}</pre><small>Receipt ce79258872e65b79c08680f2b566e761de99f5aeefe789e5034f1bf00630f572<br>Artifacts ab5c6d5f2ff859c05dcd2f0d2d14af9822a2b556b67671300e0b7743e6628616</small></details><details><summary>bootstrap-reproduction · repi/glm-5.3-flash · attempt 1 · completed</summary><p>Declared integrity/validity gate: true. Assessment: automated.</p><p>Mechanical artifact checks only; independent expert review pending. Unchanged-input integrity gate: true. These checks do not establish scientific validity or paper quality. Native session: completed.</p><pre>{
+  &quot;baselineRmse&quot;: 1,
+  &quot;seeds&quot;: 1,
+  &quot;candidateRmses&quot;: 1,
+  &quot;candidateMean&quot;: 1,
+  &quot;candidateSampleSd&quot;: 1,
+  &quot;populationUncertaintyEstablished&quot;: 1,
+  &quot;scriptExecuted&quot;: 1,
+  &quot;freshReplay&quot;: 1,
+  &quot;perturbedInputReplay&quot;: 1
+}</pre><small>Receipt cad7d0ba2eec365914c816a04f4879f7baadb21b2a56720f435feec9d6a3af2a<br>Artifacts b44d8aa1315d5a65897d8380d30e9c1c9cac62829df79c5757ec299d0dc20266</small></details><details><summary>grouped-study-design · repi/glm-5.3-flash · attempt 1 · completed</summary><p>Declared integrity/validity gate: true. Assessment: automated.</p><p>Mechanical artifact checks only; independent expert review pending. Unchanged-input integrity gate: true. These checks do not establish scientific validity or paper quality. Native session: completed.</p><pre>{
+  &quot;validProtocols&quot;: 1,
+  &quot;leakageByProtocol&quot;: 1,
+  &quot;independentUnit&quot;: 1,
+  &quot;tenInitializationSeedsEstablishPopulationUncertainty&quot;: 1,
+  &quot;externalHospitalClaimSupported&quot;: 1,
+  &quot;protocolArtifactPresent&quot;: 1
+}</pre><small>Receipt 8fae6e614a3ea002a9f47408befd5d351abe246e8eadc7a610d8b07482392ac6<br>Artifacts a35ca2ea2fd58ab485908eec0b6b5460e8b15b92742f10d01fac1c9a6141de37</small></details><details><summary>grouped-study-design · repi/deepseek-v4.1-flash · attempt 1 · completed</summary><p>Declared integrity/validity gate: true. Assessment: automated.</p><p>Mechanical artifact checks only; independent expert review pending. Unchanged-input integrity gate: true. These checks do not establish scientific validity or paper quality. Native session: completed.</p><pre>{
+  &quot;validProtocols&quot;: 1,
+  &quot;leakageByProtocol&quot;: 1,
+  &quot;independentUnit&quot;: 1,
+  &quot;tenInitializationSeedsEstablishPopulationUncertainty&quot;: 1,
+  &quot;externalHospitalClaimSupported&quot;: 1,
+  &quot;protocolArtifactPresent&quot;: 1
+}</pre><small>Receipt 798771610594dff38012ae70348e8a9ffea655d15553ecd80447117f783500ad<br>Artifacts 033bc7ad845d4311e143dbe10f9712b51e80e74b21453d94e4175754d4d2beb1</small></details><details><summary>clustered-and-causal-analysis · repi/deepseek-v4.1-flash · attempt 1 · completed</summary><p>Declared integrity/validity gate: true. Assessment: automated.</p><p>Mechanical artifact checks only; independent expert review pending. Unchanged-input integrity gate: true. These checks do not establish scientific validity or paper quality. Native session: completed.</p><pre>{
+  &quot;subjectMeanDifference&quot;: 1,
+  &quot;subjectSampleSd&quot;: 1,
+  &quot;bootstrapLower&quot;: 1,
+  &quot;bootstrapUpper&quot;: 1,
+  &quot;subjectCount&quot;: 1,
+  &quot;marginalRiskDifference&quot;: 1,
+  &quot;allSiteAteIdentified&quot;: 1,
+  &quot;initializationSdIsPopulationInterval&quot;: 1,
+  &quot;explanationArtifactPresent&quot;: 1
+}</pre><small>Receipt 9d5ec5d84edcd8f3540b4415713538d758f69aaeff12b3351d7c581e4343498c<br>Artifacts 66a238e1eba62a89904b4d1977b26a70b0984b4a14aa2f449a9a0dcd9981531f</small></details><details><summary>clustered-and-causal-analysis · repi/glm-5.3-flash · attempt 1 · failed</summary><p>Declared integrity/validity gate: true. Assessment: automated.</p><p>Mechanical artifact checks only; independent expert review pending. Unchanged-input integrity gate: true. These checks do not establish scientific validity or paper quality. Native session: provider_failed.</p><pre>{
+  &quot;subjectMeanDifference&quot;: 0,
+  &quot;subjectSampleSd&quot;: 0,
+  &quot;bootstrapLower&quot;: 0,
+  &quot;bootstrapUpper&quot;: 0,
+  &quot;subjectCount&quot;: 0,
+  &quot;marginalRiskDifference&quot;: 0,
+  &quot;allSiteAteIdentified&quot;: 0,
+  &quot;initializationSdIsPopulationInterval&quot;: 0,
+  &quot;explanationArtifactPresent&quot;: 0
+}</pre><small>Receipt 7b2776ee9ce8d2e9387d6eaa0598729c2829c4ea91f0d7f8349e9d1113639757<br>Artifacts d16f33cfa57513ad6ab4f7ac76dc9b13200ad6e60b017d10e555fc27ff8de514</small></details><details><summary>bibliographic-integrity · repi/glm-5.3-flash · attempt 1 · completed</summary><p>Declared integrity/validity gate: true. Assessment: automated.</p><p>Mechanical artifact checks only; independent expert review pending. Unchanged-input integrity gate: true. These checks do not establish scientific validity or paper quality. Native session: completed.</p><pre>{
+  &quot;validReferences&quot;: 1,
+  &quot;mismatchedReferences&quot;: 1,
+  &quot;doiExistenceAloneVerifiesCitation&quot;: 1,
+  &quot;metadataAloneEstablishesScientificClaim&quot;: 1,
+  &quot;verifiedLiveInternet&quot;: 1,
+  &quot;explanationArtifactPresent&quot;: 1
+}</pre><small>Receipt a7b14b5fb1f9f95b63245ab0aeca0108a54bc74917801779e8dd37c273a6da1a<br>Artifacts 3d200daaf41a4c5ab2347c3f58122cc90acea6c85033de1bd441b7aa5f2171db</small></details><details><summary>bibliographic-integrity · repi/deepseek-v4.1-flash · attempt 1 · completed</summary><p>Declared integrity/validity gate: true. Assessment: automated.</p><p>Mechanical artifact checks only; independent expert review pending. Unchanged-input integrity gate: true. These checks do not establish scientific validity or paper quality. Native session: completed.</p><pre>{
+  &quot;validReferences&quot;: 1,
+  &quot;mismatchedReferences&quot;: 1,
+  &quot;doiExistenceAloneVerifiesCitation&quot;: 1,
+  &quot;metadataAloneEstablishesScientificClaim&quot;: 1,
+  &quot;verifiedLiveInternet&quot;: 1,
+  &quot;explanationArtifactPresent&quot;: 1
+}</pre><small>Receipt 3118e38d628cb1a700ec03f41e35cf73a3cc4b0736b039ebefec9c0055cc9471<br>Artifacts b91280d3be47c9bd07447d90b5c4ec2ea6b91dacf071316344b8a25a72cf0151</small></details><details><summary>evidence-grounded-paper · repi/deepseek-v4.1-flash · attempt 1 · completed</summary><p>Declared integrity/validity gate: true. Assessment: automated.</p><p>Mechanical artifact checks only; independent expert review pending. Unchanged-input integrity gate: true. These checks do not establish scientific validity or paper quality. Native session: completed. Uniform rubric amendment seed-role-rubric-amendment-1 applied; receiptHash refers to unchanged original receipt.</p><pre>{
+  &quot;candidateBetterOnAverage&quot;: 1,
+  &quot;populationGeneralizationEstablished&quot;: 1,
+  &quot;causalImprovementEstablished&quot;: 1,
+  &quot;baselineNeedsTenIdenticalRefits&quot;: 0,
+  &quot;paperSectionsPresent&quot;: 1,
+  &quot;figurePresent&quot;: 1
+}</pre><small>Receipt 869a96f33e0169eabc2d8b03ec3a47f8ed6cf2603a99d85e88d1c627bc3d2776<br>Artifacts 246545716c290981aac17110915d4dcbabbe015913128b6a973729d89fd727a3</small></details><details><summary>evidence-grounded-paper · repi/glm-5.3-flash · attempt 1 · completed</summary><p>Declared integrity/validity gate: true. Assessment: automated.</p><p>Mechanical artifact checks only; independent expert review pending. Unchanged-input integrity gate: true. These checks do not establish scientific validity or paper quality. Native session: completed. Uniform rubric amendment seed-role-rubric-amendment-1 applied; receiptHash refers to unchanged original receipt.</p><pre>{
+  &quot;candidateBetterOnAverage&quot;: 1,
+  &quot;populationGeneralizationEstablished&quot;: 1,
+  &quot;causalImprovementEstablished&quot;: 1,
+  &quot;baselineNeedsTenIdenticalRefits&quot;: 1,
+  &quot;paperSectionsPresent&quot;: 1,
+  &quot;figurePresent&quot;: 1
+}</pre><small>Receipt 768566b917c0ac300e1db5c61422a368588055ce8487caf106ce3f20381d1a19<br>Artifacts 96d06fb9944ca88c137f2dd467623375e6022f659d848ff377dfc8462fa85ebc</small></details></div><small>Protocol 47ba53e1ed036740975c4557db97f0f158f5fc1c3eb09ad21050971ccbcc9399<br>Evidence cd7ca57b006f6962b8267283c01965786c8cd0159e1b6c9e82be83602b013b36</small></main></body></html>
